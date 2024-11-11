@@ -1,0 +1,12 @@
+{
+    "ID": "9527a00d-69d8-4b22-abb1-007ad16d7ec3",
+    "ActionKeyword": "test",
+    "Name": "flow.py test",
+    "Description": "test for flow.py",
+    "Author": "cibere",
+    "Version": "0.0.1",
+    "Language": "python_v2",
+    "Website": "https://github.com/cibere/flow.py",
+    "IcoPath": "Images\\app.png",
+    "ExecuteFileName": "test.py"
+}
