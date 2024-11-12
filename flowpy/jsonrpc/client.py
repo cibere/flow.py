@@ -5,11 +5,19 @@ import json
 import logging
 import sys
 from asyncio.streams import StreamReader, StreamWriter
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Callable
 
 from ..errors import PluginExecutionError
 from .errors import JsonRPCException
-from .objects import JsonRPCError, Option, QueryResponse, Request, Result
+from .objects import (
+    Action,
+    BaseResponse,
+    JsonRPCError,
+    Option,
+    QueryResponse,
+    Request,
+    Result,
+)
 from .utils import coro_or_gen
 
 LOG = logging.getLogger(__name__)
@@ -18,10 +26,10 @@ if TYPE_CHECKING:
     from ..plugin import Plugin
     from ..settings import Settings
 
-__all__ = ("Client",)
+__all__ = ("JsonRPCClient",)
 
 
-class Client:
+class JsonRPCClient:
     reader: StreamReader
     writer: StreamWriter
 
@@ -30,6 +38,7 @@ class Client:
         self.requests: dict[int, asyncio.Future[Result | JsonRPCError]] = {}
         self.request_id = 1
         self.plugin = plugin
+        self.method_mappings: dict[str, Callable] = {}
 
     async def request(
         self, method: str, params: list[object] = []
@@ -38,7 +47,7 @@ class Client:
         self.request_id += 1
         self.requests[self.request_id] = fut
         msg = Request(method, self.request_id, params).to_message()
-        self.writer.write(msg)
+        await self.write(msg, drain=False)
         return await fut
 
     async def __handle_cancellation(self, id: int) -> None:
@@ -83,15 +92,32 @@ class Client:
 
     async def __handle_request(self, request: dict[str, Any]) -> None:
         method = request["method"]
-        coro, params = self.plugin._get_coro_from_method(method, request["params"])
-        if isinstance(coro, JsonRPCError):
-            LOG.exception(
-                f"A JsonRPCError error occured while handling request ({request!r}): {coro!r}"
+        params = request["params"]
+        func = self.method_mappings.get(method)
+        if func is None:
+            try:
+                func = getattr(self.plugin, method)
+            except AttributeError as e:
+                return await self.write(
+                    JsonRPCError(
+                        code=-32601, message="Method not found", data=e
+                    ).to_message(request["id"])
+                )
+        else:
+            if params:
+                params = params[0]
+        try:
+            coro = func(*params)
+        except TypeError as e:
+            LOG.exception(f"Ran into a TypeError while getting the coro of the {method!r} method, returning invalid params error. Params: {params!r}", exc_info=e)
+            return await self.write(
+                JsonRPCError(code=-32602, message="Invalid params").to_message(
+                    id=request["id"]
+                )
             )
-            return await self.write(coro.to_message(id=request["id"]))
 
         try:
-            task = asyncio.create_task(coro_or_gen(coro))
+            task = asyncio.create_task(coro)
             self.tasks[request["id"]] = task
             try:
                 result = await task
@@ -106,29 +132,23 @@ class Client:
                     ).to_message(id=request["id"])
                 )
 
-            if method in ("query", "context_menu"):
-                if result is None:
-                    e = TypeError("Recieved NoneType instead of list of options")
-                    LOG.exception(
-                        f"Exception occured while running {f'{self.plugin.__class__.__name__}.{method}'}",
-                        exc_info=PluginExecutionError(method, params, e),
-                    )
-                    return await self.write(
-                        JsonRPCError(
-                            code=-32603, message="Internal error", data=e
-                        ).to_message(id=request["id"])
-                    )
-                setting_changes = None
-                if method == "query":
-                    settings: Settings = params[1]
-                    setting_changes = settings._changes
+            if isinstance(result, BaseResponse):
                 if isinstance(result, QueryResponse):
-                    response = result
-                elif isinstance(result, Option):
-                    response = QueryResponse([result], setting_changes)
-                else:
-                    response = QueryResponse(result, setting_changes)
-                return await self.write(response.to_message(id=request["id"]))
+                    [self.register_action(opt.action) for opt in result.options if opt.action]
+                return await self.write(result.to_message(id=request["id"]))
+            else:
+                e = PluginExecutionError(
+                    method,
+                    params,
+                    TypeError(
+                        f"Return type of method was not of Response. Returned: {result!r}"
+                    ),
+                )
+                return await self.write(
+                    JsonRPCError(
+                        code=-32603, message="Internal error", data=e
+                    ).to_message(id=request["id"])
+                )
         except json.JSONDecodeError:
             return await self.write(
                 JsonRPCError(code=-32700, message="JSON decode error").to_message(
@@ -171,7 +191,7 @@ class Client:
                 LOG.debug(f"Received result: {message!r}")
                 asyncio.create_task(self.__handle_result(Result.from_dict(message)))
             elif "error" in message:
-                LOG.debug(f"Received error: {message!r}")
+                LOG.exception(f"Received error: {message!r}")
                 asyncio.create_task(
                     self.__handle_error(
                         message["id"], JsonRPCError.from_dict(message["error"])
@@ -188,3 +208,8 @@ class Client:
         self.writer.write(msg)
         if drain:
             await self.writer.drain()
+
+    def register_action(self, action: Action) -> str:
+        name = action.method.__qualname__
+        self.method_mappings[name] = action.method
+        return name

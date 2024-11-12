@@ -61,24 +61,39 @@ class Base:
         return f"<{self.__class__.__name__} {" ".join(args)}>"
 
 
+class BaseResponse(Base):
+    def _as_request(self, id: int) -> dict:
+        return {
+            "jsonrpc": "2.0",
+            "result": self.to_dict(),
+            "id": id,
+        }
+
+    def to_message(self, id: int) -> bytes:  # type: ignore
+        return (json.dumps(self._as_request(id)) + "\r\n").encode()
+
+
 class Action(Base):
-    __slots__ = "id", "method", "parameters"
+    __slots__ = "id", "method", "parameters", "hide_after_finish"
 
     def __init__(
         self,
         id: int,
         method: Callable[[*Ts], Awaitable[Any]],
         parameters: tuple[*Ts] = MISSING,
+        hide_after_finish: bool = True
     ) -> None:
         self.id = id
         self.method = method
         self.parameters = parameters or []
+        self.hide_after_finish = hide_after_finish
 
     def to_dict(self) -> dict:
         return {
             "id": self.id,
             "method": self.method.__qualname__,
             "parameters": self.parameters,
+            "DontHideAfterAction": not self.hide_after_finish
         }
 
 
@@ -140,7 +155,7 @@ class Option(Base):
         return x
 
 
-class JsonRPCError(Base):
+class JsonRPCError(BaseResponse):
     __slots__ = "code", "message", "data"
 
     def __init__(self, code: int, message: str, data: Any | None = None):
@@ -153,7 +168,7 @@ class JsonRPCError(Base):
         return cls(code=data["code"], message=data["message"], data=data["data"])
 
 
-class QueryResponse(Base):
+class QueryResponse(BaseResponse):
     __slots__ = "options", "settings_changes", "debug_message"
     __jsonrpc_option_names__ = {
         "settings_changes": "settingsChanges",
@@ -187,21 +202,21 @@ class Request(Base):
 
 
 class Result(Base):
-    __slots__ = "id", "result"
+    __slots__ = "id", "data"
 
-    def __init__(self, id: int, result: dict[str, Any]) -> None:
+    def __init__(self, id: int, data: dict[str, Any]) -> None:
         self.id = id
-        self.result = result
+        self.data = data
 
     @classmethod
     def from_dict(cls: type[Self], data: dict[str, Any]) -> Self:
         if data["jsonrpc"] != "2.0":
             raise JsonRPCVersionMismatch("2.0", data["jsonrpc"])
 
-        return cls(id=data["id"], result=data["result"])
+        return cls(id=data["id"], data=data["result"])
 
 
-class ExecuteResponse(Base):
+class ExecuteResponse(BaseResponse):
     __slots__ = ("hide",)
 
     def __init__(self, hide: bool = True):

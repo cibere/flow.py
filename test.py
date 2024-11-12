@@ -17,27 +17,13 @@ LOG = logging.getLogger(__name__)
 
 
 class MyPlugin(Plugin):
-    async def query(self, data: Query, settings: Settings):
-        result = await self.client.request("FuzzySearch", [data.text, "hello"])
-        assert isinstance(result, Result)
-        LOG.debug(result)
+    async def __call__(self, data: Query, settings: Settings):
+        result = await self.api.fuzzy_search(data.text, "hello")
 
         yield Option(
-            f"hello: {result.result['score']}",
-            title_highlight_data=result.result.get("matchData", list()),
-            action=Action(id=0, method=self.store, parameters=(result.result,)),
+            f"hello: {result.score}",
         )
-        yield Option(
-            "Click here to try hide=true",
-            action=Action(id=0, method=self.test, parameters=(True,)),
-        )
-        yield Option(
-            "Click here to try hide=false",
-            action=Action(id=1, method=self.test, parameters=(False,)),
-        )
-
-    async def test(self, hide: bool):
-        return ExecuteResponse(hide)
-
+        yield Option("Click to test1", action=Action(100, self.api.open_settings_menu, hide_after_finish=True))
+        yield Option("Click to test2", action=Action(100, self.api.open_settings_menu, hide_after_finish=False))
 
 MyPlugin().run()
