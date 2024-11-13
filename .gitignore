@@ -4,3 +4,5 @@ lib/*
 *.logs
 *.log
 *.pyc
+dist/*
+*.egg-info
