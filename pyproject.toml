@@ -9,7 +9,6 @@ readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.12"
 authors = [{ name = "cibere" }]
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
     "License :: OSI Approved :: MIT License",
     "Intended Audience :: Developers",
     "Natural Language :: English",
@@ -35,4 +34,3 @@ packages = [
     "flowpy.flow_api",
     "flowpy.jsonrpc",
 ]
-include-package-data = true
