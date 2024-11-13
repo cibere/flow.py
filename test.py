@@ -23,7 +23,7 @@ class MyPlugin(Plugin):
         yield Option(
             f"hello: {result.score}",
         )
-        yield Option("Show message", action=Action(id=80, method=self.test))
+        yield Option("Show message", action=Action(method=self.test))
 
     async def test(self):
         res = await self.api.show_message("This is a test", "sub")
