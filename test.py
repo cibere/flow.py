@@ -23,7 +23,12 @@ class MyPlugin(Plugin):
         yield Option(
             f"hello: {result.score}",
         )
-        yield Option("Click to test1", action=Action(100, self.api.open_settings_menu, hide_after_finish=True))
-        yield Option("Click to test2", action=Action(100, self.api.open_settings_menu, hide_after_finish=False))
+        yield Option("Show message", action=Action(id=80, method=self.test))
+
+    async def test(self):
+        res = await self.api.show_message("This is a test", "sub")
+        LOG.info(res.data)
+        return ExecuteResponse(False)
+
 
 MyPlugin().run()

@@ -8,23 +8,17 @@ from asyncio.streams import StreamReader, StreamWriter
 from typing import TYPE_CHECKING, Any, Callable
 
 from ..errors import PluginExecutionError
+from .base_object import ToMessageBase as BaseResponse
 from .errors import JsonRPCException
-from .objects import (
-    Action,
-    BaseResponse,
-    JsonRPCError,
-    Option,
-    QueryResponse,
-    Request,
-    Result,
-)
-from .utils import coro_or_gen
+from .option import Action
+from .requests import Request
+from .responses import JsonRPCError, QueryResponse
+from .result import Result
 
 LOG = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from ..plugin import Plugin
-    from ..settings import Settings
 
 __all__ = ("JsonRPCClient",)
 
@@ -36,17 +30,22 @@ class JsonRPCClient:
     def __init__(self, plugin: Plugin) -> None:
         self.tasks: dict[int, asyncio.Task] = {}
         self.requests: dict[int, asyncio.Future[Result | JsonRPCError]] = {}
-        self.request_id = 1
+        self._current_request_id = 1
         self.plugin = plugin
         self.method_mappings: dict[str, Callable] = {}
+
+    @property
+    def request_id(self) -> int:
+        self._current_request_id += 1
+        return self._current_request_id
 
     async def request(
         self, method: str, params: list[object] = []
     ) -> Result | JsonRPCError:
         fut: asyncio.Future[Result | JsonRPCError] = asyncio.Future()
-        self.request_id += 1
-        self.requests[self.request_id] = fut
-        msg = Request(method, self.request_id, params).to_message()
+        rid = self.request_id
+        self.requests[rid] = fut
+        msg = Request(method, rid, params).to_message(rid)
         await self.write(msg, drain=False)
         return await fut
 
@@ -109,7 +108,10 @@ class JsonRPCClient:
         try:
             coro = func(*params)
         except TypeError as e:
-            LOG.exception(f"Ran into a TypeError while getting the coro of the {method!r} method, returning invalid params error. Params: {params!r}", exc_info=e)
+            LOG.exception(
+                f"Ran into a TypeError while getting the coro of the {method!r} method, returning invalid params error. Params: {params!r}",
+                exc_info=e,
+            )
             return await self.write(
                 JsonRPCError(code=-32602, message="Invalid params").to_message(
                     id=request["id"]
@@ -134,7 +136,11 @@ class JsonRPCClient:
 
             if isinstance(result, BaseResponse):
                 if isinstance(result, QueryResponse):
-                    [self.register_action(opt.action) for opt in result.options if opt.action]
+                    [
+                        self.register_action(opt.action)
+                        for opt in result.options
+                        if opt.action
+                    ]
                 return await self.write(result.to_message(id=request["id"]))
             else:
                 e = PluginExecutionError(
@@ -212,4 +218,5 @@ class JsonRPCClient:
     def register_action(self, action: Action) -> str:
         name = action.method.__qualname__
         self.method_mappings[name] = action.method
+        action.id = self.request_id
         return name

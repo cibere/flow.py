@@ -1,6 +1,7 @@
 from .base import Base, add_prop
 
-__all__ = "FuzzySearchResult",
+__all__ = ("FuzzySearchResult",)
+
 
 class FuzzySearchResult(Base):
     score: int = add_prop("score")
