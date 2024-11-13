@@ -1,17 +1,14 @@
 import asyncio
 import json
 import logging
-import sys
-from typing import TYPE_CHECKING, Any, AsyncIterable, Awaitable, Callable, Iterable
+from typing import TYPE_CHECKING, Any, AsyncIterable, Awaitable, Iterable
 
 import aioconsole
 
 from .flow_api.client import FlowLauncherAPI
 from .jsonrpc import (
-    Action,
     ExecuteResponse,
     JsonRPCClient,
-    JsonRPCError,
     Option,
     QueryResponse,
 )
