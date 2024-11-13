@@ -6,12 +6,7 @@ from typing import TYPE_CHECKING, Any, AsyncIterable, Awaitable, Iterable
 import aioconsole
 
 from .flow_api.client import FlowLauncherAPI
-from .jsonrpc import (
-    ExecuteResponse,
-    JsonRPCClient,
-    Option,
-    QueryResponse,
-)
+from .jsonrpc import ExecuteResponse, JsonRPCClient, Option, QueryResponse
 from .query import Query
 from .settings import Settings
 from .utils import coro_or_gen, setup_logging

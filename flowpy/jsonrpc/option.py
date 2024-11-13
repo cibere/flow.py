@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from typing import Any, Awaitable, Callable, TypeVarTuple
 
-from .base_object import Base
 from ..utils import MISSING
+from .base_object import Base
 
 Ts = TypeVarTuple("Ts")
 
