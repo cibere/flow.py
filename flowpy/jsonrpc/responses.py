@@ -6,7 +6,7 @@ from typing import Any
 
 from .base_object import ToMessageBase
 from .option import Option
-from .utils import MISSING
+from ..utils import MISSING
 
 __all__ = (
     "JsonRPCError",

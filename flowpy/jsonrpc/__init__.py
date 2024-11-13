@@ -1,4 +1,3 @@
-from . import utils as utils
 from .client import *
 from .errors import *
 from .option import *

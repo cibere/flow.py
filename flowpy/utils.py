@@ -1,11 +1,20 @@
-import json
 import logging
 import logging.handlers
 from inspect import isasyncgen, iscoroutine
-from typing import Any, AsyncIterable, Awaitable, Iterable
+from typing import AsyncIterable, Awaitable, Iterable, Any
+
+class _MissingSentinel:
+    def __bool__(self) -> bool:
+        return False
+
+    def __eq__(self, other: Any) -> bool:
+        return False
+
+
+MISSING: Any = _MissingSentinel()
 
 LOG = logging.getLogger(__name__)
-__all__ = ("setup_logging", "coro_or_gen")
+__all__ = ("setup_logging", "coro_or_gen", "MISSING")
 
 
 def setup_logging(*, formatter: logging.Formatter | None = None) -> None:
