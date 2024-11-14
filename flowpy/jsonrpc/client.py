@@ -10,7 +10,6 @@ from typing import TYPE_CHECKING, Any, Callable
 from ..errors import PluginExecutionError
 from .base_object import ToMessageBase as BaseResponse
 from .errors import JsonRPCException
-from .option import Action
 from .requests import Request
 from .responses import JsonRPCError, QueryResponse
 from .result import Result
@@ -19,6 +18,7 @@ LOG = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from ..plugin import Plugin
+    from .option import Action
 
 __all__ = ("JsonRPCClient",)
 

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Awaitable, Callable, TypeVarTuple
 
+from ..flow_api import FlowLauncherAPI
 from ..utils import MISSING
 from .base_object import Base
 
@@ -22,6 +23,10 @@ class Action(Base):
         parameters: tuple[*Ts] = MISSING,
         hide_after_finish: bool = True,
     ) -> None:
+        parent: Any = getattr(method, "__self__")
+        if isinstance(parent, FlowLauncherAPI):
+            parameters = (method.__name__, *parameters) # type: ignore
+            method = parent.__call__ # type: ignore
         self.method = method
         self.parameters = parameters or []
         self.hide_after_finish = hide_after_finish
