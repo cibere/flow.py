@@ -1,12 +1,13 @@
 from __future__ import annotations
 
-import asyncio
 import json
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from ..utils import MISSING
 from .base_object import ToMessageBase
-from .option import Option
+
+if TYPE_CHECKING:
+    from .option import Option
 
 __all__ = (
     "JsonRPCError",
@@ -15,7 +16,21 @@ __all__ = (
 )
 
 
-class JsonRPCError(ToMessageBase):
+class BaseResponse(ToMessageBase):
+    def to_message(self, id: int) -> bytes:
+        return (
+            json.dumps(
+                {
+                    "jsonrpc": "2.0",
+                    "result": self.to_dict(),
+                    "id": id,
+                }
+            )
+            + "\r\n"
+        ).encode()
+
+
+class JsonRPCError(BaseResponse):
     __slots__ = "code", "message", "data"
 
     def __init__(self, code: int, message: str, data: Any | None = None):
@@ -28,7 +43,7 @@ class JsonRPCError(ToMessageBase):
         return cls(code=data["code"], message=data["message"], data=data["data"])
 
 
-class QueryResponse(ToMessageBase):
+class QueryResponse(BaseResponse):
     __slots__ = "options", "settings_changes", "debug_message"
     __jsonrpc_option_names__ = {
         "settings_changes": "settingsChanges",
@@ -47,7 +62,7 @@ class QueryResponse(ToMessageBase):
         self.debug_message = debug_message or ""
 
 
-class ExecuteResponse(ToMessageBase):
+class ExecuteResponse(BaseResponse):
     __slots__ = ("hide",)
 
     def __init__(self, hide: bool = True):

@@ -1,7 +1,7 @@
 import json
 from typing import Any, Self
 
-__all__ = "Base", "ToMessageBase"
+__all__ = ("Base",)
 
 
 class Base:
@@ -32,13 +32,4 @@ class Base:
 
 class ToMessageBase(Base):
     def to_message(self, id: int) -> bytes:
-        return (
-            json.dumps(
-                {
-                    "jsonrpc": "2.0",
-                    "result": self.to_dict(),
-                    "id": id,
-                }
-            )
-            + "\r\n"
-        ).encode()
+        return (json.dumps(self.to_dict()) + "\r\n").encode()
