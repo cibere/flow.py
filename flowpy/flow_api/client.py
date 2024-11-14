@@ -75,7 +75,7 @@ class FlowLauncherAPI:
         res = await self.jsonrpc.request("OpenSettingDialog")
         assert isinstance(res, Result)
 
-    async def open_url(self, url: str, in_private: bool) -> None:
+    async def open_url(self, url: str, in_private: bool = False) -> None:
         from ..jsonrpc import Result  # circular import
 
         res = await self.jsonrpc.request("OpenUrl", [url, in_private])
