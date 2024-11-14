@@ -80,3 +80,9 @@ class FlowLauncherAPI:
 
         res = await self.jsonrpc.request("OpenUrl", [url, in_private])
         assert isinstance(res, Result)
+
+    async def run_shell_cmd(self, cmd: str, filename: str) -> None:
+        from ..jsonrpc import Result  # circular import
+
+        res = await self.jsonrpc.request("ShellRun", [cmd, filename])
+        assert isinstance(res, Result)
