@@ -15,13 +15,12 @@ __all__ = (
 
 
 class Action(Base):
-    __slots__ = "method", "parameters", "hide_after_finish", "__id"
+    __slots__ = "method", "parameters", "_id"
 
     def __init__(
         self,
         method: Callable[[*Ts], Awaitable[Any]],
-        parameters: tuple[*Ts] = MISSING,
-        hide_after_finish: bool = True,
+        *parameters: *Ts
     ) -> None:
         parent: Any = getattr(method, "__self__")
         if isinstance(parent, FlowLauncherAPI):
@@ -29,28 +28,25 @@ class Action(Base):
             method = parent.__call__ # type: ignore
         self.method = method
         self.parameters = parameters or []
-        self.hide_after_finish = hide_after_finish
-        self.__id: int | None = None
+        self._id: int | None = None
 
     @property
     def id(self) -> int:
-        if self.__id is None:
+        if self._id is None:
             raise RuntimeError("Action has not been assigned and id")
         else:
-            return self.__id
+            return self._id
 
     @id.setter
     def id(self, value: int) -> None:
-        self.__id = value
+        self._id = value
 
     def to_dict(self) -> dict:
         return {
             "id": self.id,
             "method": self.method.__qualname__,
             "parameters": self.parameters,
-            "DontHideAfterAction": not self.hide_after_finish,
         }
-
 
 class Option(Base):
     __slots__ = (
