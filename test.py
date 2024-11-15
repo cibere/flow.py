@@ -1,6 +1,7 @@
+import inspect
 import json
 import logging
-from typing import Any
+from typing import Any, Awaitable, Callable, TypeVarTuple
 
 from flowpy import (
     Action,
@@ -14,6 +15,7 @@ from flowpy import (
 )
 
 LOG = logging.getLogger(__name__)
+TS = TypeVarTuple("TS")
 
 
 class MyPlugin(Plugin):
@@ -23,10 +25,16 @@ class MyPlugin(Plugin):
         yield Option(
             f"hello: {result.score}",
         )
-        yield Option(
-            "Show message",
-            action=Action(self.api.show_message, "this is a test", "my sub"),
-        )
+
+        def gen(method: Callable[[*TS], Awaitable[Any]], *args: *TS):
+            return Option(method.__qualname__, action=Action(method, *args))
+
+        for name, val in inspect.getmembers(self.api):
+            if (
+                getattr(val, "__func__", None) is not None
+                and getattr(val, "__self__", None) is not None
+            ):
+                yield gen(val)
 
 
 MyPlugin().run()

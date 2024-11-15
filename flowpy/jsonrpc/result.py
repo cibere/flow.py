@@ -12,7 +12,7 @@ __all__ = ("Result",)
 class Result(Base):
     __slots__ = "id", "data"
 
-    def __init__(self, id: int, data: dict[str, Any]) -> None:
+    def __init__(self, id: int, data: Any) -> None:
         self.id = id
         self.data = data
 
