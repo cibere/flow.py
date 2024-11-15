@@ -18,14 +18,12 @@ class Action(Base):
     __slots__ = "method", "parameters", "_id"
 
     def __init__(
-        self,
-        method: Callable[[*Ts], Awaitable[Any]],
-        *parameters: *Ts
+        self, method: Callable[[*Ts], Awaitable[Any]], *parameters: *Ts
     ) -> None:
         parent: Any = getattr(method, "__self__")
         if isinstance(parent, FlowLauncherAPI):
-            parameters = (method.__name__, *parameters) # type: ignore
-            method = parent.__call__ # type: ignore
+            parameters = (method.__name__, *parameters)  # type: ignore
+            method = parent.__call__  # type: ignore
         self.method = method
         self.parameters = parameters or []
         self._id: int | None = None
@@ -47,6 +45,7 @@ class Action(Base):
             "method": self.method.__qualname__,
             "parameters": self.parameters,
         }
+
 
 class Option(Base):
     __slots__ = (
