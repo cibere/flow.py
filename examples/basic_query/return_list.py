@@ -2,7 +2,7 @@ from flowpy import Option, Plugin, Query, Settings
 
 
 class ReturnListPlugin(Plugin):
-    async def __call__(self, data: Query, settings: Settings):
+    async def __call__(self, data: Query):
         return [
             Option(f"Your text is: {data.text}"),
             Option(f"Your keyword is: {data.keyword}"),

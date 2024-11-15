@@ -1,7 +1,7 @@
 import asyncio
 import json
 import logging
-from typing import TYPE_CHECKING, Any, AsyncIterable, Awaitable, Iterable
+from typing import Any, AsyncIterable, Awaitable, Iterable
 
 import aioconsole
 
@@ -19,6 +19,8 @@ type ReturnOptions = Awaitable[Iterable[Option]] | AsyncIterable[Option]
 
 
 class Plugin:
+    settings: Settings
+
     def __init__(self) -> None:
         self.jsonrpc: JsonRPCClient = JsonRPCClient(self)
         self.api = FlowLauncherAPI(self.jsonrpc)
@@ -27,11 +29,11 @@ class Plugin:
         self, raw_data: dict[str, Any], raw_settings: dict[str, Any]
     ) -> QueryResponse:
         data = Query(raw_data)
-        settings = Settings(raw_settings)
-        options = await coro_or_gen(self.__call__(data, settings))
-        return QueryResponse(options, settings._changes)
+        self.settings = Settings(raw_settings)
+        options = await coro_or_gen(self.__call__(data))
+        return QueryResponse(options, self.settings._changes)
 
-    def __call__(self, data: Query, settings: Settings) -> ReturnOptions:
+    def __call__(self, data: Query) -> ReturnOptions:
         raise RuntimeError("'query' should be overridden")
 
     async def initialize(self, arg: dict[str, Any]):

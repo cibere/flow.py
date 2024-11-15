@@ -17,18 +17,16 @@ LOG = logging.getLogger(__name__)
 
 
 class MyPlugin(Plugin):
-    async def __call__(self, data: Query, settings: Settings):
+    async def __call__(self, data: Query):
         result = await self.api.fuzzy_search(data.text, "hello")
 
         yield Option(
             f"hello: {result.score}",
         )
-        yield Option("Show message", action=Action(method=self.test))
-
-    async def test(self):
-        res = await self.api.show_message("This is a test", "sub")
-        LOG.info(res.data)
-        return ExecuteResponse(False)
+        yield Option(
+            "Show message",
+            action=Action(self.api.show_message, "this is a test", "my sub"),
+        )
 
 
 MyPlugin().run()
