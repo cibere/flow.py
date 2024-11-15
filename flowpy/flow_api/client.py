@@ -40,7 +40,7 @@ class FlowLauncherAPI:
         """
         Change the query in flow launcher's menu
         """
-        
+
         from ..jsonrpc import Result  # circular import
 
         res = await self.jsonrpc.request("ChangeQuery", [new_query, requery])
@@ -99,7 +99,7 @@ class FlowLauncherAPI:
         """
         Tell flow to run a shell command
         """
-        
+
         from ..jsonrpc import Result  # circular import
 
         res = await self.jsonrpc.request("ShellRun", [cmd, filename])

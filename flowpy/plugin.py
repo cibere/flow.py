@@ -5,10 +5,10 @@ from typing import Any, AsyncIterable, Awaitable, Iterable
 
 import aioconsole
 
+from .errors import PluginNotInitialized
 from .flow_api.client import FlowLauncherAPI, PluginMetadata
 from .jsonrpc import ExecuteResponse, JsonRPCClient, Option, QueryResponse
 from .query import Query
-from .errors import PluginNotInitialized
 from .settings import Settings
 from .utils import coro_or_gen, setup_logging
 
@@ -26,7 +26,7 @@ class Plugin:
         self.jsonrpc: JsonRPCClient = JsonRPCClient(self)
         self.api = FlowLauncherAPI(self.jsonrpc)
         self._metadata: PluginMetadata | None = None
-    
+
     @property
     def metadata(self) -> PluginMetadata:
         """
@@ -37,7 +37,6 @@ class Plugin:
         if self._metadata:
             return self._metadata
         raise PluginNotInitialized()
-
 
     async def query(
         self, raw_data: dict[str, Any], raw_settings: dict[str, Any]
@@ -52,7 +51,7 @@ class Plugin:
 
     async def initialize(self, arg: dict[str, Any]):
         LOG.info(f"Initialize: {json.dumps(arg)}")
-        self._metadata = PluginMetadata(arg['currentPluginMetadata'], self.api)
+        self._metadata = PluginMetadata(arg["currentPluginMetadata"], self.api)
         return ExecuteResponse(hide=False)
 
     async def store(self, res):

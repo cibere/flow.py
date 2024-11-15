@@ -5,7 +5,7 @@ __all__ = (
     "PluginMethodException",
     "SettingNotFound",
     "PluginExecutionError",
-    "PluginNotInitialized"
+    "PluginNotInitialized",
 )
 
 
@@ -36,6 +36,7 @@ class PluginExecutionError(PluginException):
         super().__init__(
             f"An error occured while executing the {method!r} method: {error}"
         )
+
 
 class PluginNotInitialized(PluginException):
     def __init__(self):
