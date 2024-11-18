@@ -87,6 +87,10 @@ class PluginMetadata(Base):
         --------
         keyword: :class:`str`
             The keyword to be added
+        
+        Returns
+        --------
+        None
         """
 
         return self._flow_api.add_keyword(self.id, keyword)
@@ -102,6 +106,10 @@ class PluginMetadata(Base):
         --------
         keyword: :class:`str`
             The keyword to be removed
+        
+        Returns
+        --------
+        None
         """
 
         return self._flow_api.remove_keyword(self.id, keyword)
