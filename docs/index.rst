@@ -4,7 +4,6 @@ A wrapper for Flow Launcher's V2 python api using jsonrpc.
 
 .. toctree::
    :caption: API Reference
-   :maxdepth: 2
    
    plugin
    api
