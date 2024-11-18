@@ -4,7 +4,7 @@ Flow API
 Client
 ~~~~~~~~
 
-.. autoclass:: flowpy.flow_api.client.FlowLauncherAPI
+.. autoclass:: flowpy.flow_api.client.FlowLauncherAPI()
     :members:
 
 Classes
