@@ -1,5 +1,5 @@
 Plugin
 ===========
 
-.. autoclass:: flowpy.plugin
+.. autoclass:: flowpy.plugin.Plugin
     :members:
