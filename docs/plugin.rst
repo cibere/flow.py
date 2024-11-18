@@ -3,4 +3,4 @@ Plugin
 
 .. autoclass:: flowpy.plugin.Plugin
     :members:
-    .. automethod:: Plugin.__call__()
+    .. automethod:: __call__
