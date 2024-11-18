@@ -31,6 +31,18 @@ class BaseResponse(ToMessageBase):
 
 
 class JsonRPCError(BaseResponse):
+    r"""This represents an error sent to or from flow.
+    
+    Attributes
+    --------
+    code: :class:`int`
+        The error code for the error
+    message: :class:`str`
+        The error's message
+    data: Optional[:class:`Any`]
+        Any extra data
+    """
+    
     __slots__ = "code", "message", "data"
 
     def __init__(self, code: int, message: str, data: Any | None = None):
@@ -44,6 +56,17 @@ class JsonRPCError(BaseResponse):
 
 
 class QueryResponse(BaseResponse):
+    r"""This response represents the response from the `query` and `context_menu` callback methods
+    
+    Attributes
+    --------
+    options: list[:class:`Option`]
+        The options to be sent as the result of the query
+    settings_changes: dict[:class:`str`, Any]
+        Any changes to be made to the plugin's settings.
+    debug_message: :class:`str`
+        A debug message if you want
+    """
     __slots__ = "options", "settings_changes", "debug_message"
     __jsonrpc_option_names__ = {
         "settings_changes": "settingsChanges",
@@ -63,6 +86,14 @@ class QueryResponse(BaseResponse):
 
 
 class ExecuteResponse(BaseResponse):
+    r"""This response is a generic response for any callback method that isn't `query` or `context_menu`
+    
+    Attributes
+    --------
+    hide: :class:`bool`
+        Whether to hide the flow menu after execution or not
+    """
+
     __slots__ = ("hide",)
 
     def __init__(self, hide: bool = True):
