@@ -66,7 +66,7 @@ html_static_path = ["_static"]
 # autodoc
 # https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#
 autodoc_typehints_format = "short"
-autodoc_typehints = "both"
+#autodoc_typehints = "both"
 autodoc_typehints_description_target = "all"
 autodoc_mock_imports = ["typing"]
 
