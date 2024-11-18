@@ -3,6 +3,7 @@ Plugin
 
 .. autoclass:: flowpy.plugin.Plugin
     :members:
+    :private-members: __call__
 
 Classes
 ~~~~~~~~
