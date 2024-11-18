@@ -9,3 +9,4 @@ A wrapper for Flow Launcher's V2 python api using jsonrpc.
    api
    flow_api
    whats_new
+   jsonrpc
