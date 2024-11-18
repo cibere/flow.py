@@ -52,6 +52,14 @@ extensions = [
     "sphinx_toolbox.more_autodoc.typevars",  # https://sphinx-toolbox.readthedocs.io/en/latest/extensions/more_autodoc/typevars.html
 ]
 
+rst_prolog = """
+.. |coro| replace:: This function is a |coroutine_link|_.
+.. |maybecoro| replace:: This function *could be a* |coroutine_link|_.
+.. |coroutine_link| replace:: *coroutine*
+.. _coroutine_link: https://docs.python.org/3/library/asyncio-task.html#coroutine
+"""
+
+
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
