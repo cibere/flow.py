@@ -10,6 +10,33 @@ type RawSettings = dict[str, Any]
 
 
 class Settings:
+    r"""This class represents the settings that you user has chosen 
+
+    .. container:: operations
+
+        .. describe:: x['setting name']
+
+            Get a setting by key similiar to a dictionary
+        
+        .. describe:: x['setting name'] = "new value"
+
+            Change a settings value like a dictionary
+        
+        .. describe:: x.setting_name
+
+            Get a setting by name like an attribute
+        
+        .. describe:: x.setting_name = "new value"
+
+            Change a settings value like an attribute
+
+            
+    Raises
+    --------
+    :class:`SettingNotFound`
+        A setting was not found
+    """
+        
     _data: RawSettings
     _changes: RawSettings
 

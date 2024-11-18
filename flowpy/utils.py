@@ -38,9 +38,29 @@ def setup_logging(*, formatter: logging.Formatter | None = None) -> None:
 
 
 async def coro_or_gen[T](coro: Awaitable[Iterable[T]] | AsyncIterable[T]) -> list[T]:
+    """|coro|
+
+    Executes an AsyncIterable or a Coroutine that returns a list of items.
+
+    Parameters
+    -----------
+    coro: :class:`typing.Awaitable`[:class:`typing.Iterable`] | :class:`typing.AsyncIterable`
+        The coroutine or asynciterable to be ran
+
+    Raises
+    --------
+    TypeError
+        Neither a :class:`typing.Coroutine` or an :class:`typing.AsyncIterable` was passed
+
+    Returns
+    --------
+    List[Any]
+        A list of whatever was given from the :class:`typing.Coroutine` or :class:`typing.AsyncIterable`.
+    """
+
     if iscoroutine(coro):
         return await coro
     elif isasyncgen(coro):
         return [item async for item in coro]
     else:
-        raise RuntimeError(f"Not a coro or gen: {coro!r}")
+        raise TypeError(f"Not a coro or gen: {coro!r}")
