@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from typing import Any, Awaitable, Callable, TypeVarTuple
+from typing import Any, Callable, Coroutine, Iterable, TypeVarTuple
 
 from ..flow_api import FlowLauncherAPI
 from ..utils import MISSING
 from .base_object import Base
 
-Ts = TypeVarTuple("Ts")
+TS = TypeVarTuple("TS")
 
 __all__ = (
     "Action",
@@ -15,36 +15,26 @@ __all__ = (
 
 
 class Action(Base):
-    __slots__ = "method", "parameters", "_id"
+    __slots__ = "method", "args"
 
     def __init__(
-        self, method: Callable[[*Ts], Awaitable[Any]], *parameters: *Ts
+        self,
+        method: Callable[[*TS], Coroutine[Any, Any, Any]],
+        *args: *TS,
     ) -> None:
-        parent: Any = getattr(method, "__self__")
+        parent: Any = getattr(method, "__self__", None)
         if isinstance(parent, FlowLauncherAPI):
             parameters = (method.__name__, *parameters)  # type: ignore
             method = parent.__call__  # type: ignore
         self.method = method
-        self.parameters = parameters or []
-        self._id: int | None = None
+        self.args = args
 
     @property
-    def id(self) -> int:
-        if self._id is None:
-            raise RuntimeError("Action has not been assigned and id")
-        else:
-            return self._id
-
-    @id.setter
-    def id(self, value: int) -> None:
-        self._id = value
+    def name(self) -> str:
+        return self.method.__qualname__
 
     def to_dict(self) -> dict:
-        return {
-            "id": self.id,
-            "method": self.method.__qualname__,
-            "parameters": self.parameters,
-        }
+        return {"method": self.name, "parameters": self.args}
 
 
 class Option(Base):
@@ -65,7 +55,7 @@ class Option(Base):
         title: str,
         sub: str | None = None,
         icon: str | None = None,
-        title_highlight_data: tuple[int] | None = None,
+        title_highlight_data: Iterable[int] | None = None,
         title_tooltip: str | None = None,
         sub_tooltip: str | None = None,
         copy_text: str | None = None,
@@ -103,3 +93,22 @@ class Option(Base):
         if self.context_data is not None:
             x["ContextData"] = self.context_data
         return x
+
+    @classmethod
+    def from_dict(cls: type[Option], data: dict[str, Any]) -> Option:
+        action_data = data.get("jsonRPCAction")
+        if action_data:
+            action = Action.from_dict(action_data)
+        else:
+            action = None
+        return cls(
+            title=data["title"],
+            sub=data.get("subTitle"),
+            icon=data.get("icoPath"),
+            title_highlight_data=data.get("titleHighlightData"),
+            title_tooltip=data.get("titleTooltip"),
+            sub_tooltip=data.get("subtitleTooltip"),
+            copy_text=data.get("copyText"),
+            context_data=data.get("ContextData", MISSING),
+            action=action,
+        )

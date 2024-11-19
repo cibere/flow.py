@@ -6,9 +6,8 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-from datetime import date
 import re
-
+from datetime import date
 
 project = "flow.py"
 
@@ -35,7 +34,6 @@ copyright = f"{current_year}, {author}"
 
 import os
 import sys
-
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -74,7 +72,7 @@ html_static_path = ["_static"]
 # autodoc
 # https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#
 autodoc_typehints_format = "short"
-#autodoc_typehints = "both"
+# autodoc_typehints = "both"
 autodoc_typehints_description_target = "all"
 autodoc_mock_imports = ["typing"]
 

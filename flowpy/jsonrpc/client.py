@@ -3,15 +3,12 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
-import sys
 from asyncio.streams import StreamReader, StreamWriter
-from typing import TYPE_CHECKING, Any, Callable
+from typing import TYPE_CHECKING, Any, Callable, Coroutine
 
-from ..errors import PluginExecutionError
-from .base_object import ToMessageBase as BaseResponse
 from .errors import JsonRPCException
 from .requests import Request
-from .responses import JsonRPCError, QueryResponse
+from .responses import BaseResponse, ErrorResponse
 from .result import Result
 
 LOG = logging.getLogger(__name__)
@@ -29,20 +26,26 @@ class JsonRPCClient:
 
     def __init__(self, plugin: Plugin) -> None:
         self.tasks: dict[int, asyncio.Task] = {}
-        self.requests: dict[int, asyncio.Future[Result | JsonRPCError]] = {}
+        self.requests: dict[int, asyncio.Future[Result | ErrorResponse]] = {}
         self._current_request_id = 1
         self.plugin = plugin
-        self.method_mappings: dict[str, Callable] = {}
+        self.action_callback_mapping: dict[
+            str, Callable[..., Coroutine[Any, Any, Any]]
+        ] = {}
 
     @property
     def request_id(self) -> int:
         self._current_request_id += 1
         return self._current_request_id
 
+    @request_id.setter
+    def request_id(self, value: int) -> None:
+        self._current_request_id = value
+
     async def request(
         self, method: str, params: list[object] = []
-    ) -> Result | JsonRPCError:
-        fut: asyncio.Future[Result | JsonRPCError] = asyncio.Future()
+    ) -> Result | ErrorResponse:
+        fut: asyncio.Future[Result | ErrorResponse] = asyncio.Future()
         rid = self.request_id
         self.requests[rid] = fut
         msg = Request(method, rid, params).to_message(rid)
@@ -74,7 +77,7 @@ class JsonRPCClient:
                 f"Result from unknown request given. ID: {result.id!r}, result={result!r}"
             )
 
-    async def __handle_error(self, id: int, error: JsonRPCError) -> None:
+    async def __handle_error(self, id: int, error: ErrorResponse) -> None:
         if id in self.requests:
             self.requests.pop(id).set_exception(Exception(error))
         else:
@@ -92,84 +95,30 @@ class JsonRPCClient:
     async def __handle_request(self, request: dict[str, Any]) -> None:
         method = request["method"]
         params = request["params"]
-        func = self.method_mappings.get(method)
-        if func is None:
-            try:
-                func = getattr(self.plugin, method)
-            except AttributeError as e:
-                return await self.write(
-                    JsonRPCError(
-                        code=-32601, message="Method not found", data=e
-                    ).to_message(request["id"])
-                )
+
+        self.request_id = request["id"]
+
+        callback = self.action_callback_mapping.get(method)
+        if callback is None:
+            task = self.plugin.dispatch(method, *params)
+            if not task:
+                return
         else:
-            if params:
-                params = params[0]
-        try:
-            coro = func(*params)
-        except TypeError as e:
-            LOG.exception(
-                f"Ran into a TypeError while getting the coro of the {method!r} method, returning invalid params error. Params: {params!r}",
-                exc_info=e,
+            task = self.plugin._schedule_event(
+                callback,
+                method,
+                params[0],
+                error_handler_event_name="on_action_error",
             )
-            return await self.write(
-                JsonRPCError(code=-32602, message="Invalid params").to_message(
-                    id=request["id"]
-                )
-            )
+        self.tasks[request["id"]] = task
+        result = await task
 
-        try:
-            task = asyncio.create_task(coro)
-            self.tasks[request["id"]] = task
-            try:
-                result = await task
-            except Exception as e:
-                LOG.exception(
-                    f"Exception occured while running {f'{self.plugin.__class__.__name__}.{method}'}",
-                    exc_info=e,
-                )
-                return await self.write(
-                    JsonRPCError(
-                        code=-32603, message="Internal error", data=e
-                    ).to_message(id=request["id"])
-                )
-
-            if isinstance(result, BaseResponse):
-                if isinstance(result, QueryResponse):
-                    [
-                        self.register_action(opt.action)
-                        for opt in result.options
-                        if opt.action
-                    ]
-                return await self.write(result.to_message(id=request["id"]))
-            else:
-                e = PluginExecutionError(
-                    method,
-                    params,
-                    TypeError(
-                        f"Return type of method was not of Response. Returned: {result!r}"
-                    ),
-                )
-                return await self.write(
-                    JsonRPCError(
-                        code=-32603, message="Internal error", data=e
-                    ).to_message(id=request["id"])
-                )
-        except json.JSONDecodeError:
+        if isinstance(result, BaseResponse):
+            result.prepare(self)
+            return await self.write(result.to_message(id=request["id"]))
+        else:
             return await self.write(
-                JsonRPCError(code=-32700, message="JSON decode error").to_message(
-                    id=request["id"]
-                )
-            )
-        except Exception as e:
-            LOG.exception(
-                f"Unknown error caught while handling request ({request!r})",
-                exc_info=e,
-            )
-            return await self.write(
-                JsonRPCError(
-                    code=-32603, message="Internal error", data=f"{sys.exc_info()}"
-                ).to_message(id=request["id"])
+                ErrorResponse.internal_error().to_message(id=request["id"])
             )
 
     async def start_listening(self, reader: StreamReader, writer: StreamWriter):
@@ -200,7 +149,7 @@ class JsonRPCClient:
                 LOG.exception(f"Received error: {message!r}")
                 asyncio.create_task(
                     self.__handle_error(
-                        message["id"], JsonRPCError.from_dict(message["error"])
+                        message["id"], ErrorResponse.from_dict(message["error"])
                     )
                 )
             else:
@@ -214,9 +163,3 @@ class JsonRPCClient:
         self.writer.write(msg)
         if drain:
             await self.writer.drain()
-
-    def register_action(self, action: Action) -> str:
-        name = action.method.__qualname__
-        self.method_mappings[name] = action.method
-        action.id = self.request_id
-        return name

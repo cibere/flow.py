@@ -7,13 +7,7 @@ Plugin Errors
 .. autoclass:: flowpy.errors.PluginException
     :members:
 
-.. autoclass:: flowpy.errors.PluginMethodException
-    :members:
-
 .. autoclass:: flowpy.errors.SettingNotFound
-    :members:
-
-.. autoclass:: flowpy.errors.PluginExecutionError
     :members:
 
 .. autoclass:: flowpy.errors.PluginNotInitialized

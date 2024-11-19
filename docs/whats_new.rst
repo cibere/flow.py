@@ -1,1 +1,3 @@
-coming soon
+Whats New
+===========
+coming soon...

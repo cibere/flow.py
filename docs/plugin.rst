@@ -5,7 +5,10 @@ Plugin
 
 .. autoclass:: flowpy.plugin.Plugin
     :members:
-    :private-members: __call__
+    .. automethod:: Client.event()
+        :decorator:
+
+.. autofunction:: subclassed_event
 
 Classes
 ~~~~~~~

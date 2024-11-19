@@ -13,7 +13,7 @@ __all__ = ("PluginMetadata",)
 
 class PluginMetadata(Base):
     r"""This class represents a plugin's metadata
-    
+
     Attributes
     --------
     id: :class:`str`
@@ -39,6 +39,7 @@ class PluginMetadata(Base):
     main_keyword: :class:`str`
         The plugin's main keyword
     """
+
     def __init__(self, data: dict[str, Any], flow_api: FlowLauncherAPI) -> None:
         super().__init__(data)
         self._flow_api = flow_api
@@ -78,7 +79,7 @@ class PluginMetadata(Base):
 
     def add_keyword(self, keyword: str) -> Awaitable[None]:
         r"""|coro|
-        
+
         Registers a new keyword with flow for the plugin.
 
         This is a shortcut to :func:`FlowLauncherAPI.add_keyword`
@@ -87,7 +88,7 @@ class PluginMetadata(Base):
         --------
         keyword: :class:`str`
             The keyword to be added
-        
+
         Returns
         --------
         None
@@ -106,7 +107,7 @@ class PluginMetadata(Base):
         --------
         keyword: :class:`str`
             The keyword to be removed
-        
+
         Returns
         --------
         None

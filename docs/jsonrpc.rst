@@ -13,7 +13,7 @@ Option
 Responses
 ~~~~~~~~
 
-.. autoclass:: flowpy.jsonrpc.responses.JsonRPCError
+.. autoclass:: flowpy.jsonrpc.responses.ErrorResponse
     :members:
 
 .. autoclass:: flowpy.jsonrpc.responses.QueryResponse

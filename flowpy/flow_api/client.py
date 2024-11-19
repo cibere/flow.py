@@ -15,8 +15,8 @@ __all__ = ("FlowLauncherAPI",)
 
 class FlowLauncherAPI:
     r"""This class is a wrapper around Flow's API to make it easy to make requests and receive results.
-    
-    .. NOTE:: 
+
+    .. NOTE::
         Do not initialize this class yourself, use :obj:`Plugin.api` to get an instance instead.
     """
 
@@ -33,7 +33,7 @@ class FlowLauncherAPI:
         self, text: str, text_to_compare_it_to: str
     ) -> FuzzySearchResult:
         r"""|coro|
-        
+
         Asks flow how similiar two strings are.
 
         Parameters
@@ -42,7 +42,7 @@ class FlowLauncherAPI:
             The text
         text_to_compare_it_to: :class:`str`
             The text you want to compare the other text to
-        
+
         Returns
         --------
         :class:`FuzzySearchResult`
@@ -56,7 +56,7 @@ class FlowLauncherAPI:
 
     async def change_query(self, new_query: str, requery: bool = False) -> None:
         r"""|coro|
-        
+
         Change the query in flow launcher's menu.
 
         Parameters
@@ -65,7 +65,7 @@ class FlowLauncherAPI:
             The new query to change it to
         requery: :class:`bool`
             Whether or not to re-send a query request in the event that the `new_query` is the same as the current query
-        
+
         Returns
         --------
         None
@@ -78,7 +78,7 @@ class FlowLauncherAPI:
 
     async def show_error_message(self, title: str, text: str) -> None:
         r"""|coro|
-        
+
         Triggers an error message in the form of a windows notification
 
         Parameters
@@ -87,7 +87,7 @@ class FlowLauncherAPI:
             The title of the notification
         text: :class:`str`
             The content of the notification
-        
+
         Returns
         --------
         None
@@ -107,7 +107,7 @@ class FlowLauncherAPI:
     ) -> None:
         r"""|coro|
 
-        Creates a windows notification
+        Creates a notification window in the bottom right hand of the user's screen
 
         Parameters
         --------
@@ -116,10 +116,10 @@ class FlowLauncherAPI:
         content: :class:`str`
             The notification's content
         icon: :class:`str`
-            The icon to be shown with the notification, defualts to `""`
+            The icon to be shown with the notification, defaults to `""`
         use_main_window_as_owner: :class:`bool`
             Whether or not to use the main flow window as the notification's owner. Defaults to `True`
-        
+
         Returns
         --------
         None
@@ -134,7 +134,7 @@ class FlowLauncherAPI:
 
     async def open_settings_menu(self) -> None:
         r"""|coro|
-        
+
         This method tells flow to open up the settings menu.
 
         Returns
@@ -158,7 +158,7 @@ class FlowLauncherAPI:
             The url to be opened in the webbrowser
         in_private: :class:`bool`
             Whether or not to open up the url in a private window
-        
+
         Returns
         --------
         None
@@ -180,7 +180,7 @@ class FlowLauncherAPI:
             The command to be run
         filename: :class:`str`
             The name of the command prompt instance, defaults to `cmd.exe`
-        
+
         Returns
         --------
         None
@@ -301,10 +301,10 @@ class FlowLauncherAPI:
         r"""|coro|
 
         This tells flow launcher to check for updates to flow launcher
-        
+
         .. NOTE::
             This tells flow launcher to check for updates to flow launcher, not your plugin
-        
+
         Returns
         --------
         None
@@ -342,7 +342,7 @@ class FlowLauncherAPI:
             The id of the plugin that you want the keyword added to
         keyword: :class:`str`
             The keyword to add
-        
+
         Returns
         --------
         None
@@ -364,7 +364,7 @@ class FlowLauncherAPI:
             The ID of the plugin that you want to remove the keyword from
         keyword: :class:`str`
             The keyword that you want to remove
-        
+
         Returns
         --------
         None
@@ -386,7 +386,7 @@ class FlowLauncherAPI:
             The directory you want to open
         file: Optional[:class:`str`]
             The file in the directory that you want to highlight, defaults to `None`
-        
+
         Returns
         --------
         None

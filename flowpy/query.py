@@ -4,8 +4,7 @@ __all__ = ("Query",)
 
 
 class Query:
-    r"""This class represents the query data sent from flow launcher
-    """
+    r"""This class represents the query data sent from flow launcher"""
 
     def __init__(self, data: dict[str, Any]) -> None:
         self.__data = data
