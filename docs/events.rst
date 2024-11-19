@@ -13,9 +13,15 @@ API Events
 ----------
 These events are triggered by flow
 
+on_initialization
+~~~~~~~~~~~~~~~~~
+
 .. function:: async def on_initialization()
 
     Called when the plugin gets initialized.
+
+on_query
+~~~~~~~~
 
 .. function:: async def on_query(data)
 
@@ -25,7 +31,10 @@ These events are triggered by flow
     :type data: :class:`~flowpy.query.Query`
     :rtype: list[:class:`~flowpy.jsonrpc.option.Option`]
     :yields: :class:`~flowpy.jsonrpc.option.Option`
-    
+
+on_context_menu
+~~~~~~~~~~~~~~~
+
 .. function:: async def on_context_menu(data)
 
     Called when flow sends a context menu request
@@ -39,6 +48,9 @@ Error Handling Events
 ---------------------
 These events are triggered by flow.py to handle errors
 
+on_error
+~~~~~~~~
+
 .. function:: async def on_error(event, error, *args, **kwargs)
 
     This is called when an error occurs inside of another event.
@@ -51,6 +63,9 @@ These events are triggered by flow.py to handle errors
     :param **kwargs: The keyword arguments that were passed to the event
     :returns: Any valid response object for the given event
     :rtype: :class:`~flowpy.jsonrpc.responses.BaseResponse`
+
+on_action_error
+~~~~~~~~~~~~~~~
 
 .. function:: async def on_action_error(action_name, error)
 
