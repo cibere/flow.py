@@ -168,6 +168,9 @@ class Plugin:
 
         Aside from the `query` and `context_menu` events, all events must be a :ref:`coroutine <coroutine>`.
 
+        .. NOTE::
+            This is to be used outside of a :class:`Plugin` subclass, use :func:`subclassed_event` if it will be used inside of a subclass.
+
         Example
         ---------
 
@@ -185,5 +188,23 @@ class Plugin:
 
 
 def subclassed_event[T: Callable[..., Any]](func: T) -> T:
+    """A decorator that registers an event to listen for.
+    
+    Aside from the `query` and `context_menu` events, all events must be a :ref:`coroutine <coroutine>`.
+    
+    .. NOTE::
+        This is to be used within a :class:`Plugin` subclass, use :method:`Plugin.event` if it will be used outside of a subclass.
+    
+    Example
+        ---------
+
+        .. code-block:: python3
+
+            class MyPlugin(Plugin):
+                @subclassed_event
+                async def on_initialization(self):
+                    print('Ready!')
+    """
+
     setattr(func, "__flowpy_is_event__", True)
     return func
