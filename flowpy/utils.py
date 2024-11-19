@@ -15,7 +15,7 @@ class _MissingSentinel:
 MISSING: Any = _MissingSentinel()
 
 LOG = logging.getLogger(__name__)
-__all__ = ("setup_logging", "coro_or_gen", "MISSING")
+__all__ = ("setup_logging", "coro_or_gen", "MISSING", "remove_self_arg_from_func")
 
 
 def setup_logging(*, formatter: logging.Formatter | None = None) -> None:
@@ -64,3 +64,8 @@ async def coro_or_gen[T](coro: Awaitable[Iterable[T]] | AsyncIterable[T]) -> lis
         return [item async for item in coro]
     else:
         raise TypeError(f"Not a coro or gen: {coro!r}")
+
+def remove_self_arg_from_func[T](func: T, self) -> T:
+    def inner(*args):
+        return func(self, *args) # type: ignore
+    return inner # type: ignore

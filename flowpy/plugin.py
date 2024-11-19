@@ -13,7 +13,7 @@ from .jsonrpc import ExecuteResponse, JsonRPCClient, QueryResponse
 from .jsonrpc.responses import BaseResponse
 from .query import Query
 from .settings import Settings
-from .utils import MISSING, coro_or_gen, setup_logging
+from .utils import MISSING, coro_or_gen, setup_logging, remove_self_arg_from_func
 
 LOG = logging.getLogger(__name__)
 
@@ -49,17 +49,7 @@ class Plugin:
                 except AttributeError:
                     continue
                 else:
-
-                    def foo(*args):
-                        LOG.debug("Running subclassed event")
-                        LOG.debug(f"{elem=}")
-                        LOG.debug(f"{value=}")
-                        LOG.debug(f"{args=}")
-                        LOG.debug(f"{self._events=}")
-                        return value(self, *args)
-
-                    self._events[elem] = value  # lambda *args: value(self, *args)
-        # self._events.update({name:func for name, func in inspect.getmembers(self, lambda x: getattr(x, "__flowpy_is_event__", False))})
+                    self._events[elem] = remove_self_arg_from_func(value, self)
 
     async def _run_event(
         self,
