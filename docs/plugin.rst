@@ -3,7 +3,7 @@ Plugin
 
 .. autoclass:: flowpy.plugin.Plugin
     :members:
-    
+
 .. automethod:: Plugin.event()
     :decorator:
 
