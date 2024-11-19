@@ -15,11 +15,13 @@ LOG = logging.getLogger(__name__)
 async def on_error(
     event_method: str, error: Exception, *args: Any, **kwargs: Any
 ) -> ErrorResponse:
+    """gets called when an error occurs in an event"""
     LOG.exception(f"Ignoring exception in event {event_method!r}", exc_info=error)
     return ErrorResponse.internal_error(error)
 
 
 async def on_action_error(action_name: str, error: Exception) -> ErrorResponse:
+    """gets called when an error occurs in an action"""
     LOG.exception(f"Ignoring exception in action ({action_name!r})", exc_info=error)
     return ErrorResponse.internal_error(error)
 
