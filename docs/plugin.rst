@@ -5,7 +5,7 @@ Plugin
 
 .. autoclass:: flowpy.plugin.Plugin
     :members:
-    .. automethod:: Client.event()
+    .. automethod:: Plugin.event()
         :decorator:
 
 .. autofunction:: subclassed_event
