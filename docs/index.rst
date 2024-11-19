@@ -10,3 +10,4 @@ A wrapper for Flow Launcher's V2 python api using jsonrpc.
    whats_new
    jsonrpc
    errors
+   events
