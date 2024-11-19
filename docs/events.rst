@@ -29,5 +29,6 @@ These events are triggered by flow
 
     :param data: The context menu data from :attr:`Option.context_data`
     :type data: list[:class:`Any`]
-    :rtype: list[:class:`Option`]
-    :yields: :class:`Option`
+    :rtype: list[:class:`~flowpy.jsonrpc.option.Option`]
+    :yields: :class:`~flowpy.jsonrpc.option.Option`
+    
