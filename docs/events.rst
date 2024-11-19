@@ -1,3 +1,5 @@
+.. _events:
+
 Event Reference
 ===========
 

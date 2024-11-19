@@ -169,6 +169,9 @@ class Plugin:
         Aside from the `query` and `context_menu` events, all events must be a :ref:`coroutine <coroutine>`.
 
         .. NOTE::
+            See the :ref:`event reference <events>` to see what valid events there are.
+
+        .. NOTE::
             This is to be used outside of a :class:`Plugin` subclass, use :func:`subclassed_event` if it will be used inside of a subclass.
 
         Example
@@ -191,6 +194,9 @@ def subclassed_event[T: Callable[..., Any]](func: T) -> T:
     """A decorator that registers an event to listen for.
     
     Aside from the `query` and `context_menu` events, all events must be a :ref:`coroutine <coroutine>`.
+
+    .. NOTE::
+        See the :ref:`event reference <events>` to see what valid events there are.
     
     .. NOTE::
         This is to be used within a :class:`Plugin` subclass, use :method:`Plugin.event` if it will be used outside of a subclass.
