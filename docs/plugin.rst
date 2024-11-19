@@ -1,12 +1,11 @@
 Plugin
 ===========
 
-.. attributetable:: Plugin
-
 .. autoclass:: flowpy.plugin.Plugin
     :members:
-    .. automethod:: Plugin.event()
-        :decorator:
+    
+.. automethod:: Plugin.event()
+    :decorator:
 
 .. autofunction:: subclassed_event
 
