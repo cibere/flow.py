@@ -13,6 +13,10 @@ API Events
 ----------
 These events are triggered by flow
 
+.. function:: async def on_initialization()
+
+    Called when the plugin gets initialized.
+
 .. function:: async def on_query(data)
 
     Called when flow says a query request.
@@ -30,3 +34,33 @@ These events are triggered by flow
     :type data: list[:class:`Any`]
     :rtype: list[:class:`~flowpy.jsonrpc.option.Option`]
     :yields: :class:`~flowpy.jsonrpc.option.Option`
+
+Error Handling Events
+---------------------
+These events are triggered by flow.py to handle errors
+
+.. function:: async def on_error(event, error, *args, **kwargs)
+
+    This is called when an error occurs inside of another event.
+
+    :param event: The name of the event
+    :type event: :class:`str`
+    :param error: The error that occured
+    :type error: :class:`Exception`
+    :param *args: The args that were passed to the event
+    :type *args: :class:`Iterable`[:class:`Any`]
+    :param **kwargs: The kwargs that were passed to the event
+    :type **kwargs: dict[:class:`str`, :class:`Any`]
+    :returns: Any valid response object for the given event
+    :rtype: :class:`~flowpy.jsonrpc.responses.BaseResponse`
+
+.. function:: async def on_action_error(action_name, error)
+
+    This is called when an error occurs within an action
+
+    :param action_name: The action's name (see :attr:`~flowpy.jsonrpc.option.Action.name` for more info)
+    :type action_name: :class:`str`
+    :param error: The error that occured
+    :type error: :class:`Exception`
+    :returns: The response to be returned to flow. Use :class:`~flowpy.jsonrpc.responses.ExecuteResponse` if the error was successfully handled, use :class:`~flowpy.jsonrpc.responses.ErrorResponse` if the error was not successfully handled.
+    :rtype: :class:`~flowpy.jsonrpc.responses.ExecuteResponse` | :class:`~flowpy.jsonrpc.responses.ErrorResponse`
