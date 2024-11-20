@@ -1,7 +1,5 @@
 :orphan:
 
-.. currentmodule:: flowpy
-
 .. _quickstart:
 
 Quickstart
@@ -44,12 +42,11 @@ There's a lot going on here, so let's walk you through it line by line.
 1. The first line just imports the library, if this raises a :exc:`ModuleNotFoundError` or :exc:`ImportError`
    then head on over to :ref:`installing` section to properly install.
 2. Empty Line to increase readability
-3. Now we create an instance of :class:`Plugin`, which will let us work with Flow.
+3. Now we create an instance of :class:`~flowpy.plugin.Plugin`, which will let us work with Flow.
 4. Empty Line to increase readability
-5. Now, in line 5, we use the :func:`Plugin.event` decorator to mark our ``on_query`` coroutine as an event that should be registered.
+5. Now, in line 5, we use the :func:`~flowpy.plugin.Plugin.event` decorator to mark our ``on_query`` coroutine as an event that should be registered.
 6. Now in line 6, we define our ``on_query`` event handler, which takes a single argument: ``data`` of the type :class:`~flowpy.query.Query`
-7. In line 7, we access the :class:`~flowpy.flow_api.client.FlowLauncherAPI` client, and use its :func:`~flowpy.flow_api.client.FlowLauncherAPI.fuzzy_search` method to tell flow to use fuzzy search to compare the two strings inputted.
-   In this case, we are telling Flow to compare whatever the user gave as their query (which we get by the data.:attr:`~flowpy.query.Query.text` attribute), against the string ``Flow``.
+7. In line 7, we access the :class:`~flowpy.flow_api.client.FlowLauncherAPI` client, and use its :func:`~flowpy.flow_api.client.FlowLauncherAPI.fuzzy_search` method to tell flow to use fuzzy search to compare the two strings inputted. In this case, we are telling Flow to compare whatever the user gave as their query. See :class:`~flowpy.query.Query` for more info on working with the query object.
 8. We are returning a list which we expanded for readability
 9. We are putting an :class:`~flowpy.jsonrpc.option.Option` object into the list, but expanding it for readability
 10. For the first argument into the :class:`~flowpy.jsonrpc.option.Option` object (which is the title/content of the option), we give a string that's our original text (``Flow``), and after that,the fuzzy search's score. See the :class:`~flowpy.flow_api.fuzzy_search.FuzzySearchResult` class for more information on using the result object.
@@ -58,6 +55,6 @@ There's a lot going on here, so let's walk you through it line by line.
 13. Ending the :class:`~flowpy.jsonrpc.option.Option` object which we expanded for readability
 14. Ending the list object that we expanded for readability
 15. Empty Line to increase readability
-16. Now we call :class:`~flowpy.plugin.Plugin.run` to start the plugin.
+16. Now we call Plugin.:class:`~flowpy.plugin.Plugin.run` to start the plugin.
 
 Now although we've just made a plugin, we can't use it yet, because it isn't as simple as running the program.
