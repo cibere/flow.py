@@ -11,3 +11,4 @@ A wrapper for Flow Launcher's V2 python api using jsonrpc.
    jsonrpc
    errors
    events
+   faq

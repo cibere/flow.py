@@ -8,6 +8,7 @@ new question or submit one via pull requests.
 
 .. contents:: Questions
     :local:
+    :this-will-duplicate-information-and-it-is-still-useful-here:
 
 Coroutines
 ------------
