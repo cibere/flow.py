@@ -59,6 +59,6 @@ A quick example code to showcase this:
 Options & Actions
 ~~~~~~~~~~~~~~~~~
 
-When flow sends a query or context menu request, you'll receive them via the :ref:`on_query <on_query>` and :ref:`on_context_menu <on_context_menu>`events. To respond to these requests, you give them a list of :class:`~flowpy.jsonrpc.option.Option`s, which in the case of a query request, acts as the user's results.
+When flow sends a query or context menu request, you'll receive them via the :ref:`on_query <on_query>` and :ref:`on_context_menu <on_context_menu>` events. To respond to these requests, you give them a list of :class:`~flowpy.jsonrpc.option.Option` objects, which in the case of a query request, acts as the user's results.
 
 You can use an :class:`~flowpy.jsonrpc.option.Action` to wrap the :ref:`coroutine <coroutine>` that you want to run when a user clicks on the :class:`~flowpy.jsonrpc.option.Option` that the :class:`~flowpy.jsonrpc.option.Action` has been assigned to via the :attr:`~flowpy.jsonrpc.option.Option.action` parameter/attribute.
