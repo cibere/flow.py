@@ -1,5 +1,6 @@
 from flowpy import Option, Plugin, Query, subclassed_event
 
+
 class MyPlugin(Plugin):
     @subclassed_event
     async def on_query(self, data: Query):

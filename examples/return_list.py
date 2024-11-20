@@ -2,6 +2,7 @@ from flowpy import Option, Plugin, Query
 
 plugin = Plugin()
 
+
 @plugin.event
 async def on_query(data: Query):
     return [

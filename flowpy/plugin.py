@@ -13,7 +13,7 @@ from .jsonrpc import ExecuteResponse, JsonRPCClient, QueryResponse
 from .jsonrpc.responses import BaseResponse
 from .query import Query
 from .settings import Settings
-from .utils import MISSING, coro_or_gen, setup_logging, remove_self_arg_from_func
+from .utils import MISSING, coro_or_gen, remove_self_arg_from_func, setup_logging
 
 LOG = logging.getLogger(__name__)
 
@@ -182,15 +182,15 @@ class Plugin:
 
 def subclassed_event[T: Callable[..., Any]](func: T) -> T:
     """A decorator that registers an event to listen for.
-    
+
     Aside from the `query` and `context_menu` events, all events must be a :ref:`coroutine <coroutine>`.
 
     .. NOTE::
         See the :ref:`event reference <events>` to see what valid events there are.
-    
+
     .. NOTE::
         This is to be used within a :class:`Plugin` subclass, use :method:`Plugin.event` if it will be used outside of a subclass.
-    
+
     Example
         ---------
 

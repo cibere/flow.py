@@ -65,7 +65,9 @@ async def coro_or_gen[T](coro: Awaitable[Iterable[T]] | AsyncIterable[T]) -> lis
     else:
         raise TypeError(f"Not a coro or gen: {coro!r}")
 
+
 def remove_self_arg_from_func[T](func: T, self) -> T:
     def inner(*args):
-        return func(self, *args) # type: ignore
-    return inner # type: ignore
+        return func(self, *args)  # type: ignore
+
+    return inner  # type: ignore

@@ -13,6 +13,7 @@ LOG = logging.getLogger(__name__)
 
 __all__ = "on_error", "on_action_error", "on_query", "on_context_menu"
 
+
 async def on_error(
     event_method: str, error: Exception, *args: Any, **kwargs: Any
 ) -> ErrorResponse:
