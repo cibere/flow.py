@@ -156,7 +156,7 @@ class Plugin:
     def event[T: Callable[..., Any]](self, callback: T) -> T:
         """A decorator that registers an event to listen for.
 
-        Aside from the `query` and `context_menu` events, all events must be a :ref:`coroutine <coroutine>`.
+        Aside from the :ref:`on_query <on_query>` and :ref:`on_context_menu <on_context_menu>` events, all events must be a :ref:`coroutine <coroutine>`.
 
         .. NOTE::
             See the :ref:`event reference <events>` to see what valid events there are.

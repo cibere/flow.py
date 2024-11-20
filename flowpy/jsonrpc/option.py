@@ -20,7 +20,7 @@ class Action(Base):
     Attributes
     ----------
     method: :ref:`coroutine <coroutine>`
-        The |coroutine|_ that will be ran when the user clicks the option this is associated with
+        The :ref:`coroutine <coroutine>` that will be ran when the user clicks the option this is associated with
     args: Iterable[Any]
         The arguments that will be passed to the coroutine
     """

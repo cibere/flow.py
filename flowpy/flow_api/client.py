@@ -17,7 +17,7 @@ class FlowLauncherAPI:
     r"""This class is a wrapper around Flow's API to make it easy to make requests and receive results.
 
     .. NOTE::
-        Do not initialize this class yourself, use :attr:`~flow.plugin.Plugin.api` to get an instance instead.
+        Do not initialize this class yourself, use :attr:`~flowpy.plugin.Plugin.api` to get an instance instead.
     """
 
     def __init__(self, jsonrpc: JsonRPCClient):
