@@ -1,5 +1,7 @@
 :orphan:
 
+.. currentmodule:: flowpy
+
 .. _quickstart:
 
 Quickstart
