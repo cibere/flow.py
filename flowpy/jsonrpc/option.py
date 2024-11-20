@@ -24,7 +24,7 @@ class Action(Base):
     args: Iterable[Any]
         The arguments that will be passed to the coroutine
     """
-    
+
     __slots__ = "method", "args"
 
     def __init__(
@@ -115,7 +115,7 @@ class Option(Base):
         self.context_data = context_data or []
 
     def to_dict(self) -> dict[str, Any]:
-        """This converts the option into a json serializable dictionary
+        r"""This converts the option into a json serializable dictionary
         
         Returns
         -------
