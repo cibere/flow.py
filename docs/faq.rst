@@ -81,3 +81,10 @@ Where can I get help with using the library?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can ask questions in `flow's official discord server <https://discord.gg/QDbDfUJaGH>`_
+
+.. _highlights: 
+
+How do highlights work?
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Highlight data works by marking which characters should be highlighted, by including their index in a list. Take the following string as an example: ``Hello World``. If I wanted to just highlight ``Hello``, the highlight data would be ``(0, 1, 2, 3, 4)``. If I wanted to just highlight ``World``, the highlight data would be ``(6, 7, 8, 9, 10)``. If I just wanted to highlight the vowels, I would do: ``(1, 4, 7)``.

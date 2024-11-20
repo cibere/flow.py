@@ -47,6 +47,8 @@ on_query
     :rtype: list[:class:`~flowpy.jsonrpc.option.Option`]
     :yields: :class:`~flowpy.jsonrpc.option.Option`
 
+.. _on_context_menu:
+
 on_context_menu
 ~~~~~~~~~~~~~~~
 
