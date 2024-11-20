@@ -10,12 +10,15 @@ class _MissingSentinel:
 
     def __eq__(self, other: Any) -> bool:
         return False
+    
+    def __repr__(self) -> str:
+        return "..."
 
 
 MISSING: Any = _MissingSentinel()
 
 LOG = logging.getLogger(__name__)
-__all__ = ("setup_logging", "coro_or_gen", "MISSING")
+__all__ = ("setup_logging", "coro_or_gen", "MISSING", "remove_self_arg_from_func")
 
 
 def setup_logging(*, formatter: logging.Formatter | None = None) -> None:
@@ -38,9 +41,36 @@ def setup_logging(*, formatter: logging.Formatter | None = None) -> None:
 
 
 async def coro_or_gen[T](coro: Awaitable[Iterable[T]] | AsyncIterable[T]) -> list[T]:
+    """|coro|
+
+    Executes an AsyncIterable or a Coroutine that returns a list of items.
+
+    Parameters
+    -----------
+    coro: :class:`typing.Awaitable`[:class:`typing.Iterable`] | :class:`typing.AsyncIterable`
+        The coroutine or asynciterable to be ran
+
+    Raises
+    --------
+    TypeError
+        Neither a :class:`typing.Coroutine` or an :class:`typing.AsyncIterable` was passed
+
+    Returns
+    --------
+    List[Any]
+        A list of whatever was given from the :class:`typing.Coroutine` or :class:`typing.AsyncIterable`.
+    """
+
     if iscoroutine(coro):
         return await coro
     elif isasyncgen(coro):
         return [item async for item in coro]
     else:
-        raise RuntimeError(f"Not a coro or gen: {coro!r}")
+        raise TypeError(f"Not a coro or gen: {coro!r}")
+
+
+def remove_self_arg_from_func[T](func: T, self) -> T:
+    def inner(*args):
+        return func(self, *args)  # type: ignore
+
+    return inner  # type: ignore

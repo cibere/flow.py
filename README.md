@@ -8,6 +8,24 @@ A wrapper for Flow Launcher's V2 python api using jsonrpc.
 > [!WARNING]
 > The V2 api is undocumented, so things may change
 
+## Basic Example
+```python
+from flowpy import Option, Plugin, Query, Settings
+
+
+class ExamplePlugin(Plugin):
+    async def __call__(self, data: Query):
+        return [
+            Option(f"Your text is: {data.text}"),
+            Option(f"Your keyword is: {data.keyword}"),
+            Option(f"Your raw text is: {data.raw_text}", sub="keyword + text"),
+        ]
+
+
+if __name__ == "__main__":
+    ExamplePlugin().run()
+```
+
 ## Contributing
 
 Contributions are greatly appriciated, I just have a couple of requests:

@@ -1,8 +1,9 @@
-from flowpy import Option, Plugin, Query, Settings
+from flowpy import Option, Plugin, Query, subclassed_event
 
 
-class ReturnListPlugin(Plugin):
-    async def __call__(self, data: Query):
+class MyPlugin(Plugin):
+    @subclassed_event
+    async def on_query(self, data: Query):
         return [
             Option(f"Your text is: {data.text}"),
             Option(f"Your keyword is: {data.keyword}"),
@@ -11,4 +12,4 @@ class ReturnListPlugin(Plugin):
 
 
 if __name__ == "__main__":
-    ReturnListPlugin().run()
+    MyPlugin().run()

@@ -7,10 +7,11 @@ from ..utils import MISSING
 from .base_object import ToMessageBase
 
 if TYPE_CHECKING:
+    from .client import JsonRPCClient
     from .option import Option
 
 __all__ = (
-    "JsonRPCError",
+    "ErrorResponse",
     "QueryResponse",
     "ExecuteResponse",
 )
@@ -29,8 +30,22 @@ class BaseResponse(ToMessageBase):
             + "\r\n"
         ).encode()
 
+    def prepare(self, client: JsonRPCClient) -> None: ...
 
-class JsonRPCError(BaseResponse):
+
+class ErrorResponse(BaseResponse):
+    r"""This represents an error sent to or from flow.
+
+    Attributes
+    --------
+    code: :class:`int`
+        The error code for the error
+    message: :class:`str`
+        The error's message
+    data: Optional[:class:`Any`]
+        Any extra data
+    """
+
     __slots__ = "code", "message", "data"
 
     def __init__(self, code: int, message: str, data: Any | None = None):
@@ -38,12 +53,34 @@ class JsonRPCError(BaseResponse):
         self.message = message
         self.data = data
 
+    def to_dict(self) -> dict:
+        data = self.data
+        if isinstance(data, Exception):
+            data = f"{data}"
+        return {"code": self.code, "message": self.message, "data": data}
+
     @classmethod
-    def from_dict(cls: type[JsonRPCError], data: dict[str, Any]) -> JsonRPCError:
+    def from_dict(cls: type[ErrorResponse], data: dict[str, Any]) -> ErrorResponse:
         return cls(code=data["code"], message=data["message"], data=data["data"])
+
+    @classmethod
+    def internal_error(cls: type[ErrorResponse], data: Any = None) -> ErrorResponse:
+        return cls(code=-32603, message="Internal error", data=data)
 
 
 class QueryResponse(BaseResponse):
+    r"""This response represents the response from the `query` and `context_menu` callback methods
+
+    Attributes
+    --------
+    options: list[:class:`Option`]
+        The options to be sent as the result of the query
+    settings_changes: dict[:class:`str`, Any]
+        Any changes to be made to the plugin's settings.
+    debug_message: :class:`str`
+        A debug message if you want
+    """
+
     __slots__ = "options", "settings_changes", "debug_message"
     __jsonrpc_option_names__ = {
         "settings_changes": "settingsChanges",
@@ -61,8 +98,21 @@ class QueryResponse(BaseResponse):
         self.settings_changes = settings_changes or {}
         self.debug_message = debug_message or ""
 
+    def prepare(self, client: JsonRPCClient) -> None:
+        for opt in self.options:
+            if opt.action:
+                client.action_callback_mapping[opt.action.name] = opt.action.method
+
 
 class ExecuteResponse(BaseResponse):
+    r"""This response is a generic response for any callback method that isn't `query` or `context_menu`
+
+    Attributes
+    --------
+    hide: :class:`bool`
+        Whether to hide the flow menu after execution or not
+    """
+
     __slots__ = ("hide",)
 
     def __init__(self, hide: bool = True):
