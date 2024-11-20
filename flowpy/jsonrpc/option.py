@@ -15,7 +15,7 @@ __all__ = (
 
 
 class Action(Base):
-    """This represents a |coroutine_link|_ that will be triggered when a user clicks on an option.
+    r"""This represents a :ref:`coroutine <coroutine>` that will be triggered when a user clicks on an option.
     
     Attributes
     ----------
