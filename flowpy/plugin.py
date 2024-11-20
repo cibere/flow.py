@@ -2,7 +2,7 @@ import asyncio
 import inspect
 import json
 import logging
-from typing import Any, Awaitable, Callable, Concatenate, Iterable, TypeVar
+from typing import Any, Awaitable, Callable, Iterable
 
 import aioconsole
 

@@ -15,7 +15,6 @@ LOG = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from ..plugin import Plugin
-    from .option import Action
 
 __all__ = ("JsonRPCClient",)
 
