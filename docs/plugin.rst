@@ -22,7 +22,7 @@ subclassed_event
         See the :ref:`event reference <events>` to see what valid events there are.
     
     .. NOTE::
-        This is to be used within a :class:`Plugin` subclass, use :func:`Plugin.event` if it will be used outside of a subclass.
+        This is to be used within a :class:`~flowpy.plugin.Plugin` subclass, use :func:`~flowpy.plugin.Plugin.event` if it will be used outside of a subclass.
     
     Example
     ---------
