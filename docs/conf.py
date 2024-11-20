@@ -75,7 +75,9 @@ autodoc_typehints_format = "short"
 # autodoc_typehints = "both"
 autodoc_typehints_description_target = "all"
 autodoc_mock_imports = ["typing"]
-
+autodoc_default_options = {
+    'exclude-members': '__init__'
+}
 
 # sphinx.ext.napoleon
 napoleon_google_docstring = False
