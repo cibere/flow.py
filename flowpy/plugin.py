@@ -26,9 +26,9 @@ class Plugin:
 
     Attributes
     --------
-    settings: :class:`Settings`
+    settings: :class:`~flowpy.settings.Settings`
         The plugin's settings set by the user
-    api: :class:`FlowLauncherAPI`
+    api: :class:`~flowpy.flow_api.FlowLauncherAPI`
         An easy way to acess Flow Launcher's API
     """
 
@@ -162,7 +162,7 @@ class Plugin:
             See the :ref:`event reference <events>` to see what valid events there are.
 
         .. NOTE::
-            This is to be used outside of a :class:`Plugin` subclass, use :func:`subclassed_event` if it will be used inside of a subclass.
+            This is to be used outside of a :class:`Plugin` subclass, use :ref:`subclassed_event <subclassed_event>` if it will be used inside of a subclass.
 
         Example
         ---------
