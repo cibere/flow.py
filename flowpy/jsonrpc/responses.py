@@ -19,11 +19,11 @@ __all__ = (
 
 class BaseResponse(ToMessageBase):
     r"""This represents a response to flow.
-    
+
     .. WARNING::
         This class is NOT to be used as is. Use one of it's subclasses instead.
     """
-    
+
     def to_message(self, id: int) -> bytes:
         return (
             json.dumps(

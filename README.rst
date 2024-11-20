@@ -10,13 +10,14 @@ Key Features
 
 - Modern Pythonic API using ``async`` and ``await``.
 - Fully Typed
+- Easy to use with an object oriented design
 
 Installing
 ----------
 
 **Python 3.12 or higher is required**
 
-To install the library without full voice support, you can just run the following command:
+To install the stable version, use the following command:
 
 .. note::
 
