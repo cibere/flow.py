@@ -124,12 +124,12 @@ class Plugin:
     @property
     def metadata(self) -> PluginMetadata:
         """
-        :class:`PluginMetadata`: Returns the plugin's metadata from `initialize`.
+        :class:`PluginMetadata`: Returns the plugin's metadata.
 
         Raises
         --------
-        :class:`PluginNotInitialized`
-            This gets raised if the plugin hasn't been initialized yet, or if the :class:`Plugin.initialize` method was overridden and does not call the original.
+        :class:`~flowpy.errors.PluginNotInitialized`
+            This gets raised if the plugin hasn't been initialized yet
         """
         if self._metadata:
             return self._metadata

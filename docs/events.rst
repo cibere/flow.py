@@ -35,6 +35,8 @@ on_initialization
 
     Called when the plugin gets initialized.
 
+.. _on_query:
+
 on_query
 ~~~~~~~~
 
