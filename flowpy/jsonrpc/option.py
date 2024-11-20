@@ -49,14 +49,14 @@ class Action(Base):
         
         Returns
         -------
-        :class:`dict`[:class:`str`, Any]
+        dict[:class:`str`, Any]
         """
 
         return {"method": self.name, "parameters": self.args}
 
 
 class Option(Base):
-    """This represents an option that would be returned as a result for a query or context menu.
+    r"""This represents an option that would be returned as a result for a query or context menu.
     
     Attributes
     ----------
@@ -76,8 +76,8 @@ class Option(Base):
         I have no idea
     action: Optional[:class:`Action`]
         The action to be preformed when the user clicks on the option
-    context_data: Optional[:class:`Iterable`[Any]]
-        A list of json seriable objects which will be given in the `on_context_menu event <on_context_menu>` when the user requests the context menu for this option.
+    context_data: Optional[Iterable[Any]]
+        A list of json seriable objects which will be given in the :ref:`on_context_menu event <on_context_menu>` when the user requests the context menu for this option.
     """
 
     __slots__ = (
@@ -119,7 +119,7 @@ class Option(Base):
         
         Returns
         -------
-        :class:`dict`[:class:`str`, Any]
+        dict[:class:`str`, Any]
         """
 
         x: dict[str, Any] = {
@@ -145,11 +145,11 @@ class Option(Base):
 
     @classmethod
     def from_dict(cls: type[Option], data: dict[str, Any]) -> Option:
-        """Creates an Option from a dictionary
+        r"""Creates an Option from a dictionary
         
         Parameters
         ----------
-        data: :class:`dict`[:class:`str`, Any]
+        data: dict[:class:`str`, Any]
             The valid dictionary that includes the option data
         
         Raises

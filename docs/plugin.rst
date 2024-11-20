@@ -7,8 +7,6 @@ Plugin
 .. automethod:: Plugin.event()
     :decorator:
 
-.. autofunction:: subclassed_event
-
 .. _subclassed_event:
 
 subclassed_event
