@@ -11,7 +11,7 @@ The first way is by using the :func:`~flowpy.plugin.Plugin.event` decorator usin
     async def on_initialization():
         print('Ready!')
 
-The second way is by using the :ref:`subclassed_event <subclassed_event>` decorator inside of a :class:`~flowpy.plugin.Plugin` subclass. For example: ::
+The second way is by using the :ref:`@subclassed_event <subclassed_event>` decorator inside of a :class:`~flowpy.plugin.Plugin` subclass. For example: ::
 
     class MyPlugin(Plugin):
         @subclassed_event
