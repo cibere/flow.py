@@ -3,6 +3,20 @@
 Event Reference
 ===========
 
+There are two main ways to register events.
+
+The first way is by using the :func:`Plugin.event` decorator using your :class:`Plugin` instance. For example: ::
+
+    @plugin.event
+    async def on_initialization():
+        print('Ready!')
+
+The second way is by using the :func:`subclassed_event` decorator inside of a :class:`Plugin` subclass. For example: ::
+    class MyPlugin(Plugin):
+        @subclassed_event
+        async def on_initialization(self):
+            print('Ready!')
+
 .. warning::
 
     All the events must be a |coroutine_link|_. If they aren't, then you might get unexpected
