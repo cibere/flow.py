@@ -75,10 +75,7 @@ autodoc_typehints_format = "short"
 # autodoc_typehints = "both"
 autodoc_typehints_description_target = "all"
 autodoc_mock_imports = ["typing"]
-autodoc_default_options = {
-    'exclude-members': '__init__',
-    'special-members': ""
-}
+autodoc_default_options = {"exclude-members": "__init__", "special-members": ""}
 
 # sphinx.ext.napoleon
 napoleon_google_docstring = False
@@ -96,8 +93,8 @@ all_typevars = True
 # https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
-    'req': ('https://requests.readthedocs.io/en/latest/', None),
-    'aio': ('https://docs.aiohttp.org/en/stable/', None)
+    "req": ("https://requests.readthedocs.io/en/latest/", None),
+    "aio": ("https://docs.aiohttp.org/en/stable/", None),
 }
 
 # https://pradyunsg.me/furo/customisation/announcement/

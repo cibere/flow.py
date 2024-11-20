@@ -16,7 +16,7 @@ __all__ = (
 
 class Action(Base):
     r"""This represents a :ref:`coroutine <coroutine>` that will be triggered when a user clicks on an option.
-    
+
     Attributes
     ----------
     method: :ref:`coroutine <coroutine>`
@@ -46,7 +46,7 @@ class Action(Base):
 
     def to_dict(self) -> dict:
         """This converts the action into a json serializable dictionary
-        
+
         Returns
         -------
         dict[:class:`str`, Any]
@@ -57,7 +57,7 @@ class Action(Base):
 
 class Option(Base):
     r"""This represents an option that would be returned as a result for a query or context menu.
-    
+
     Attributes
     ----------
     title: :class:`str`
@@ -116,7 +116,7 @@ class Option(Base):
 
     def to_dict(self) -> dict[str, Any]:
         r"""This converts the option into a json serializable dictionary
-        
+
         Returns
         -------
         dict[:class:`str`, Any]
@@ -146,17 +146,17 @@ class Option(Base):
     @classmethod
     def from_dict(cls: type[Option], data: dict[str, Any]) -> Option:
         r"""Creates an Option from a dictionary
-        
+
         Parameters
         ----------
         data: dict[:class:`str`, Any]
             The valid dictionary that includes the option data
-        
+
         Raises
         ------
         :class:`KeyError`
             The dictionary did not include the only required field, ``title``.
-        
+
         Returns
         --------
         :class:`Option`
