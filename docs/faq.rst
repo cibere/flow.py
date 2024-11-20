@@ -80,4 +80,4 @@ in the repository.
 Where can I get help with using the library?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can ask questions in `flow's official discord server <https://discord.gg/QDbDfUJaGH>`
+You can ask questions in `flow's official discord server <https://discord.gg/QDbDfUJaGH>`_
