@@ -10,6 +10,7 @@ Key Features
 
 - Modern Pythonic API using ``async`` and ``await``.
 - Fully Typed
+- Easy to use with an object oriented design
 
 Installing
 ----------
