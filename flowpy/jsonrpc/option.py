@@ -66,7 +66,7 @@ class Option(Base):
         The subtitle to be shown.
     icon: Optional[:class:`str`]
         A path to the icon to be shown with the option.
-    title_highlight_data: Optional[:class:`Iterable`[:class:`int`]]
+    title_highlight_data: Optional[Iterable[:class:`int`]]
         The highlight data for the title. See the `FAQ section on highlights <highlights>` for more info.
     title_tooltip: Optional[:class:`str`]
         The text to be displayed when the user hovers over the option's title
