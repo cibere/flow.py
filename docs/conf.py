@@ -85,7 +85,6 @@ napoleon_google_docstring = False
 napoleon_use_rtype = False
 
 # sphinx_autodoc_typehints
-always_document_param_types = True
 typehints_document_rtype = False
 typehints_defaults = "braces"
 simplify_optional_unions = False
