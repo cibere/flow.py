@@ -18,6 +18,12 @@ __all__ = (
 
 
 class BaseResponse(ToMessageBase):
+    r"""This represents a response to flow.
+    
+    .. WARNING::
+        This class is NOT to be used as is. Use one of it's subclasses instead.
+    """
+    
     def to_message(self, id: int) -> bytes:
         return (
             json.dumps(
@@ -42,7 +48,7 @@ class ErrorResponse(BaseResponse):
         The error code for the error
     message: :class:`str`
         The error's message
-    data: Optional[:class:`Any`]
+    data: Optional[Any]
         Any extra data
     """
 
@@ -69,11 +75,11 @@ class ErrorResponse(BaseResponse):
 
 
 class QueryResponse(BaseResponse):
-    r"""This response represents the response from the `query` and `context_menu` callback methods
+    r"""This response represents the response from the :ref:`on_query <on_query>` and :ref:`on_context_menu <on_context_menu>` events.
 
     Attributes
     --------
-    options: list[:class:`Option`]
+    options: list[:class:`~flowpy.jsonrpc.option.Option`]
         The options to be sent as the result of the query
     settings_changes: dict[:class:`str`, Any]
         Any changes to be made to the plugin's settings.

@@ -17,7 +17,7 @@ class FlowLauncherAPI:
     r"""This class is a wrapper around Flow's API to make it easy to make requests and receive results.
 
     .. NOTE::
-        Do not initialize this class yourself, use :attr:`Plugin.api` to get an instance instead.
+        Do not initialize this class yourself, use :attr:`~flow.plugin.Plugin.api` to get an instance instead.
     """
 
     def __init__(self, jsonrpc: JsonRPCClient):
@@ -45,7 +45,7 @@ class FlowLauncherAPI:
 
         Returns
         --------
-        :class:`FuzzySearchResult`
+        :class:`~flowpy.flow_api.fuzzy_search.FuzzySearchResult`
         """
 
         from ..jsonrpc import Result  # circular import
@@ -322,7 +322,7 @@ class FlowLauncherAPI:
 
         Returns
         --------
-        list[:class:`PluginMetadata`]
+        list[:class:`~flowpy.flow_api.plugin_metadata.PluginMetadata`]
         """
 
         from ..jsonrpc import Result  # circular import

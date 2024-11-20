@@ -13,6 +13,9 @@ Option
 Responses
 ~~~~~~~~
 
+.. autoclass:: flowpy.jsonrpc.responses.BaseResponse
+    :members:
+
 .. autoclass:: flowpy.jsonrpc.responses.ErrorResponse
     :members:
 

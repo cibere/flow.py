@@ -69,12 +69,12 @@ class PluginMetadata(Base):
 
     @property
     def executable(self) -> Path:
-        r""":class:`pathlib.Path`: The path to the plugin's executable file"""
+        r"""The path to the plugin's executable file"""
         return Path(self._data["executeFilePath"]).absolute()
 
     @property
     def icon(self) -> Path:
-        r""":class:`pathlib.Path`: The path to the plugin's icon file"""
+        r"""The path to the plugin's icon file"""
         return Path(self._data["icoPath"]).absolute()
 
     def add_keyword(self, keyword: str) -> Awaitable[None]:
@@ -82,7 +82,7 @@ class PluginMetadata(Base):
 
         Registers a new keyword with flow for the plugin.
 
-        This is a shortcut to :func:`FlowLauncherAPI.add_keyword`
+        This is a shortcut to :func:`~flowpy.flow_api.client.FlowLauncherAPI.add_keyword`
 
         Parameters
         --------
@@ -101,7 +101,7 @@ class PluginMetadata(Base):
 
         Removes a keyword from the plugin.
 
-        This is a shortcut to :func:`FlowLauncherAPI.remove_keyword`
+        This is a shortcut to :func:`~flowpy.flow_api.client.FlowLauncherAPI.remove_keyword`
 
         Parameters
         --------
