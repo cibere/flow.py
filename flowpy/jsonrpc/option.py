@@ -15,6 +15,16 @@ __all__ = (
 
 
 class Action(Base):
+    """This represents a |coroutine_link|_ that will be triggered when a user clicks on an option.
+    
+    Attributes
+    ----------
+    method: :ref:`coroutine <coroutine>`
+        The |coroutine|_ that will be ran when the user clicks the option this is associated with
+    args: Iterable[Any]
+        The arguments that will be passed to the coroutine
+    """
+    
     __slots__ = "method", "args"
 
     def __init__(
@@ -31,13 +41,45 @@ class Action(Base):
 
     @property
     def name(self) -> str:
+        """:class:`str`: The name of the method provided"""
         return self.method.__qualname__
 
     def to_dict(self) -> dict:
+        """This converts the action into a json serializable dictionary
+        
+        Returns
+        -------
+        :class:`dict`[:class:`str`, Any]
+        """
+
         return {"method": self.name, "parameters": self.args}
 
 
 class Option(Base):
+    """This represents an option that would be returned as a result for a query or context menu.
+    
+    Attributes
+    ----------
+    title: :class:`str`
+        The title/content of the option
+    sub: Optional[:class:`str`]
+        The subtitle to be shown.
+    icon: Optional[:class:`str`]
+        A path to the icon to be shown with the option.
+    title_highlight_data: Optional[:class:`Iterable`[:class:`int`]]
+        The highlight data for the title. See the `FAQ section on highlights <highlights>` for more info.
+    title_tooltip: Optional[:class:`str`]
+        The text to be displayed when the user hovers over the option's title
+    sub_tooltip: Optional[:class:`str`]
+        The text to be displayed when the user hovers over the option's subtitle
+    copy_text: Optional[:class:`str`]
+        I have no idea
+    action: Optional[:class:`Action`]
+        The action to be preformed when the user clicks on the option
+    context_data: Optional[:class:`Iterable`[Any]]
+        A list of json seriable objects which will be given in the `on_context_menu event <on_context_menu>` when the user requests the context menu for this option.
+    """
+
     __slots__ = (
         "title",
         "sub",
@@ -72,7 +114,14 @@ class Option(Base):
         self.action = action
         self.context_data = context_data or []
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, Any]:
+        """This converts the option into a json serializable dictionary
+        
+        Returns
+        -------
+        :class:`dict`[:class:`str`, Any]
+        """
+
         x: dict[str, Any] = {
             "title": self.title,
         }
@@ -96,6 +145,23 @@ class Option(Base):
 
     @classmethod
     def from_dict(cls: type[Option], data: dict[str, Any]) -> Option:
+        """Creates an Option from a dictionary
+        
+        Parameters
+        ----------
+        data: :class:`dict`[:class:`str`, Any]
+            The valid dictionary that includes the option data
+        
+        Raises
+        ------
+        :class:`KeyError`
+            The dictionary did not include the only required field, ``title``.
+        
+        Returns
+        --------
+        :class:`Option`
+        """
+
         action_data = data.get("jsonRPCAction")
         if action_data:
             action = Action.from_dict(action_data)
