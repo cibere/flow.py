@@ -124,7 +124,7 @@ class Plugin:
     @property
     def metadata(self) -> PluginMetadata:
         """
-        :class:`PluginMetadata`: Returns the plugin's metadata.
+        Returns the plugin's metadata.
 
         Raises
         --------
