@@ -28,7 +28,7 @@ class Plugin:
     --------
     settings: :class:`~flowpy.settings.Settings`
         The plugin's settings set by the user
-    api: :class:`~flowpy.flow_api.FlowLauncherAPI`
+    api: :class:`~flowpy.flow_api.client.FlowLauncherAPI`
         An easy way to acess Flow Launcher's API
     """
 
