@@ -12,7 +12,7 @@ Coroutines
 Questions regarding coroutines and asyncio belong here.
 
 .. NOTE::
-    Credits for the ``Coroutines`` section goes to :ref:`discord.py <https://discordpy.readthedocs.io/en/latest/faq.html?highlight=on_error#coroutines>`
+    Credits for the ``Coroutines`` section goes to `discord.py <https://discordpy.readthedocs.io/en/latest/faq.html?highlight=on_error#coroutines>`_
 
 What is a coroutine?
 ~~~~~~~~~~~~~~~~~~~~~~
