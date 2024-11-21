@@ -1,6 +1,6 @@
 __title__ = "flow.py"
 __author__ = "cibere"
-__version__ = "0.0.1a"
+__version__ = "0.0.1"
 
 
 from typing import Literal, NamedTuple
