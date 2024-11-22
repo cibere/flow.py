@@ -4,11 +4,11 @@ Plugin
 .. autoclass:: flowpy.plugin.Plugin
     :members:
 
-.. automethod:: Plugin.event()
-    :decorator:
+.. autodecorator:: Plugin.event()
 
-.. automethod:: Plugin.search()
-    :decorator:
+.. autodecorator:: Plugin.search()
+
+.. autodecorator:: Plugin.action()
 
 Classes
 ~~~~~~~

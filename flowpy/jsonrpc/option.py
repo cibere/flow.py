@@ -17,6 +17,9 @@ __all__ = (
 class Action(Base):
     r"""This represents a :ref:`coroutine <coroutine>` that will be triggered when a user clicks on an option.
 
+    .. NOTE::
+        See the :func:`~flowpy.plugin.Plugin.action` decorator for an alternate way of creating actions
+
     Attributes
     ----------
     method: :ref:`coroutine <coroutine>`

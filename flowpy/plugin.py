@@ -10,7 +10,9 @@ from typing import (
     AsyncIterable,
     Awaitable,
     Callable,
+    Coroutine,
     Iterable,
+    TypeVarTuple,
     overload,
 )
 
@@ -20,7 +22,7 @@ from .conditions import PlainTextCondition, RegexCondition
 from .default_events import get_default_events
 from .errors import PluginNotInitialized
 from .flow_api.client import FlowLauncherAPI, PluginMetadata
-from .jsonrpc import ExecuteResponse, JsonRPCClient, Option, QueryResponse
+from .jsonrpc import ExecuteResponse, JsonRPCClient, Option, QueryResponse, Action
 from .jsonrpc.responses import BaseResponse
 from .query import Query
 from .search_handler import SearchHandler
@@ -29,6 +31,7 @@ from .utils import MISSING, coro_or_gen, setup_logging
 
 if TYPE_CHECKING:
     from ._types import SearchHandlerCallback, SearchHandlerCondition
+TS = TypeVarTuple("TS")
 
 LOG = logging.getLogger(__name__)
 
@@ -288,3 +291,27 @@ class Plugin:
             return handler
 
         return inner
+
+    def action[**P](self, method: Callable[P, Coroutine[Any, Any, Any]]) -> Callable[P, Action]:
+        """A decorator to easily and quickly turn a function into a :class:`~flowpy.jsonrpc.option.Action` object.
+
+        All events must be a :ref:`coroutine <coroutine>`.
+        
+        Example
+        -------
+        
+        .. code-block:: python3
+        
+            @plugin.action
+            async def my_action(param: str):
+                ...
+            
+            # later on
+
+            Option("...", action=my_action("param"))
+        """
+
+        def inner(*args):
+            return Action(method, args) # type: ignore
+        return inner # type: ignore
+        
