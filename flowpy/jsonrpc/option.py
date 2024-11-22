@@ -178,3 +178,12 @@ class Option(Base):
             context_data=data.get("ContextData", MISSING),
             action=action,
         )
+
+    @classmethod
+    def from_anything(cls: type[Option], item: Any) -> Option:
+        if isinstance(item, dict):
+            return cls.from_dict(item)
+        elif isinstance(item, Option):
+            return item
+        else:
+            return cls(str(item))

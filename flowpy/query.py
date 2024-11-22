@@ -1,13 +1,17 @@
+from __future__ import annotations
+
+import re
 from typing import Any
 
 __all__ = ("Query",)
 
 
-class Query:
+class Query[T]:
     r"""This class represents the query data sent from flow launcher"""
 
     def __init__(self, data: dict[str, Any]) -> None:
         self.__data = data
+        self.__search_condition_data: T | None = None
 
     @property
     def raw_text(self) -> str:
@@ -28,3 +32,12 @@ class Query:
     def keyword(self) -> str:
         """:class:`str`: The keyword used to initiate the query"""
         return self.__data["actionKeyword"]
+
+    @property
+    def condition_data(self) -> T | None:
+        """Any | None: If used in a :class:`~flowpy.search_handler.SearchHandler`, this attribute will return any extra data that the condition gave."""
+        return self.__search_condition_data
+
+    @condition_data.setter
+    def condition_data(self, value: T) -> None:
+        self.__search_condition_data = value

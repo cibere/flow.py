@@ -24,11 +24,10 @@ To install the stable version, use the following command:
     A `Virtual Environment <https://docs.python.org/3/library/venv.html>`__ is recommended to install
     the library.
 
-.. code:: sh
+.. NOTE::
+    The ``flow.py`` package on PyPi is NOT the same package
 
-    pip install -U flow.py
-
-To install the development version, do the following:
+To install flow.py, do the following:
 
 .. code:: sh
 
@@ -40,7 +39,7 @@ Basic Concepts
 Events
 ~~~~~~
 
-flow.py revolves around a concept called :ref:`events <events>`. An event is something that you listen for, then respond to. For example, when flow sends a query request, you can use the :ref:`on_query <on_query>` event to listen for, and respond to the request.
+flow.py revolves around a concept called :ref:`events <events>`. An event is something that you listen for, then respond to. For example, when flow starts and runs your plugin, it will send a :ref:`on_initialization <on_initialization>` event that we can listen for.
 
 A quick example code to showcase this:
 
@@ -51,10 +50,28 @@ A quick example code to showcase this:
     plugin = Plugin()
 
     @plugin.event
-    async def on_query(data: Query):
-        return [Option(f"You wrote {data.text}")]
+    async def on_initialization():
+        # Plugin has started
     
     plugin.run()
+
+Search handlers
+~~~~~~~~~~~~~~~
+
+For handling search/query requests with flow.py, you will use :ref:`search handlers <search_handlers>`. See the :ref:`search handlers section <search_handlers>` for an in-depth look at them, but for now, here is a quick version:
+
+You can use the :func:`~flowpy.plugin.Plugin.search` decorator to register a search handler, with an async callback. The callback takes a single argument (:class:`~flowpy.query.Query`), and returns an :class:`~flowpy.jsonrpc.option.Option` object, a list of :class:`~flowpy.jsonrpc.option.Option` objects, or anything that will get casted to a string and converted into an :class:`~flowpy.jsonrpc.option.Option` object.
+
+.. NOTE::
+    Unlike :func:`~flowpy.plugin.Plugin.event`, with :func:`~flowpy.plugin.Plugin.search` you must call the decorator, as there are optional arguments that could be passed.
+
+.. code:: py
+    
+    plugin = Plugin()
+    
+    @plugin.search()
+    async def my_search_handler(query):
+        return "Hello!"
 
 Options & Actions
 ~~~~~~~~~~~~~~~~~

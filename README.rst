@@ -17,20 +17,10 @@ Installing
 
 **Python 3.12 or higher is required**
 
-To install the stable version, use the following command:
+.. NOTE::
+    The ``flow.py`` package on PyPi is NOT the same package
 
-.. note::
-
-    A `Virtual Environment <https://docs.python.org/3/library/venv.html>`__ is recommended to install
-    the library, especially on Linux where the system Python is externally managed and restricts which
-    packages you can install on it.
-
-
-.. code:: sh
-
-    pip install -U flow.py
-
-To install the development version, do the following:
+To install flow.py, do the following:
 
 .. code:: sh
 

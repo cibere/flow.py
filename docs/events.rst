@@ -28,6 +28,8 @@ API Events
 ----------
 These events are triggered by flow
 
+.. _on_initialization:
+
 on_initialization
 ~~~~~~~~~~~~~~~~~
 
@@ -40,14 +42,21 @@ on_initialization
 on_query
 ~~~~~~~~
 
-.. function:: async def on_query(data)
+.. function:: async def on_query(raw_query, raw_settings)
 
     Called when flow says a query request.
 
-    :param data: The query data.
-    :type data: :class:`~flowpy.query.Query`
-    :rtype: list[:class:`~flowpy.jsonrpc.option.Option`]
-    :yields: :class:`~flowpy.jsonrpc.option.Option`
+    .. WARNING::
+        Overriding this event will stop plugin's :attr:`~flowpy.plugin.Plugin.settings` attribute from updating, and stop flow from receiving setting updates from the attribute.
+    
+    .. WARNING::
+        Overriding this event will stop all search handlers from running. If you must override this event and have search handlers running, use the :func:`~flowpy.plugin.Plugin.process_search_handlers` method to run the search handlers.
+
+    :param raw_query: The raw query data.
+    :type raw_query: dict[:class:`str`, Any]
+    :param raw_settings: The raw settings data.
+    :type raw_settings: dict[:class:`str`, Any]
+    :rtype: :class:`~flowpy.jsonrpc.responses.QueryResponse`
 
 .. _on_context_menu:
 
@@ -96,3 +105,19 @@ on_action_error
     :type error: :class:`Exception`
     :returns: The response to be returned to flow. Use :class:`~flowpy.jsonrpc.responses.ExecuteResponse` if the error was successfully handled, use :class:`~flowpy.jsonrpc.responses.ErrorResponse` if the error was not successfully handled.
     :rtype: :class:`~flowpy.jsonrpc.responses.ExecuteResponse` | :class:`~flowpy.jsonrpc.responses.ErrorResponse`
+
+on_search_error
+~~~~~~~~~~~~~~~
+
+.. function:: async def on_search_error(handler_name, error, query)
+
+    This is called when an error occurs in a search handler.
+
+    :param handler_name: The search handler's name (see :attr:`~flowpy.search_handler.SearchHandler.name` for more info)
+    :type handler_name: :class:`str`
+    :param error: The error that occured
+    :type error: :class:`Exception`
+    :param query: The query given to the search handler
+    :type query: :class:`~flowpy.query.Query`
+    :returns: The response to be returned to flow. Use :class:`~flowpy.jsonrpc.responses.QueryResponse` if the error was successfully handled, use :class:`~flowpy.jsonrpc.responses.ErrorResponse` if the error was not successfully handled.
+    :rtype: :class:`~flowpy.jsonrpc.responses.QueryResponse` | :class:`~flowpy.jsonrpc.responses.ErrorResponse`
