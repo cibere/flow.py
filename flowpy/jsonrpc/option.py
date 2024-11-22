@@ -3,11 +3,11 @@ from __future__ import annotations
 from typing import Any, Callable, Coroutine, Iterable, TypeVarTuple, TYPE_CHECKING
 
 from ..flow_api import FlowLauncherAPI
-from ..utils import MISSING
 from .base_object import Base
 
 if TYPE_CHECKING:
     from .responses import ExecuteResponse
+    from ..context_menu_handler import ContextMenuHandler
 
 TS = TypeVarTuple("TS")
 
@@ -82,8 +82,8 @@ class Option(Base):
         This is the text that will be copied when the user does `CTRL+C` on the option.
     action: Optional[:class:`Action`]
         The action to be preformed when the user clicks on the option
-    context_data: Optional[Iterable[Any]]
-        A list of json seriable objects which will be given in the :ref:`on_context_menu event <on_context_menu>` when the user requests the context menu for this option.
+    context_menu_handler: Optional[:class:`~flowpy.context_menu_handler.ContextMenuHandler`]
+        The context menu handler to create the context menu for this option. See the :ref:`context menu handler section <ctx_menu_handlers>` for more information about using context menu handlers.
     """
 
     __slots__ = (
@@ -95,7 +95,7 @@ class Option(Base):
         "sub_tooltip",
         "copy_text",
         "action",
-        "context_data",
+        "context_menu_handler"
     )
 
     def __init__(
@@ -108,7 +108,7 @@ class Option(Base):
         sub_tooltip: str | None = None,
         copy_text: str | None = None,
         action: Action | None = None,
-        context_data: list[Any] = MISSING,
+        context_menu_handler: ContextMenuHandler | None = None
     ) -> None:
         self.title = title
         self.sub = sub
@@ -118,7 +118,7 @@ class Option(Base):
         self.sub_tooltip = sub_tooltip
         self.copy_text = copy_text
         self.action = action
-        self.context_data = context_data or []
+        self.context_menu_handler = context_menu_handler
 
     def to_dict(self) -> dict[str, Any]:
         r"""This converts the option into a json serializable dictionary
@@ -145,13 +145,16 @@ class Option(Base):
             x["copyText"] = self.copy_text
         if self.action is not None:
             x["jsonRPCAction"] = self.action.to_dict()
-        if self.context_data is not None:
-            x["ContextData"] = self.context_data
+        if self.context_menu_handler is not None:
+            x["ContextData"] = [self.context_menu_handler.slug]
         return x
 
     @classmethod
     def from_dict(cls: type[Option], data: dict[str, Any]) -> Option:
         r"""Creates an Option from a dictionary
+
+        .. NOTE::
+            This method does NOT fill the :attr:`~flowpy.jsonrpc.option.Option.context_menu_handler` attribute.
 
         Parameters
         ----------
@@ -181,7 +184,6 @@ class Option(Base):
             title_tooltip=data.get("titleTooltip"),
             sub_tooltip=data.get("subtitleTooltip"),
             copy_text=data.get("copyText"),
-            context_data=data.get("ContextData", MISSING),
             action=action,
         )
 

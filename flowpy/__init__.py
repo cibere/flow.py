@@ -12,6 +12,7 @@ from .plugin import *
 from .query import *
 from .search_handler import *
 from .settings import *
+from .context_menu_handler import *
 
 
 class VersionInfo(NamedTuple):
