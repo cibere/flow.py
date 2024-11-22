@@ -28,6 +28,8 @@ API Events
 ----------
 These events are triggered by flow
 
+.. _on_initialization:
+
 on_initialization
 ~~~~~~~~~~~~~~~~~
 
@@ -109,7 +111,7 @@ on_search_error
 
 .. function:: async def on_search_error(handler_name, error, query)
 
-    This is called when an error occurs within an action
+    This is called when an error occurs in a search handler.
 
     :param handler_name: The search handler's name (see :attr:`~flowpy.search_handler.SearchHandler.name` for more info)
     :type handler_name: :class:`str`

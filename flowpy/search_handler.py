@@ -21,14 +21,14 @@ class SearchHandler:
     
     When creating this on your own, the :func:`~flowpy.plugin.Plugin.register_search_handler` method can be used to register it.
 
-    See the `search handler section <search_handlers>` for more information about using search handlers.
+    See the :ref:`search handler section <search_handlers>` for more information about using search handlers.
     
-    There are provided decorators to easily create search handlers: :func:`~flowpy.plugin.Plugin.search` and `subclassed_on_search <subclassed_on_search>`
+    There are provided decorators to easily create search handlers: :func:`~flowpy.plugin.Plugin.search` and :ref:`subclassed_search <subclassed_search>`
     
     Attributes
     ------------
-    callback: |coroutine|
-        The coroutine to be ran as the handler's callback
+    callback: :ref:`coroutine <coroutine>`
+        The :ref:`coroutine <coroutine>` to be ran as the handler's callback
     condition: :ref:`condition <condition_example>`
         A function which is used to determine if this search handler should be used to handle a given query or not
     """

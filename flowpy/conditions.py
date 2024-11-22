@@ -14,7 +14,7 @@ class PlainTextCondition:
     r"""A builtin search condition to check plain text.
     
     This condition will only run if the query's text is the same as the text given to this condition.
-    See the `search handler section <search_handlers>` for more information about using search handlers and conditions.
+    See the :ref:`search handler section <search_handlers>` for more information about using search handlers and conditions.
     
     Attributes
     ----------
@@ -35,7 +35,7 @@ class RegexCondition:
     r"""A builtin search condition to check a regex pattern.
     
     This condition will only run if the query's text is a match to the regex pattern given to this condition.
-    See the `search handler section <search_handlers>` for more information about using search handlers and conditions.
+    See the :ref:`search handler section <search_handlers>` for more information about using search handlers and conditions.
 
     .. NOTE::
         This condition will set the query's :attr:`~flowpy.query.Query.condition_data` attribute to the :class:`re.Match` object.
@@ -63,7 +63,7 @@ class MultiCondition:
     r"""A builtin search condition to check for multiple conditions.
 
     This condition will only run if all given conditions return ``True``.
-    See the `search handler section <search_handlers>` for more information about using search handlers and conditions.
+    See the :ref:`search handler section <search_handlers>` for more information about using search handlers and conditions.
 
     .. NOTE::
         This condition will set the query's :attr:`~flowpy.query.Query.condition_data` attribute to a dictionary object where the key is the condition and the value is the extra data it provided.
@@ -92,7 +92,7 @@ class KeywordCondition:
     If the :attr:`~flowpy.conditions.KeywordCondition.allowed_keywords` attribute is given, the handler will only run if the query's keyword is in the list of allowed keywords.
     If the :attr:`~flowpy.conditions.KeywordCondition.disallowed_keywords` attribute is given, the handler will only run if the query's keyword is not in the list of allowed keywords.
     
-    See the `search handler section <search_handlers>` for more information about using search handlers and conditions.
+    See the :ref:`search handler section <search_handlers>` for more information about using search handlers and conditions.
 
     Attributes
     ----------

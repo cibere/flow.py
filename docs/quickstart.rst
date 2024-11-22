@@ -23,16 +23,10 @@ Let's make a plugin which compares how similar the user's query is with the word
 
     plugin = Plugin()
 
-    @plugin.event
-    async def on_query(data: Query):
+    @plugin.search()
+    async def compare_results(data: Query):
         result = await plugin.api.fuzzy_search(data.text, "Flow")
-        return [
-            Option(
-                f"Flow: {result.score}",
-                sub=f"Precision: {result.search_precision}",
-                title_highlight_data=result.highlight_data,
-            )
-        ]
+        return f"Flow: {result.score}",
 
     plugin.run()
 
@@ -44,17 +38,19 @@ There's a lot going on here, so let's walk you through it line by line.
 2. Empty Line to increase readability
 3. Now we create an instance of :class:`~flowpy.plugin.Plugin`, which will let us work with Flow.
 4. Empty Line to increase readability
-5. Now, in line 5, we use the :func:`~flowpy.plugin.Plugin.event` decorator to mark our ``on_query`` coroutine as an event that should be registered.
-6. Now in line 6, we define our ``on_query`` event handler, which takes a single argument: ``data`` of the type :class:`~flowpy.query.Query`
+5. Now, in line 5, we use the :func:`~flowpy.plugin.Plugin.search` decorator to create and register a :class:`~flowpy.search_handler.SearchHandler` object using the function defined in line 6.
+6. Now in line 6, we define our handler's callback, which takes a single argument: ``data`` of the type :class:`~flowpy.query.Query`
 7. In line 7, we access the :class:`~flowpy.flow_api.client.FlowLauncherAPI` client, and use its :func:`~flowpy.flow_api.client.FlowLauncherAPI.fuzzy_search` method to tell flow to use fuzzy search to compare the two strings inputted. In this case, we are telling Flow to compare whatever the user gave as their query. See :class:`~flowpy.query.Query` for more info on working with the query object.
-8. We are returning a list which we expanded for readability
-9. We are putting an :class:`~flowpy.jsonrpc.option.Option` object into the list, but expanding it for readability
-10. For the first argument into the :class:`~flowpy.jsonrpc.option.Option` object (which is the title/content of the option), we give a string that's our original text (``Flow``), and after that,the fuzzy search's score. See the :class:`~flowpy.flow_api.fuzzy_search.FuzzySearchResult` class for more information on using the result object.
-11. For the second argument into the :class:`~flowpy.jsonrpc.option.Option` object (which is the subtitle of the option), we give a string that tells our user how precise flow thinks it is. See the :class:`~flowpy.flow_api.fuzzy_search.FuzzySearchResult` class for more information on using the result object.
-12. For the third argument, we provide title highlight data from the fuzzy search results (this is why we started the option's title/content with our original string). See the `Highlighting section in the FAQ <highlights>` for more information on this.
-13. Ending the :class:`~flowpy.jsonrpc.option.Option` object which we expanded for readability
-14. Ending the list object that we expanded for readability
-15. Empty Line to increase readability
-16. Now we call Plugin.:class:`~flowpy.plugin.Plugin.run` to start the plugin.
+8. We are returning a string that contains our ``Flow`` string and the results score. See the :class:`~flowpy.flow_api.fuzzy_search.FuzzySearchResult` class for more information on using the result object.
+9. Empty Line to increase readability
+10. Now we call plugin's :class:`~flowpy.plugin.Plugin.run` method to start the plugin.
 
 Now although we've just made a plugin, we can't use it yet, because it isn't as simple as running the program.
+
+What's Next?
+------------
+Here are a couple of good places to go next:
+
+- :doc:`search_handlers`
+- :doc:`jsonrpc`
+- :doc:`plugin`

@@ -44,14 +44,14 @@ subclassed_search
 
 .. function:: @subclassed_search
 
-    All search handlers must be a :ref:`coroutine <coroutine>`. See the `search handler section <search_handlers>` for more information about using search handlers.
+    All search handlers must be a :ref:`coroutine <coroutine>`. See the :ref:`search handler section <search_handlers>` for more information about using search handlers.
 
     .. NOTE::
-        This is to be used inside of a :class:`Plugin` subclass, use the :func:`~flowpy.plugin.Plugin.search` decorator if it will be used outside of a subclass.
+        This is to be used inside of a :class:`~flowpy.plugin.Plugin` subclass, use the :func:`~flowpy.plugin.Plugin.search` decorator if it will be used outside of a subclass.
 
     Parameters
     ----------
-    condition: Optional[`condition <condition_example>`]
+    condition: Optional[:ref:`condition <condition_example>`]
         The condition to determine which queries this handler should run on. If given, this should be the only argument given.
     text: Optional[:class:`str`]
         A kwarg to quickly add a :class:`~flowpy.conditions.PlainTextCondition`. If given, this should be the only argument given.
