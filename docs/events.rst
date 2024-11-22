@@ -3,20 +3,11 @@
 Event Reference
 ===========
 
-There are two main ways to register events.
-
-The first way is by using the :func:`~flowpy.plugin.Plugin.event` decorator using your :class:`~flowpy.plugin.Plugin` instance. For example: ::
+You can register an event using the :func:`~flowpy.plugin.Plugin.event` decorator using your :class:`~flowpy.plugin.Plugin` instance. For example: ::
 
     @plugin.event
     async def on_initialization():
         print('Ready!')
-
-The second way is by using the :ref:`@subclassed_event <subclassed_event>` decorator inside of a :class:`~flowpy.plugin.Plugin` subclass. For example: ::
-
-    class MyPlugin(Plugin):
-        @subclassed_event
-        async def on_initialization(self):
-            print('Ready!')
 
 .. warning::
 

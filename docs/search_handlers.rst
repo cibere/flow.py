@@ -96,9 +96,7 @@ There are 3 main ways to register handlers:
 
 1. :ref:`Using the plugin.search decorator <register_search_handler_by_plugin.search_deco>`
 
-2. :ref:`Using the subclassed_search decorator <register_search_handler_by_subclassed_search_deco>`
-
-3. :ref:`Manually create and register the handler <manaully_register_search_handler>`
+2. :ref:`Manually create and register the handler <manaully_register_search_handler>`
 
 .. _register_search_handler_by_plugin.search_deco:
 
@@ -109,17 +107,6 @@ If you want to create a handler outside of your :class:`~flowpy.plugin.Plugin` c
     @plugin.search()
     async def my_handler(query: Query):
         return f"Your query was: {query.text}"
-
-.. _register_search_handler_by_subclassed_search_deco:
-
-subclassed_search decorator
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-If you want to create a handler inside of your :class:`~flowpy.plugin.Plugin` class using a decorator, you can use the :ref:`subclassed_search <subclassed_search>` decorator. ::
-
-    class MyPlugin(Plugin):
-        @subclassed_search()
-        async def my_handler(self, query: Query):
-            return f"Your query was: {query.text}"
 
 .. _manaully_register_search_handler:
 

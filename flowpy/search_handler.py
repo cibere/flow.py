@@ -23,7 +23,7 @@ class SearchHandler:
 
     See the :ref:`search handler section <search_handlers>` for more information about using search handlers.
 
-    There are provided decorators to easily create search handlers: :func:`~flowpy.plugin.Plugin.search` and :ref:`subclassed_search <subclassed_search>`
+    There is a provided decorator to easily create search handlers: :func:`~flowpy.plugin.Plugin.search`
 
     Attributes
     ------------
