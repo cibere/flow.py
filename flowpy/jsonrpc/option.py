@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from typing import Any, Callable, Coroutine, Iterable, TypeVarTuple, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Callable, Coroutine, Iterable, TypeVarTuple
 
 from ..flow_api import FlowLauncherAPI
 from .base_object import Base
 
 if TYPE_CHECKING:
-    from .responses import ExecuteResponse
     from ..context_menu_handler import ContextMenuHandler
+    from .responses import ExecuteResponse
 
 TS = TypeVarTuple("TS")
 
@@ -95,7 +95,7 @@ class Option(Base):
         "sub_tooltip",
         "copy_text",
         "action",
-        "context_menu_handler"
+        "context_menu_handler",
     )
 
     def __init__(
@@ -108,7 +108,7 @@ class Option(Base):
         sub_tooltip: str | None = None,
         copy_text: str | None = None,
         action: Action | None = None,
-        context_menu_handler: ContextMenuHandler | None = None
+        context_menu_handler: ContextMenuHandler | None = None,
     ) -> None:
         self.title = title
         self.sub = sub

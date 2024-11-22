@@ -12,7 +12,13 @@ if TYPE_CHECKING:
 
 LOG = logging.getLogger(__name__)
 
-__all__ = "on_error", "on_action_error", "on_context_menu", "on_search_error", "on_context_menu_error"
+__all__ = (
+    "on_error",
+    "on_action_error",
+    "on_context_menu",
+    "on_search_error",
+    "on_context_menu_error",
+)
 
 
 async def on_error(
@@ -45,7 +51,9 @@ async def on_context_menu_error(
     handler_name: str, error: Exception, *args, **kwargs
 ) -> ErrorResponse:
     """gets called when an error occurs in a context menu handler"""
-    LOG.exception(f"Ignoring exception in context menu handler ({handler_name!r})", exc_info=error)
+    LOG.exception(
+        f"Ignoring exception in context menu handler ({handler_name!r})", exc_info=error
+    )
     return ErrorResponse.internal_error(error)
 
 
@@ -54,7 +62,7 @@ def get_default_events(plugin: Plugin) -> dict[str, Callable[..., Awaitable[Any]
         query = Query(data)
         plugin.settings._update(raw_settings)
         return plugin.process_search_handlers(query)
-    
+
     def on_context_menu(data: list[str]):
         return plugin.process_context_menu_handlers(data)
 
@@ -67,6 +75,7 @@ def get_default_events(plugin: Plugin) -> dict[str, Callable[..., Awaitable[Any]
             on_search_error,
             plugin._initialize_wrapper,
             plugin._context_menu_wrapper,
-            on_action_error,on_context_menu_error
+            on_action_error,
+            on_context_menu_error,
         )
     }

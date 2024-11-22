@@ -31,9 +31,12 @@ class PluginNotInitialized(PluginException):
     def __init__(self):
         return super().__init__("The plugin hasn't been initialized yet")
 
+
 class ContextMenuHandlerException(PluginException):
     r"""This is a base class for errors related to context menu handlers."""
+
     ...
+
 
 class InvalidContextDataReceived(ContextMenuHandlerException):
     r"""Invalid context menu data was provided"""
@@ -41,9 +44,10 @@ class InvalidContextDataReceived(ContextMenuHandlerException):
     def __init__(self):
         return super().__init__(f"Invalid context menu data received")
 
+
 class ContextMenuHandlerNotFound(ContextMenuHandlerException):
     r"""This is raised when a context menu handler is not found.
-    
+
     The soul purpose for this error to exist is incase you want to impliment a default context menu handler.
     """
 

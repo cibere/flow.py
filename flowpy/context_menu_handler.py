@@ -1,12 +1,13 @@
 from __future__ import annotations
 
-from typing import Any, Callable
 import random
+from typing import Any, Callable
+
 from .jsonrpc.option import Option
 from .utils import MISSING, coro_or_gen
 
-
 __all__ = ("ContextMenuHandler",)
+
 
 class ContextMenuHandler:
     r"""This represents a context menu handler.
@@ -25,16 +26,17 @@ class ContextMenuHandler:
         The keyword arguments that should be passed to the callback
     """
 
-    def __init__[**P](
-        self,
-        callback: Callable[P, Any],
-        *args: P.args,
-        **kwargs: P.kwargs
-    ) -> None:
+    def __init__[
+        **P
+    ](self, callback: Callable[P, Any], *args: P.args, **kwargs: P.kwargs) -> None:
         self.callback = callback
         self.__args = args
         self.__kwargs = kwargs
-        self.slug = "".join(random.choices("QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890", k=15))
+        self.slug = "".join(
+            random.choices(
+                "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890", k=15
+            )
+        )
 
     async def invoke(self) -> list[Option]:
         """|coro|
