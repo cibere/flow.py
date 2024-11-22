@@ -15,7 +15,7 @@ class SettingNotFound(PluginException):
     r"""This gets raised when you try to access a setting key that doesn't exist
 
     Attributes
-    --------
+    -----------
     name: :class:`str`
         The name of the setting key
     """
