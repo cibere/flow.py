@@ -136,7 +136,7 @@ class Plugin:
         r"""|coro|
         
         Runs and processes the registered search handlers.
-        See the `search handler section <search_handlers>` for more information about using search handlers.
+        See the :ref:`search handler section <search_handlers>` for more information about using search handlers.
         
         Parameters
         ----------
@@ -190,13 +190,13 @@ class Plugin:
 
         asyncio.run(main())
 
-    def add_search_handler(self, handler: SearchHandler) -> None:
+    def register_search_handler(self, handler: SearchHandler) -> None:
         r"""Register a new search handler
 
-        See the `search handler section <search_handlers>` for more information about using search handlers.
+        See the :ref:`search handler section <search_handlers>` for more information about using search handlers.
         
         Parameters
-        ----------
+        -----------
         handler: :class:`~flowpy.search_handler.SearchHandler`
             The search handler to be registered
         """
@@ -254,14 +254,14 @@ class Plugin:
     ) -> Callable[[SearchHandlerCallback], SearchHandler]:
         """A decorator that registers a search handler.
 
-        All search handlers must be a :ref:`coroutine <coroutine>`. See the `search handler section <search_handlers>` for more information about using search handlers.
+        All search handlers must be a :ref:`coroutine <coroutine>`. See the :ref:`search handler section <search_handlers>` for more information about using search handlers.
 
         .. NOTE::
-            This is to be used outside of a :class:`Plugin` subclass, use :ref:`subclassed_on_search <subclassed_on_search>` if it will be used inside of a subclass.
+            This is to be used outside of a :class:`Plugin` subclass, use :ref:`subclassed_search <subclassed_search>` if it will be used inside of a subclass.
 
         Parameters
         ----------
-        condition: Optional[`condition <condition_example>`]
+        condition: Optional[:ref:`condition <condition_example>`]
             The condition to determine which queries this handler should run on. If given, this should be the only argument given.
         text: Optional[:class:`str`]
             A kwarg to quickly add a :class:`~flowpy.conditions.PlainTextCondition`. If given, this should be the only argument given.
@@ -287,7 +287,7 @@ class Plugin:
 
         def inner(func: SearchHandlerCallback) -> SearchHandler:
             handler = SearchHandler(func, condition)
-            self.add_search_handler(handler)
+            self.register_search_handler(handler)
             return handler
 
         return inner
