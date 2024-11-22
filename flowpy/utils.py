@@ -1,7 +1,7 @@
 import logging
 import logging.handlers
 from inspect import isasyncgen, iscoroutine
-from typing import Any, AsyncIterable, Awaitable, Iterable
+from typing import Any, AsyncIterable, Awaitable
 
 
 class _MissingSentinel:
@@ -40,14 +40,14 @@ def setup_logging(*, formatter: logging.Formatter | None = None) -> None:
     logger.addHandler(handler)
 
 
-async def coro_or_gen[T](coro: Awaitable[Iterable[T]] | AsyncIterable[T]) -> list[T]:
+async def coro_or_gen[T](coro: Awaitable[T] | AsyncIterable[T]) -> list[T] | T:
     """|coro|
 
-    Executes an AsyncIterable or a Coroutine that returns a list of items.
+    Executes an AsyncIterable or a Coroutine, and returns the result
 
     Parameters
     -----------
-    coro: :class:`typing.Awaitable`[:class:`typing.Iterable`] | :class:`typing.AsyncIterable`
+    coro: :class:`typing.Awaitable` | :class:`typing.AsyncIterable`
         The coroutine or asynciterable to be ran
 
     Raises
@@ -57,8 +57,8 @@ async def coro_or_gen[T](coro: Awaitable[Iterable[T]] | AsyncIterable[T]) -> lis
 
     Returns
     --------
-    List[Any]
-        A list of whatever was given from the :class:`typing.Coroutine` or :class:`typing.AsyncIterable`.
+    Any
+        Whatever was given from the :class:`typing.Coroutine` or :class:`typing.AsyncIterable`.
     """
 
     if iscoroutine(coro):

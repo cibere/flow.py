@@ -68,3 +68,7 @@ class Settings:
         if name.startswith("_"):
             return super().__setattr__(name, value)
         self.__setitem__(name, value)
+
+    def _update(self, data: RawSettings) -> None:
+        self._data = data
+        self._changes = {}

@@ -10,6 +10,8 @@ from .jsonrpc import *
 from .plugin import *
 from .query import *
 from .settings import *
+from .search_handler import *
+from .conditions import *
 
 
 class VersionInfo(NamedTuple):

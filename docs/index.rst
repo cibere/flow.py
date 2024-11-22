@@ -30,9 +30,10 @@ If you're having trouble with something, these resources might help.
    :caption: API Reference
    
    plugin
+   search_handlers
    flow_api
-   whats_new
    jsonrpc
    errors
    events
+   whats_new
    faq
