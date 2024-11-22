@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import asyncio
-import inspect
 import json
 import logging
 import re
@@ -31,7 +30,6 @@ from .utils import MISSING, coro_or_gen, setup_logging
 if TYPE_CHECKING:
     from ._types import (
         SearchHandlerCallback,
-        SearchHandlerCallbackInClass,
         SearchHandlerCondition,
     )
 
