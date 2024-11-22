@@ -1,10 +1,13 @@
 from __future__ import annotations
 
-from typing import Any, Callable, Coroutine, Iterable, TypeVarTuple
+from typing import Any, Callable, Coroutine, Iterable, TypeVarTuple, TYPE_CHECKING
 
 from ..flow_api import FlowLauncherAPI
 from ..utils import MISSING
 from .base_object import Base
+
+if TYPE_CHECKING:
+    from .responses import ExecuteResponse
 
 TS = TypeVarTuple("TS")
 
@@ -76,7 +79,7 @@ class Option(Base):
     sub_tooltip: Optional[:class:`str`]
         The text to be displayed when the user hovers over the option's subtitle
     copy_text: Optional[:class:`str`]
-        I have no idea
+        This is the text that will be copied when the user does `CTRL+C` on the option.
     action: Optional[:class:`Action`]
         The action to be preformed when the user clicks on the option
     context_data: Optional[Iterable[Any]]
