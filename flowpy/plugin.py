@@ -4,10 +4,20 @@ import asyncio
 import inspect
 import json
 import logging
-from typing import TYPE_CHECKING, Any, AsyncIterable, Awaitable, Callable, Iterable, overload
+import re
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    AsyncIterable,
+    Awaitable,
+    Callable,
+    Iterable,
+    overload,
+)
 
-import aioconsole, re
+import aioconsole
 
+from .conditions import PlainTextCondition, RegexCondition
 from .default_events import get_default_events
 from .errors import PluginNotInitialized
 from .flow_api.client import FlowLauncherAPI, PluginMetadata
@@ -17,10 +27,13 @@ from .query import Query
 from .search_handler import SearchHandler
 from .settings import Settings
 from .utils import MISSING, coro_or_gen, remove_self_arg_from_func, setup_logging
-from .conditions import PlainTextCondition, RegexCondition
 
 if TYPE_CHECKING:
-    from ._types import SearchHandlerCallback, SearchHandlerCondition, SearchHandlerCallbackInClass
+    from ._types import (
+        SearchHandlerCallback,
+        SearchHandlerCallbackInClass,
+        SearchHandlerCondition,
+    )
 
 LOG = logging.getLogger(__name__)
 
@@ -57,7 +70,7 @@ class Plugin:
                     pass
                 else:
                     self._events[elem] = remove_self_arg_from_func(value, self)
-                    
+
                 if isinstance(value, SearchHandler):
                     self._search_handlers.append(value)
                     value.parent = self
@@ -138,16 +151,16 @@ class Plugin:
 
     async def process_search_handlers(self, query: Query) -> QueryResponse:
         r"""|coro|
-        
+
         Runs and processes the registered search handlers.
         See the :ref:`search handler section <search_handlers>` for more information about using search handlers.
-        
+
         Parameters
         ----------
         query: :class:`~flowpy.query.Query`
             The query object to be give to the search handlers
         """
-        
+
         options = []
         for handler in self._search_handlers:
             if handler.condition(query):
@@ -198,7 +211,7 @@ class Plugin:
         r"""Register a new search handler
 
         See the :ref:`search handler section <search_handlers>` for more information about using search handlers.
-        
+
         Parameters
         -----------
         handler: :class:`~flowpy.search_handler.SearchHandler`
@@ -236,25 +249,29 @@ class Plugin:
     @overload
     def search(
         self, condition: SearchHandlerCondition
-    ) -> Callable[[SearchHandlerCallback], SearchHandler]:...
-    
+    ) -> Callable[[SearchHandlerCallback], SearchHandler]: ...
+
     @overload
     def search(
         self, *, text: str
-    ) -> Callable[[SearchHandlerCallback], SearchHandler]:...
+    ) -> Callable[[SearchHandlerCallback], SearchHandler]: ...
 
     @overload
     def search(
         self, *, pattern: re.Pattern
-    ) -> Callable[[SearchHandlerCallback], SearchHandler]:...
+    ) -> Callable[[SearchHandlerCallback], SearchHandler]: ...
 
     @overload
     def search(
         self,
-    ) -> Callable[[SearchHandlerCallback], SearchHandler]:...
+    ) -> Callable[[SearchHandlerCallback], SearchHandler]: ...
 
     def search(
-        self, condition: SearchHandlerCondition | None = None, *, text: str = MISSING, pattern: re.Pattern = MISSING
+        self,
+        condition: SearchHandlerCondition | None = None,
+        *,
+        text: str = MISSING,
+        pattern: re.Pattern = MISSING,
     ) -> Callable[[SearchHandlerCallback], SearchHandler]:
         """A decorator that registers a search handler.
 
@@ -322,27 +339,34 @@ def subclassed_event[T: Callable[..., Any]](func: T) -> T:
     setattr(func, "__flowpy_is_event__", True)
     return func
 
+
 @overload
 def subclassed_search(
-    condition: SearchHandlerCondition
-) -> Callable[[SearchHandlerCallbackInClass], SearchHandler]:...
+    condition: SearchHandlerCondition,
+) -> Callable[[SearchHandlerCallbackInClass], SearchHandler]: ...
+
 
 @overload
 def subclassed_search(
     *, text: str
-) -> Callable[[SearchHandlerCallbackInClass], SearchHandler]:...
+) -> Callable[[SearchHandlerCallbackInClass], SearchHandler]: ...
+
 
 @overload
 def subclassed_search(
     *, pattern: re.Pattern
-) -> Callable[[SearchHandlerCallbackInClass], SearchHandler]:...
+) -> Callable[[SearchHandlerCallbackInClass], SearchHandler]: ...
+
 
 @overload
-def subclassed_search(
-) -> Callable[[SearchHandlerCallbackInClass], SearchHandler]:...
+def subclassed_search() -> Callable[[SearchHandlerCallbackInClass], SearchHandler]: ...
+
 
 def subclassed_search(
-    condition: SearchHandlerCondition | None = None, *, text: str = MISSING, pattern: re.Pattern = MISSING
+    condition: SearchHandlerCondition | None = None,
+    *,
+    text: str = MISSING,
+    pattern: re.Pattern = MISSING,
 ) -> Callable[[SearchHandlerCallbackInClass], SearchHandler]:
     """A decorator that registers a search handler.
 
@@ -381,4 +405,4 @@ def subclassed_search(
         handler = SearchHandler(func, condition)
         return handler
 
-    return inner # type: ignore
+    return inner  # type: ignore

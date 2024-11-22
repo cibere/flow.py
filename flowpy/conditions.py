@@ -12,10 +12,10 @@ __all__ = "PlainTextCondition", "RegexCondition", "KeywordCondition", "MultiCond
 
 class PlainTextCondition:
     r"""A builtin search condition to check plain text.
-    
+
     This condition will only run if the query's text is the same as the text given to this condition.
     See the :ref:`search handler section <search_handlers>` for more information about using search handlers and conditions.
-    
+
     Attributes
     ----------
     text: :class:`str`
@@ -33,7 +33,7 @@ class PlainTextCondition:
 
 class RegexCondition:
     r"""A builtin search condition to check a regex pattern.
-    
+
     This condition will only run if the query's text is a match to the regex pattern given to this condition.
     See the :ref:`search handler section <search_handlers>` for more information about using search handlers and conditions.
 
@@ -67,8 +67,9 @@ class MultiCondition:
 
     .. NOTE::
         This condition will set the query's :attr:`~flowpy.query.Query.condition_data` attribute to a dictionary object where the key is the condition and the value is the extra data it provided.
-    
+
     """
+
     __slots__ = ("conditions",)
 
     def __init__(self, conditions: Iterable[SearchHandlerCondition]) -> None:
@@ -81,17 +82,17 @@ class MultiCondition:
                 return False
             condition_data[condition.__name__] = query.condition_data
             query.condition_data = None
-        
+
         query.condition_data = condition_data
         return True
 
 
 class KeywordCondition:
     r"""A builtin search condition to check what keyword was used with the query.
-    
+
     If the :attr:`~flowpy.conditions.KeywordCondition.allowed_keywords` attribute is given, the handler will only run if the query's keyword is in the list of allowed keywords.
     If the :attr:`~flowpy.conditions.KeywordCondition.disallowed_keywords` attribute is given, the handler will only run if the query's keyword is not in the list of allowed keywords.
-    
+
     See the :ref:`search handler section <search_handlers>` for more information about using search handlers and conditions.
 
     Attributes

@@ -18,13 +18,13 @@ def _default_condition(q: Query) -> bool:
 
 class SearchHandler:
     r"""This represents a search handler.
-    
+
     When creating this on your own, the :func:`~flowpy.plugin.Plugin.register_search_handler` method can be used to register it.
 
     See the :ref:`search handler section <search_handlers>` for more information about using search handlers.
-    
+
     There are provided decorators to easily create search handlers: :func:`~flowpy.plugin.Plugin.search` and :ref:`subclassed_search <subclassed_search>`
-    
+
     Attributes
     ------------
     callback: :ref:`coroutine <coroutine>`
@@ -47,7 +47,7 @@ class SearchHandler:
 
     async def invoke(self, query: Query) -> list[Option]:
         """|coro|
-        
+
         Executes the handler's callback, evaluates the result, and returns a list of options.
 
         .. NOTE::

@@ -7,5 +7,7 @@ if TYPE_CHECKING:
 
 type SearchHandlerCallbackReturns = Coroutine[Any, Any, Any] | AsyncIterable[Any]
 type SearchHandlerCallback = Callable[[Query], SearchHandlerCallbackReturns]
-type SearchHandlerCallbackInClass[T] = Callable[[T, Query], SearchHandlerCallbackReturns]
+type SearchHandlerCallbackInClass[T] = Callable[
+    [T, Query], SearchHandlerCallbackReturns
+]
 type SearchHandlerCondition = Callable[[Query], bool]

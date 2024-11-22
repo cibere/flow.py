@@ -5,13 +5,13 @@ __version__ = "0.0.1"
 
 from typing import Literal, NamedTuple
 
+from .conditions import *
 from .errors import *
 from .jsonrpc import *
 from .plugin import *
 from .query import *
-from .settings import *
 from .search_handler import *
-from .conditions import *
+from .settings import *
 
 
 class VersionInfo(NamedTuple):
