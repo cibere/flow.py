@@ -3,11 +3,11 @@ from flowpy import Option, Plugin, Query
 plugin = Plugin()
 
 
-@plugin.event
-async def on_query(data: Query):
+@plugin.search()
+async def on_search(data: Query):
     return [
-        Option(f"Your text is: {data.text}"),
-        Option(f"Your keyword is: {data.keyword}"),
+        f"Your text is: {data.text}",
+        f"Your keyword is: {data.keyword}",
         Option(f"Your raw text is: {data.raw_text}", sub="keyword + text"),
     ]
 

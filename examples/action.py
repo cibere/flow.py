@@ -8,9 +8,9 @@ async def my_action(text: str):
     return ExecuteResponse(hide=False)
 
 
-@plugin.event
-async def on_query(data: Query):
-    yield Option(
+@plugin.search()
+async def on_search(data: Query):
+    return Option(
         f"Your text is: {data.text}",
         sub="Click this to initiate the action",
         action=Action(my_action, data.text),

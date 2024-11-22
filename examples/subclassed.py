@@ -1,12 +1,12 @@
-from flowpy import Option, Plugin, Query, subclassed_event
+from flowpy import Option, Plugin, Query, subclassed_search
 
 
 class MyPlugin(Plugin):
-    @subclassed_event
+    @subclassed_search()
     async def on_query(self, data: Query):
         return [
-            Option(f"Your text is: {data.text}"),
-            Option(f"Your keyword is: {data.keyword}"),
+            f"Your text is: {data.text}",
+            f"Your keyword is: {data.keyword}",
             Option(f"Your raw text is: {data.raw_text}", sub="keyword + text"),
         ]
 

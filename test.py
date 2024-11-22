@@ -1,20 +1,16 @@
-from flowpy import Option, Plugin, Query, PlainTextCondition
-import re
+from flowpy import Option, Plugin, Query
+
 plugin = Plugin()
 
-@plugin.search(text="cibere")
-async def author_easteregg(data: Query):
-    return f"That is the name of the person who wrote this plugin"
 
 @plugin.search()
-async def on_query(data: Query):
-    result = await plugin.api.fuzzy_search(data.text, "Flow")
+async def on_search(data: Query):
     return [
-        Option(
-            f"Flow: {result.score}",
-            sub=f"Precision: {result.search_precision}",
-            title_highlight_data=result.highlight_data,
-        )
+        f"Your text is: {data.text}",
+        f"Your keyword is: {data.keyword}",
+        Option(f"Your raw text is: {data.raw_text}", sub="keyword + text"),
     ]
 
-plugin.run()
+
+if __name__ == "__main__":
+    plugin.run()
