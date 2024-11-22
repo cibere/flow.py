@@ -20,11 +20,11 @@ from .utils import MISSING, coro_or_gen, remove_self_arg_from_func, setup_loggin
 from .conditions import PlainTextCondition, RegexCondition
 
 if TYPE_CHECKING:
-    from ._types import SearchHandlerCallback, SearchHandlerCondition
+    from ._types import SearchHandlerCallback, SearchHandlerCondition, SearchHandlerCallbackInClass
 
 LOG = logging.getLogger(__name__)
 
-__all__ = ("Plugin", "subclassed_event")
+__all__ = ("Plugin", "subclassed_event", "subclassed_search")
 
 
 class Plugin:
@@ -54,9 +54,13 @@ class Plugin:
                 try:
                     getattr(value, "__flowpy_is_event__")
                 except AttributeError:
-                    continue
+                    pass
                 else:
                     self._events[elem] = remove_self_arg_from_func(value, self)
+                    
+                if isinstance(value, SearchHandler):
+                    self._search_handlers.append(value)
+                    value.parent = self
 
     async def _run_event(
         self,
@@ -317,3 +321,64 @@ def subclassed_event[T: Callable[..., Any]](func: T) -> T:
 
     setattr(func, "__flowpy_is_event__", True)
     return func
+
+@overload
+def subclassed_search(
+    condition: SearchHandlerCondition
+) -> Callable[[SearchHandlerCallbackInClass], SearchHandler]:...
+
+@overload
+def subclassed_search(
+    *, text: str
+) -> Callable[[SearchHandlerCallbackInClass], SearchHandler]:...
+
+@overload
+def subclassed_search(
+    *, pattern: re.Pattern
+) -> Callable[[SearchHandlerCallbackInClass], SearchHandler]:...
+
+@overload
+def subclassed_search(
+) -> Callable[[SearchHandlerCallbackInClass], SearchHandler]:...
+
+def subclassed_search(
+    condition: SearchHandlerCondition | None = None, *, text: str = MISSING, pattern: re.Pattern = MISSING
+) -> Callable[[SearchHandlerCallbackInClass], SearchHandler]:
+    """A decorator that registers a search handler.
+
+    All search handlers must be a :ref:`coroutine <coroutine>`. See the :ref:`search handler section <search_handlers>` for more information about using search handlers.
+
+    .. NOTE::
+        This is to be used outside of a :class:`Plugin` subclass, use :ref:`subclassed_search <subclassed_search>` if it will be used inside of a subclass.
+
+    Parameters
+    ----------
+    condition: Optional[:ref:`condition <condition_example>`]
+        The condition to determine which queries this handler should run on. If given, this should be the only argument given.
+    text: Optional[:class:`str`]
+        A kwarg to quickly add a :class:`~flowpy.conditions.PlainTextCondition`. If given, this should be the only argument given.
+    pattern: Optional[:class:`re.Pattern`]
+        A kwarg to quickly add a :class:`~flowpy.conditions.RegexCondition`. If given, this should be the only argument given.
+
+    Example
+    ---------
+
+    .. code-block:: python3
+
+        @plugin.on_search()
+        async def example_search_handler(data: Query):
+            return "This is a result!"
+
+    """
+
+    if condition is None:
+        if text is not MISSING:
+            condition = PlainTextCondition(text)
+        elif pattern is not MISSING:
+            condition = RegexCondition(pattern)
+
+    def inner(func: SearchHandlerCallback) -> SearchHandler:
+        handler = SearchHandler(func, condition)
+        return handler
+
+    return inner # type: ignore

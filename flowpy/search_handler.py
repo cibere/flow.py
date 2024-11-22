@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from .jsonrpc.option import Option
 from .utils import MISSING, coro_or_gen
@@ -43,6 +43,7 @@ class SearchHandler:
 
         self.callback = callback
         self.condition = condition
+        self.parent: Any | None = None
 
     async def invoke(self, query: Query) -> list[Option]:
         """|coro|
@@ -53,7 +54,8 @@ class SearchHandler:
             This bypasses the condition
         """
 
-        coro = self.callback(query)
+        args = [query] if self.parent is None else [self.parent, query]
+        coro = self.callback(*args)
         raw_options = await coro_or_gen(coro)
 
         if isinstance(raw_options, dict):
