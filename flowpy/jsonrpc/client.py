@@ -106,7 +106,7 @@ class JsonRPCClient:
             task = self.plugin._schedule_event(
                 callback,
                 method,
-                params[0],
+                params[0][0],
                 error_handler_event_name="on_action_error",
             )
         self.tasks[request["id"]] = task
