@@ -19,10 +19,15 @@ from typing import (
 import aioconsole
 
 from .conditions import PlainTextCondition, RegexCondition
+from .context_menu_handler import ContextMenuHandler
 from .default_events import get_default_events
-from .errors import PluginNotInitialized
+from .errors import (
+    ContextMenuHandlerNotFound,
+    InvalidContextDataReceived,
+    PluginNotInitialized,
+)
 from .flow_api.client import FlowLauncherAPI, PluginMetadata
-from .jsonrpc import ExecuteResponse, JsonRPCClient, Option, QueryResponse, Action
+from .jsonrpc import Action, ExecuteResponse, JsonRPCClient, Option, QueryResponse
 from .jsonrpc.responses import BaseResponse
 from .query import Query
 from .search_handler import SearchHandler
@@ -59,6 +64,7 @@ class Plugin:
             self
         )
         self._search_handlers: list[SearchHandler] = []
+        self._context_menu_handlers: dict[str, ContextMenuHandler] = {}
 
     async def _run_event(
         self,
@@ -97,7 +103,7 @@ class Plugin:
 
         # Special Event Cases
         replacements = {
-            "on_context_menu": "_context_menu_wrapper",
+            # "on_context_menu": "_context_menu_wrapper",
             "on_initialize": "_initialize_wrapper",
         }
         method = replacements.get(method, method)
@@ -160,6 +166,38 @@ class Plugin:
 
         return QueryResponse(options, self.settings._changes)
 
+    async def process_context_menu_handlers(self, data: list[str]) -> QueryResponse:
+        r"""|coro|
+
+        Runs and processes the registered search handlers.
+        See the :ref:`context menu handler section <ctx_menu_handlers>` for more information about using context menu handlers.
+
+        Parameters
+        ----------
+        data: list[Any]
+            The context data sent from flow
+        """
+
+        LOG.debug(f"Context Menu Handler: {data=}")
+        LOG.debug(f"Registered Context Menu Handlers: {self._context_menu_handlers=}")
+
+        if not data:
+            raise InvalidContextDataReceived()
+
+        handler = self._context_menu_handlers.get(data[0])
+
+        if handler is None:
+            raise ContextMenuHandlerNotFound()
+
+        task = self._schedule_event(
+            handler.invoke,
+            event_name=f"ContextMenu-{handler.name}",
+            error_handler_event_name="on_context_menu_error",
+        )
+        options = await task
+
+        return QueryResponse(options, self.settings._changes)
+
     @property
     def metadata(self) -> PluginMetadata:
         """
@@ -204,6 +242,21 @@ class Plugin:
         """
 
         self._search_handlers.append(handler)
+        LOG.info(f"Registered search handler: {handler}")
+
+    def register_context_menu_handler(self, handler: ContextMenuHandler) -> None:
+        r"""Register a new context menu handler
+
+        See the :ref:`context menu handler section <ctx_menu_handlers>` for more information about using context menu handlers.
+
+        Parameters
+        -----------
+        handler: :class:`~flowpy.search_handler.SearchHandler`
+            The search handler to be registered
+        """
+
+        self._context_menu_handlers[handler.slug] = handler
+        LOG.info(f"Registered context menu handler: {handler}")
 
     def event[T: Callable[..., Any]](self, callback: T) -> T:
         """A decorator that registers an event to listen for.
@@ -292,26 +345,58 @@ class Plugin:
 
         return inner
 
-    def action[**P](self, method: Callable[P, Coroutine[Any, Any, ExecuteResponse]]) -> Callable[P, Action]:
+    def action[
+        **P
+    ](self, method: Callable[P, Coroutine[Any, Any, ExecuteResponse]]) -> Callable[
+        P, Action
+    ]:
         """A decorator to easily and quickly turn a function into a :class:`~flowpy.jsonrpc.option.Action` object.
 
         All events must be a :ref:`coroutine <coroutine>`.
-        
+
         Example
         -------
-        
+
         .. code-block:: python3
-        
+
             @plugin.action
             async def my_action(param: str):
                 ...
-            
+
             # later on
 
             Option("...", action=my_action("param"))
         """
 
         def inner(*args):
-            return Action(method, args) # type: ignore
-        return inner # type: ignore
-        
+            return Action(method, args)  # type: ignore
+
+        return inner  # type: ignore
+
+    def context_menu[
+        **P
+    ](self, method: Callable[P, Any]) -> Callable[P, ContextMenuHandler]:
+        """A decorator to easily and quickly turn a function into a :class:`~flowpy.context_menu_handler.ContextMenuHandler` object.
+
+        All handlers must be a :ref:`coroutine <coroutine>`.
+
+        Example
+        -------
+
+        .. code-block:: python3
+
+            @plugin.context_menu
+            async def my_context_menu_handler(param: str):
+                ...
+
+            # later on
+
+            Option("...", context_menu_handler=my_context_menu_handler("param"))
+        """
+
+        def inner(*args, **kwargs):
+            handler = ContextMenuHandler(method, *args, **kwargs)  # type: ignore
+            self.register_context_menu_handler(handler)
+            return handler
+
+        return inner  # type: ignore

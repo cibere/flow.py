@@ -6,6 +6,7 @@ __version__ = "0.0.1"
 from typing import Literal, NamedTuple
 
 from .conditions import *
+from .context_menu_handler import *
 from .errors import *
 from .jsonrpc import *
 from .plugin import *

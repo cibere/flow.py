@@ -10,6 +10,8 @@ Plugin
 
 .. autodecorator:: Plugin.action()
 
+.. autodecorator:: Plugin.context_menu()
+
 Classes
 ~~~~~~~
 

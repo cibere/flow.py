@@ -7,3 +7,7 @@ lib/*
 dist/*
 *.egg-info
 docs/_build
+
+plugin.json
+test.py
+Images

@@ -31,6 +31,7 @@ If you're having trouble with something, these resources might help.
    
    plugin
    search_handlers
+   ctx_menu_handlers
    flow_api
    jsonrpc
    errors
