@@ -28,10 +28,7 @@ from .settings import Settings
 from .utils import MISSING, coro_or_gen, setup_logging
 
 if TYPE_CHECKING:
-    from ._types import (
-        SearchHandlerCallback,
-        SearchHandlerCondition,
-    )
+    from ._types import SearchHandlerCallback, SearchHandlerCondition
 
 LOG = logging.getLogger(__name__)
 

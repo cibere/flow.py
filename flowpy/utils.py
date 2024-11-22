@@ -18,7 +18,11 @@ class _MissingSentinel:
 MISSING: Any = _MissingSentinel()
 
 LOG = logging.getLogger(__name__)
-__all__ = ("setup_logging", "coro_or_gen", "MISSING",)
+__all__ = (
+    "setup_logging",
+    "coro_or_gen",
+    "MISSING",
+)
 
 
 def setup_logging(*, formatter: logging.Formatter | None = None) -> None:
