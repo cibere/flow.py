@@ -32,7 +32,7 @@ class Action(Base):
 
     def __init__(
         self,
-        method: Callable[[*TS], Coroutine[Any, Any, Any]],
+        method: Callable[[*TS], Coroutine[Any, Any, ExecuteResponse]],
         *args: *TS,
     ) -> None:
         parent: Any = getattr(method, "__self__", None)

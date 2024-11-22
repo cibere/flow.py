@@ -292,7 +292,7 @@ class Plugin:
 
         return inner
 
-    def action[**P](self, method: Callable[P, Coroutine[Any, Any, Any]]) -> Callable[P, Action]:
+    def action[**P](self, method: Callable[P, Coroutine[Any, Any, ExecuteResponse]]) -> Callable[P, Action]:
         """A decorator to easily and quickly turn a function into a :class:`~flowpy.jsonrpc.option.Action` object.
 
         All events must be a :ref:`coroutine <coroutine>`.
