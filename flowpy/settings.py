@@ -72,3 +72,6 @@ class Settings:
     def _update(self, data: RawSettings) -> None:
         self._data = data
         self._changes = {}
+
+    def __repr__(self) -> str:
+        return f"<Settings current={self._data!r}, pending_changes={self._changes}>"
