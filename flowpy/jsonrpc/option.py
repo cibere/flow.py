@@ -40,7 +40,7 @@ class Action(Base):
     ) -> None:
         parent: Any = getattr(method, "__self__", None)
         if isinstance(parent, FlowLauncherAPI):
-            parameters = (method.__name__, *parameters)  # type: ignore
+            parameters = (method.__name__, *args)  # type: ignore
             method = parent.__call__  # type: ignore
         self.method = method
         self.args = args
@@ -59,7 +59,6 @@ class Action(Base):
         """
 
         return {"method": self.name, "parameters": self.args}
-
 
 class Option(Base):
     r"""This represents an option that would be returned as a result for a query or context menu.
@@ -96,6 +95,7 @@ class Option(Base):
         "copy_text",
         "action",
         "context_menu_handler",
+        "score"
     )
 
     def __init__(
@@ -109,6 +109,7 @@ class Option(Base):
         copy_text: str | None = None,
         action: Action | None = None,
         context_menu_handler: ContextMenuHandler | None = None,
+        score: int | None = None
     ) -> None:
         self.title = title
         self.sub = sub
@@ -118,6 +119,7 @@ class Option(Base):
         self.sub_tooltip = sub_tooltip
         self.copy_text = copy_text
         self.action = action
+        self.score = score
         self.context_menu_handler = context_menu_handler
 
     def to_dict(self) -> dict[str, Any]:
@@ -147,6 +149,8 @@ class Option(Base):
             x["jsonRPCAction"] = self.action.to_dict()
         if self.context_menu_handler is not None:
             x["ContextData"] = [self.context_menu_handler.slug]
+        if self.score is not None:
+            x['score'] = self.score
         return x
 
     @classmethod
