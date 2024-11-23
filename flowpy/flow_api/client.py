@@ -8,7 +8,7 @@ from .plugin_metadata import PluginMetadata
 ATS = ParamSpec("ATS")
 
 if TYPE_CHECKING:
-    from ..jsonrpc import ExecuteResponse, JsonRPCClient
+    from ..jsonrpc import ExecuteResponse, JsonRPCClient, Option
 
 __all__ = ("FlowLauncherAPI",)
 
@@ -396,3 +396,29 @@ class FlowLauncherAPI:
 
         res = await self.jsonrpc.request("OpenDirectory", [directory, file])
         assert isinstance(res, Result)
+
+    async def update_options(self, raw_query: str, options: list[Option]) -> None:
+        r"""|coro|
+        
+        Tells flow to change the options shown to the user
+
+        .. NOTE::
+            The ``raw_query`` parameter is required by flow launcher, and must be the same as the current raw query in flow launcher for the options to successfully update.
+        
+        Parameters
+        ----------
+        raw_query: :class:`str`
+            Only change the options if the current raw query is the same as this
+        options: list[:class:`Option`]
+            The new options
+        
+        Returns
+        -------
+        None
+        """
+
+        from ..jsonrpc import Result  # circular import
+
+        res = await self.jsonrpc.request("UpdateResults", [raw_query, options])
+        assert isinstance(res, Result)
+
