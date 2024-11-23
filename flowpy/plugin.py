@@ -134,9 +134,19 @@ class Plugin:
         ]
         return QueryResponse(options, self.settings._changes)
 
+    async def _populate_settings_from_file(self) -> None:
+        def read_file(fp: str) -> dict:
+            with open(fp, "r") as f:
+                return json.load(f)
+        fp = f"../../Settings/Plugins/{self.metadata.name}/Settings.json"
+        data = await asyncio.to_thread(read_file, fp)
+        self.settings = Settings(data)
+        LOG.info(f"Settings successfully loaded from file")
+
     async def _initialize_wrapper(self, arg: dict[str, Any]) -> ExecuteResponse:
         LOG.info(f"Initialize: {json.dumps(arg)}")
         self._metadata = PluginMetadata(arg["currentPluginMetadata"], self.api)
+        await self._populate_settings_from_file()
         self.dispatch("initialization")
         return ExecuteResponse(hide=False)
 
