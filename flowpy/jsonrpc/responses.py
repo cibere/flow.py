@@ -89,7 +89,7 @@ class QueryResponse(BaseResponse):
 
     __slots__ = "options", "settings_changes", "debug_message"
     __jsonrpc_option_names__ = {
-        "settings_changes": "settingsChanges",
+        "settings_changes": "SettingsChange",
         "debug_message": "debugMessage",
         "options": "result",
     }
