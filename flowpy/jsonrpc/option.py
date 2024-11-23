@@ -7,7 +7,6 @@ from .base_object import Base
 
 if TYPE_CHECKING:
     from ..context_menu_handler import ContextMenuHandler
-    from .responses import ExecuteResponse
 
 TS = TypeVarTuple("TS")
 
@@ -35,7 +34,7 @@ class Action(Base):
 
     def __init__(
         self,
-        method: Callable[[*TS], Coroutine[Any, Any, ExecuteResponse]],
+        method: Callable[[*TS], Coroutine[Any, Any, None]],
         *args: *TS,
     ) -> None:
         parent: Any = getattr(method, "__self__", None)
