@@ -138,6 +138,7 @@ class Plugin:
         def read_file(fp: str) -> dict:
             with open(fp, "r") as f:
                 return json.load(f)
+
         fp = f"../../Settings/Plugins/{self.metadata.name}/Settings.json"
         data = await asyncio.to_thread(read_file, fp)
         self.settings = Settings(data)

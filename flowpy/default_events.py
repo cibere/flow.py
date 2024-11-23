@@ -29,7 +29,9 @@ async def on_error(
     return ErrorResponse.internal_error(error)
 
 
-async def on_action_error(action_name: str, error: Exception, *args, **kwargs) -> ErrorResponse:
+async def on_action_error(
+    action_name: str, error: Exception, *args, **kwargs
+) -> ErrorResponse:
     """gets called when an error occurs in an action"""
     LOG.exception(f"Ignoring exception in action ({action_name!r})", exc_info=error)
     return ErrorResponse.internal_error(error)

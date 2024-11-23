@@ -60,6 +60,7 @@ class Action(Base):
 
         return {"method": self.name, "parameters": self.args}
 
+
 class Option(Base):
     r"""This represents an option that would be returned as a result for a query or context menu.
 
@@ -95,7 +96,7 @@ class Option(Base):
         "copy_text",
         "action",
         "context_menu_handler",
-        "score"
+        "score",
     )
 
     def __init__(
@@ -109,7 +110,7 @@ class Option(Base):
         copy_text: str | None = None,
         action: Action | None = None,
         context_menu_handler: ContextMenuHandler | None = None,
-        score: int | None = None
+        score: int | None = None,
     ) -> None:
         self.title = title
         self.sub = sub
@@ -150,7 +151,7 @@ class Option(Base):
         if self.context_menu_handler is not None:
             x["ContextData"] = [self.context_menu_handler.slug]
         if self.score is not None:
-            x['score'] = self.score
+            x["score"] = self.score
         return x
 
     @classmethod
