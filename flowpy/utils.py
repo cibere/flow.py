@@ -1,7 +1,8 @@
-import logging
+import logging, functools
 import logging.handlers
+from functools import _make_key as make_cached_key
 from inspect import isasyncgen, iscoroutine
-from typing import TYPE_CHECKING, Any, AsyncIterable, Awaitable
+from typing import TYPE_CHECKING, Any, AsyncIterable, Awaitable, Callable, Coroutine
 
 LOG = logging.getLogger(__name__)
 
@@ -20,13 +21,26 @@ class _cached_property:
 
         return value
 
+def cached_coro[T: Callable[..., Coroutine[Any, Any, Any]]](coro: T) -> T:
+    cache = {}
+
+    @functools.wraps(coro)
+    async def inner(*args, **kwargs):
+        key = make_cached_key(args, kwargs, False)
+        try:
+            return cache[key]
+        except KeyError:
+            cache[key] = await coro(*args, **kwargs)
+            return cache[key]
+
+    return inner # type: ignore
 
 if TYPE_CHECKING:
     from functools import cached_property as cached_property
 else:
     cached_property = _cached_property
 
-__all__ = ("setup_logging", "coro_or_gen", "MISSING", "cached_property")
+__all__ = ("setup_logging", "coro_or_gen", "MISSING", "cached_property", "cached_coro")
 
 
 class _MissingSentinel:
