@@ -419,5 +419,5 @@ class FlowLauncherAPI:
 
         from ..jsonrpc import Result  # circular import
 
-        res = await self.jsonrpc.request("UpdateResults", [raw_query, options])
+        res = await self.jsonrpc.request("UpdateResults", [raw_query, [opt.to_dict() for opt in options]])
         assert isinstance(res, Result)
