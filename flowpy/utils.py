@@ -1,4 +1,5 @@
-import logging, functools
+import functools
+import logging
 import logging.handlers
 from functools import _make_key as make_cached_key
 from inspect import isasyncgen, iscoroutine
@@ -21,19 +22,6 @@ class _cached_property:
 
         return value
 
-def cached_coro[T: Callable[..., Coroutine[Any, Any, Any]]](coro: T) -> T:
-    cache = {}
-
-    @functools.wraps(coro)
-    async def inner(*args, **kwargs):
-        key = make_cached_key(args, kwargs, False)
-        try:
-            return cache[key]
-        except KeyError:
-            cache[key] = await coro(*args, **kwargs)
-            return cache[key]
-
-    return inner # type: ignore
 
 if TYPE_CHECKING:
     from functools import cached_property as cached_property
@@ -44,6 +32,8 @@ __all__ = ("setup_logging", "coro_or_gen", "MISSING", "cached_property", "cached
 
 
 class _MissingSentinel:
+    """A type safe sentinel used in the library to represent something as missing. Used to distinguish from ``None`` values."""
+
     def __bool__(self) -> bool:
         return False
 
@@ -57,7 +47,45 @@ class _MissingSentinel:
 MISSING: Any = _MissingSentinel()
 
 
+def cached_coro[T: Callable[..., Coroutine[Any, Any, Any]]](coro: T) -> T:
+    r"""A decorator to cache a coro's contents based on the passed arguments. This is provided to cache search results.
+
+    .. NOTE::
+        The arguments passed to the coro must be hashable.
+
+    Example
+    --------
+    .. code-block:: python3
+
+        @plugin.search()
+        @utils.cached_coro
+        async def handler(query):
+            ...
+    """
+
+    cache = {}
+
+    @functools.wraps(coro)
+    async def inner(*args, **kwargs):
+        key = make_cached_key(args, kwargs, False)
+        try:
+            return cache[key]
+        except KeyError:
+            cache[key] = await coro(*args, **kwargs)
+            return cache[key]
+
+    return inner  # type: ignore
+
+
 def setup_logging(*, formatter: logging.Formatter | None = None) -> None:
+    r"""Sets up flow.py's default logger.
+
+    Parameters
+    ----------
+    formatter: Optional[:class:`logging.Formatter`]
+        The formatter to use, incase you don't want to use the default file formatter.
+    """
+
     level = logging.DEBUG
 
     handler = logging.handlers.RotatingFileHandler(

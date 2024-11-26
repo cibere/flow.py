@@ -108,3 +108,29 @@ JSON-RPC Errors
 
 .. autoclass:: flowpy.jsonrpc.errors.JsonRPCVersionMismatch
     :members:
+
+Utils
+-----
+
+.. autofunction:: flowpy.utils.setup_logging
+
+.. autofunction:: flowpy.utils.coro_or_gen
+
+.. attribute:: flowpy.utils.MISSING
+
+    A type safe sentinel used in the library to represent something as missing. Used to distinguish from ``None`` values.
+
+.. decorator:: flowpy.utils.cached_property()
+
+    A version of :func:`functools.cached_property` that is safe for async programs.
+
+    Example
+    --------
+    .. code-block:: python3
+
+        class Foo:
+            @utils.cached_property
+            def bar(self):
+                ...
+
+.. autodecorator:: flowpy.utils.cached_coro()
