@@ -1,4 +1,4 @@
-from flowpy import Result, Plugin, Query, ExecuteResponse
+from flowpy import ExecuteResponse, Plugin, Query, Result
 
 plugin = Plugin()
 
@@ -7,6 +7,7 @@ class ActionResult(Result):
     async def callback(self):
         await plugin.api.show_notification("flow.py plugin", "I worky!")
         return ExecuteResponse(hide=False)
+
 
 @plugin.search()
 async def on_search(data: Query):
