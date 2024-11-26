@@ -8,7 +8,7 @@ from .plugin_metadata import PluginMetadata
 ATS = ParamSpec("ATS")
 
 if TYPE_CHECKING:
-    from ..jsonrpc import ExecuteResponse, JsonRPCClient, Option
+    from ..jsonrpc import ExecuteResponse, JsonRPCClient, Result
 
 __all__ = ("FlowLauncherAPI",)
 
@@ -48,10 +48,10 @@ class FlowLauncherAPI:
         :class:`~flowpy.flow_api.fuzzy_search.FuzzySearchResult`
         """
 
-        from ..jsonrpc import Result  # circular import
+        from ..jsonrpc import ErrorResponse  # circular import
 
         res = await self.jsonrpc.request("FuzzySearch", [text, text_to_compare_it_to])
-        assert isinstance(res, Result)
+        assert not isinstance(res, ErrorResponse)
         return FuzzySearchResult(res.data)
 
     async def change_query(self, new_query: str, requery: bool = False) -> None:
@@ -71,10 +71,10 @@ class FlowLauncherAPI:
         None
         """
 
-        from ..jsonrpc import Result  # circular import
+        from ..jsonrpc import ErrorResponse  # circular import
 
         res = await self.jsonrpc.request("ChangeQuery", [new_query, requery])
-        assert isinstance(res, Result)
+        assert not isinstance(res, ErrorResponse)
 
     async def show_error_message(self, title: str, text: str) -> None:
         r"""|coro|
@@ -93,10 +93,10 @@ class FlowLauncherAPI:
         None
         """
 
-        from ..jsonrpc import Result  # circular import
+        from ..jsonrpc import ErrorResponse  # circular import
 
         res = await self.jsonrpc.request("ShowMsgError", [title, text])
-        assert isinstance(res, Result)
+        assert not isinstance(res, ErrorResponse)
 
     async def show_notification(
         self,
@@ -125,12 +125,12 @@ class FlowLauncherAPI:
         None
         """
 
-        from ..jsonrpc import Result  # circular import
+        from ..jsonrpc import ErrorResponse  # circular import
 
         res = await self.jsonrpc.request(
             "ShowMsg", [title, content, icon, use_main_window_as_owner]
         )
-        assert isinstance(res, Result)
+        assert not isinstance(res, ErrorResponse)
 
     async def open_settings_menu(self) -> None:
         r"""|coro|
@@ -142,10 +142,10 @@ class FlowLauncherAPI:
         None
         """
 
-        from ..jsonrpc import Result  # circular import
+        from ..jsonrpc import ErrorResponse  # circular import
 
         res = await self.jsonrpc.request("OpenSettingDialog")
-        assert isinstance(res, Result)
+        assert not isinstance(res, ErrorResponse)
 
     async def open_url(self, url: str, in_private: bool = False) -> None:
         r"""|coro|
@@ -164,10 +164,10 @@ class FlowLauncherAPI:
         None
         """
 
-        from ..jsonrpc import Result  # circular import
+        from ..jsonrpc import ErrorResponse  # circular import
 
         res = await self.jsonrpc.request("OpenUrl", [url, in_private])
-        assert isinstance(res, Result)
+        assert not isinstance(res, ErrorResponse)
 
     async def run_shell_cmd(self, cmd: str, filename: str = "cmd.exe") -> None:
         r"""|coro|
@@ -186,10 +186,10 @@ class FlowLauncherAPI:
         None
         """
 
-        from ..jsonrpc import Result  # circular import
+        from ..jsonrpc import ErrorResponse  # circular import
 
         res = await self.jsonrpc.request("ShellRun", [cmd, filename])
-        assert isinstance(res, Result)
+        assert not isinstance(res, ErrorResponse)
 
     async def restart_flow_launcher(self) -> None:
         r"""|coro|
@@ -200,10 +200,10 @@ class FlowLauncherAPI:
             Expect this method to never finish, so clean up and prepare for the plugin to be shut down before calling this.
         """
 
-        from ..jsonrpc import Result  # circular import
+        from ..jsonrpc import ErrorResponse  # circular import
 
         res = self.jsonrpc.request("RestartApp")
-        assert isinstance(res, Result)
+        assert not isinstance(res, ErrorResponse)
 
     async def save_all_app_settings(self) -> None:
         r"""|coro|
@@ -215,10 +215,10 @@ class FlowLauncherAPI:
         None
         """
 
-        from ..jsonrpc import Result  # circular import
+        from ..jsonrpc import ErrorResponse  # circular import
 
         res = await self.jsonrpc.request("SaveAppAllSettings")
-        assert isinstance(res, Result)
+        assert not isinstance(res, ErrorResponse)
 
     async def save_plugin_settings(self) -> Any:
         r"""|coro|
@@ -230,10 +230,10 @@ class FlowLauncherAPI:
         None
         """
 
-        from ..jsonrpc import Result  # circular import
+        from ..jsonrpc import ErrorResponse  # circular import
 
         res = await self.jsonrpc.request("SavePluginSettings")
-        assert isinstance(res, Result)
+        assert not isinstance(res, ErrorResponse)
         return res.data
 
     async def reload_all_plugin_data(self) -> None:
@@ -246,10 +246,10 @@ class FlowLauncherAPI:
         None
         """
 
-        from ..jsonrpc import Result  # circular import
+        from ..jsonrpc import ErrorResponse  # circular import
 
         res = await self.jsonrpc.request("ReloadAllPluginDataAsync")
-        assert isinstance(res, Result)
+        assert not isinstance(res, ErrorResponse)
 
     async def show_main_window(self) -> None:
         """|coro|
@@ -261,10 +261,10 @@ class FlowLauncherAPI:
         None
         """
 
-        from ..jsonrpc import Result  # circular import
+        from ..jsonrpc import ErrorResponse  # circular import
 
         res = await self.jsonrpc.request("ShowMainWindow")
-        assert isinstance(res, Result)
+        assert not isinstance(res, ErrorResponse)
 
     async def hide_main_window(self) -> None:
         r"""|coro|
@@ -276,10 +276,10 @@ class FlowLauncherAPI:
         None
         """
 
-        from ..jsonrpc import Result  # circular import
+        from ..jsonrpc import ErrorResponse  # circular import
 
         res = await self.jsonrpc.request("HideMainWindow")
-        assert isinstance(res, Result)
+        assert not isinstance(res, ErrorResponse)
 
     async def is_main_window_visible(self) -> bool:
         r"""|coro|
@@ -291,10 +291,10 @@ class FlowLauncherAPI:
         :class:`bool`
         """
 
-        from ..jsonrpc import Result  # circular import
+        from ..jsonrpc import ErrorResponse  # circular import
 
         res = await self.jsonrpc.request("IsMainWindowVisible")
-        assert isinstance(res, Result)
+        assert not isinstance(res, ErrorResponse)
         return res.data
 
     async def check_for_updates(self) -> None:
@@ -310,10 +310,10 @@ class FlowLauncherAPI:
         None
         """
 
-        from ..jsonrpc import Result  # circular import
+        from ..jsonrpc import ErrorResponse  # circular import
 
         res = await self.jsonrpc.request("CheckForNewUpdate")
-        assert isinstance(res, Result)
+        assert not isinstance(res, ErrorResponse)
 
     async def get_all_plugins(self) -> list[PluginMetadata]:
         r"""|coro|
@@ -325,10 +325,10 @@ class FlowLauncherAPI:
         list[:class:`~flowpy.flow_api.plugin_metadata.PluginMetadata`]
         """
 
-        from ..jsonrpc import Result  # circular import
+        from ..jsonrpc import ErrorResponse  # circular import
 
         res = await self.jsonrpc.request("GetAllPlugins")
-        assert isinstance(res, Result)
+        assert not isinstance(res, ErrorResponse)
         return [PluginMetadata(plugin["metadata"], self) for plugin in res.data]
 
     async def add_keyword(self, plugin_id: str, keyword: str) -> None:
@@ -348,10 +348,10 @@ class FlowLauncherAPI:
         None
         """
 
-        from ..jsonrpc import Result  # circular import
+        from ..jsonrpc import ErrorResponse  # circular import
 
         res = await self.jsonrpc.request("AddActionKeyword", [plugin_id, keyword])
-        assert isinstance(res, Result)
+        assert not isinstance(res, ErrorResponse)
 
     async def remove_keyword(self, plugin_id: str, keyword: str) -> None:
         r"""|coro|
@@ -370,10 +370,10 @@ class FlowLauncherAPI:
         None
         """
 
-        from ..jsonrpc import Result  # circular import
+        from ..jsonrpc import ErrorResponse  # circular import
 
         res = await self.jsonrpc.request("RemoveActionKeyword", [plugin_id, keyword])
-        assert isinstance(res, Result)
+        assert not isinstance(res, ErrorResponse)
 
     async def open_directory(self, directory: str, file: str | None = None) -> None:
         r"""|coro|
@@ -392,32 +392,34 @@ class FlowLauncherAPI:
         None
         """
 
-        from ..jsonrpc import Result  # circular import
+        from ..jsonrpc import ErrorResponse  # circular import
 
         res = await self.jsonrpc.request("OpenDirectory", [directory, file])
-        assert isinstance(res, Result)
+        assert not isinstance(res, ErrorResponse)
 
-    async def update_options(self, raw_query: str, options: list[Option]) -> None:
+    async def update_results(self, raw_query: str, results: list[Result]) -> None:
         r"""|coro|
 
-        Tells flow to change the options shown to the user
+        Tells flow to change the results shown to the user
 
         .. NOTE::
-            The ``raw_query`` parameter is required by flow launcher, and must be the same as the current raw query in flow launcher for the options to successfully update.
+            The ``raw_query`` parameter is required by flow launcher, and must be the same as the current raw query in flow launcher for the results to successfully update.
 
         Parameters
         ----------
         raw_query: :class:`str`
-            Only change the options if the current raw query is the same as this
-        options: list[:class:`Option`]
-            The new options
+            Only change the results if the current raw query is the same as this
+        results: list[:class:`~flowpy.jsonrpc.results.Result`]
+            The new results
 
         Returns
         -------
         None
         """
 
-        from ..jsonrpc import Result  # circular import
+        from ..jsonrpc import ErrorResponse, QueryResponse  # circular import
 
-        res = await self.jsonrpc.request("UpdateResults", [raw_query, [opt.to_dict() for opt in options]])
-        assert isinstance(res, Result)
+        res = await self.jsonrpc.request(
+            "UpdateResults", [raw_query, QueryResponse(results).to_dict()]
+        )
+        assert not isinstance(res, ErrorResponse)

@@ -8,7 +8,7 @@ from .base_object import ToMessageBase
 
 if TYPE_CHECKING:
     from .client import JsonRPCClient
-    from .option import Option
+    from .results import Result
 
 __all__ = (
     "ErrorResponse",
@@ -35,8 +35,6 @@ class BaseResponse(ToMessageBase):
             )
             + "\r\n"
         ).encode()
-
-    def prepare(self, client: JsonRPCClient) -> None: ...
 
 
 class ErrorResponse(BaseResponse):
@@ -77,41 +75,39 @@ class ErrorResponse(BaseResponse):
 class QueryResponse(BaseResponse):
     r"""This response represents the response from the :ref:`on_query <on_query>` and :ref:`on_context_menu <on_context_menu>` events.
 
+    .. NOTE::
+        Search handlers are the suggested way of handling query/search requests. See the :ref:`search handler section <search_handlers>` for more information about using search handlers.
+
     Attributes
     --------
-    options: list[:class:`~flowpy.jsonrpc.option.Option`]
-        The options to be sent as the result of the query
+    results: list[:class:`~flowpy.jsonrpc.results.Result`]
+        The results to be sent as the result of the query
     settings_changes: dict[:class:`str`, Any]
         Any changes to be made to the plugin's settings.
     debug_message: :class:`str`
         A debug message if you want
     """
 
-    __slots__ = "options", "settings_changes", "debug_message"
+    __slots__ = "results", "settings_changes", "debug_message"
     __jsonrpc_option_names__ = {
         "settings_changes": "SettingsChange",
         "debug_message": "debugMessage",
-        "options": "result",
+        "results": "result",
     }
 
     def __init__(
         self,
-        options: list[Option],
+        results: list[Result],
         settings_changes: dict[str, Any] | None = None,
         debug_message: str = MISSING,
     ):
-        self.options = options
+        self.results = results
         self.settings_changes = settings_changes or {}
         self.debug_message = debug_message or ""
 
-    def prepare(self, client: JsonRPCClient) -> None:
-        for opt in self.options:
-            if opt.action:
-                client.action_callback_mapping[opt.action.name] = opt.action.method
-
 
 class ExecuteResponse(BaseResponse):
-    r"""This response is a generic response for any callback method that isn't `query` or `context_menu`
+    r"""This response is a generic response for jsonrpc requests, most notably result callbacks.
 
     Attributes
     --------

@@ -2,11 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from .jsonrpc.option import Option
-from .utils import MISSING, coro_or_gen
-
 if TYPE_CHECKING:
-    from ._types import SearchHandlerCallback, SearchHandlerCondition
+    from ._types import SearchHandlerCallback, SearchHandlerCondition, SearchHandlerCallbackReturns
     from .query import Query
 
 __all__ = ("SearchHandler",)
@@ -27,42 +24,58 @@ class SearchHandler:
 
     Attributes
     ------------
-    callback: :ref:`coroutine <coroutine>`
-        The :ref:`coroutine <coroutine>` to be ran as the handler's callback
     condition: :ref:`condition <condition_example>`
         A function which is used to determine if this search handler should be used to handle a given query or not
     """
 
     def __init__(
         self,
-        callback: SearchHandlerCallback,
         condition: SearchHandlerCondition | None = None,
     ) -> None:
         if condition is None:
             condition = _default_condition
 
-        self.callback = callback
         self.condition = condition
-        self.parent: Any | None = None
+    
+    if TYPE_CHECKING:
+        def callback(self, query: Query) -> SearchHandlerCallbackReturns:
+            r"""|coro|
 
-    async def invoke(self, query: Query) -> list[Option]:
-        """|coro|
+            Override this function to add the search handler behavior you want for the set condition.
 
-        Executes the handler's callback, evaluates the result, and returns a list of options.
+            This method can return/yield almost anything, and flow.py will convert it into a list of :class:`~flowpy.jsonrpc.results.Result` objects before sending it to flow.
 
-        .. NOTE::
-            This bypasses the condition
-        """
+            Returns
+            -------
+            list[:class:`~flowpy.jsonrpc.results.Result`] | :class:`~flowpy.jsonrpc.results.Result` | str | Any
+                A list of results, an results, or something that can be converted into a list of results.
 
-        args = [query] if self.parent is None else [self.parent, query]
-        coro = self.callback(*args)
-        raw_options = await coro_or_gen(coro)
+            Yields
+            ------
+            :class:`~flowpy.jsonrpc.results.Result` | str | Any
+                A result object or something that can be converted into a result object.
+            """
+            ...
+    else:
+        async def callback(self, query: Query):
+            r"""|coro|
 
-        if isinstance(raw_options, dict):
-            return [Option.from_dict(raw_options)]
-        if not isinstance(raw_options, list):
-            raw_options = [raw_options]
-        return [Option.from_anything(raw_option) for raw_option in raw_options]
+            Override this function to add the search handler behavior you want for the set condition.
+
+            This method can return/yield almost anything, and flow.py will convert it into a list of :class:`~flowpy.jsonrpc.results.Result` objects before sending it to flow.
+
+            Returns
+            -------
+            list[:class:`~flowpy.jsonrpc.results.Result`] | :class:`~flowpy.jsonrpc.results.Result` | str | Any
+                A list of results, an results, or something that can be converted into a list of results.
+
+            Yields
+            ------
+            :class:`~flowpy.jsonrpc.results.Result` | str | Any
+                A result object or something that can be converted into a result object.
+            """
+            raise RuntimeError("Callback was not overriden")
+
 
     @property
     def name(self) -> str:

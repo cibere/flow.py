@@ -9,7 +9,6 @@ from typing import TYPE_CHECKING, Any, Callable, Coroutine
 from .errors import JsonRPCException
 from .requests import Request
 from .responses import BaseResponse, ErrorResponse
-from .result import Result
 
 LOG = logging.getLogger(__name__)
 
@@ -25,12 +24,9 @@ class JsonRPCClient:
 
     def __init__(self, plugin: Plugin) -> None:
         self.tasks: dict[int, asyncio.Task] = {}
-        self.requests: dict[int, asyncio.Future[Result | ErrorResponse]] = {}
+        self.requests: dict[int, asyncio.Future[Any | ErrorResponse]] = {}
         self._current_request_id = 1
         self.plugin = plugin
-        self.action_callback_mapping: dict[
-            str, Callable[..., Coroutine[Any, Any, Any]]
-        ] = {}
 
     @property
     def request_id(self) -> int:
@@ -43,8 +39,8 @@ class JsonRPCClient:
 
     async def request(
         self, method: str, params: list[object] = []
-    ) -> Result | ErrorResponse:
-        fut: asyncio.Future[Result | ErrorResponse] = asyncio.Future()
+    ) -> Any | ErrorResponse:
+        fut: asyncio.Future[Any | ErrorResponse] = asyncio.Future()
         rid = self.request_id
         self.requests[rid] = fut
         msg = Request(method, rid, params).to_message(rid)
@@ -64,16 +60,18 @@ class JsonRPCClient:
                 f"Failed to cancel task with id of {id!r}, could not find task."
             )
 
-    async def __handle_result(self, result: Result) -> None:
-        LOG.debug(f"Result: {result.id}, {result!r}")
-        if result.id in self.requests:
+    async def __handle_result(self, result: dict) -> None:
+        rid = result["id"]
+
+        LOG.debug(f"Result: {rid}, {result!r}")
+        if rid in self.requests:
             try:
-                self.requests.pop(result.id).set_result(result)
+                self.requests.pop(rid).set_result(result)
             except asyncio.InvalidStateError:
                 pass
         else:
             LOG.exception(
-                f"Result from unknown request given. ID: {result.id!r}, result={result!r}"
+                f"Result from unknown request given. ID: {rid!r}, result={result!r}"
             )
 
     async def __handle_error(self, id: int, error: ErrorResponse) -> None:
@@ -92,12 +90,18 @@ class JsonRPCClient:
             )
 
     async def __handle_request(self, request: dict[str, Any]) -> None:
-        method = request["method"]
-        params = request["params"]
+        method: str = request["method"]
+        params: list[Any] = request["params"]
+        callback = None
 
         self.request_id = request["id"]
 
-        callback = self.action_callback_mapping.get(method)
+        if method.startswith("flow.py.action"):
+            slug = method.removeprefix("flow.py.action.")
+            result = self.plugin._results.get(slug)
+            if result:
+                callback = result.callback
+
         if callback is None:
             task = self.plugin.dispatch(method, *params)
             if not task:
@@ -106,14 +110,12 @@ class JsonRPCClient:
             task = self.plugin._schedule_event(
                 callback,
                 method,
-                params[0][0],
                 error_handler_event_name="on_action_error",
             )
         self.tasks[request["id"]] = task
         result = await task
 
         if isinstance(result, BaseResponse):
-            result.prepare(self)
             return await self.write(result.to_message(id=request["id"]))
         else:
             return await self.write(
@@ -143,7 +145,7 @@ class JsonRPCClient:
                 asyncio.create_task(self.__handle_request(message))
             elif "result" in message:
                 LOG.debug(f"Received result: {message!r}")
-                asyncio.create_task(self.__handle_result(Result.from_dict(message)))
+                asyncio.create_task(self.__handle_result(message))
             elif "error" in message:
                 LOG.exception(f"Received error: {message!r}")
                 asyncio.create_task(

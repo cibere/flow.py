@@ -19,7 +19,7 @@ Let's make a plugin which compares how similar the user's query is with the word
 .. code-block:: python3
     :linenos:
 
-    from flowpy import Option, Plugin, Query
+    from flowpy import Plugin, Query
 
     plugin = Plugin()
 
@@ -52,5 +52,4 @@ What's Next?
 Here are a couple of good places to go next:
 
 - :doc:`search_handlers`
-- :doc:`jsonrpc`
-- :doc:`plugin`
+- :doc:`api`

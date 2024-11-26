@@ -1,7 +1,7 @@
 import logging
 import logging.handlers
 from inspect import isasyncgen, iscoroutine
-from typing import Any, AsyncIterable, Awaitable, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, AsyncIterable, Awaitable
 
 LOG = logging.getLogger(__name__)
 
@@ -9,7 +9,7 @@ LOG = logging.getLogger(__name__)
 class _cached_property:
     def __init__(self, function) -> None:
         self.function = function
-        self.__doc__ = getattr(function, '__doc__')
+        self.__doc__ = getattr(function, "__doc__")
 
     def __get__(self, instance, owner):
         if instance is None:
@@ -20,17 +20,14 @@ class _cached_property:
 
         return value
 
+
 if TYPE_CHECKING:
     from functools import cached_property as cached_property
 else:
     cached_property = _cached_property
 
-__all__ = (
-    "setup_logging",
-    "coro_or_gen",
-    "MISSING",
-    "cached_property"
-)
+__all__ = ("setup_logging", "coro_or_gen", "MISSING", "cached_property")
+
 
 class _MissingSentinel:
     def __bool__(self) -> bool:

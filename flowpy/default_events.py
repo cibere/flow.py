@@ -66,7 +66,7 @@ def get_default_events(plugin: Plugin) -> dict[str, Callable[..., Awaitable[Any]
         return plugin.process_search_handlers(query)
 
     def on_context_menu(data: list[str]):
-        return plugin.process_context_menu_handlers(data)
+        return plugin.process_context_menus(data)
 
     return {
         event.__name__: event
@@ -76,7 +76,6 @@ def get_default_events(plugin: Plugin) -> dict[str, Callable[..., Awaitable[Any]
             on_context_menu,
             on_search_error,
             plugin._initialize_wrapper,
-            plugin._context_menu_wrapper,
             on_action_error,
             on_context_menu_error,
         )

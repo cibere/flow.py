@@ -58,10 +58,10 @@ on_context_menu
 
     Called when flow sends a context menu request
 
-    :param data: The context menu data from :attr:`~flowpy.jsonrpc.option.Option.context_data`
+    :param data: Raw context menu data from flow
     :type data: list[Any]
-    :rtype: list[:class:`~flowpy.jsonrpc.option.Option`]
-    :yields: :class:`~flowpy.jsonrpc.option.Option`
+    :rtype: list[:class:`~flowpy.jsonrpc.results.Result`]
+    :yields: :class:`~flowpy.jsonrpc.results.Result`
 
 Error Handling Events
 ---------------------

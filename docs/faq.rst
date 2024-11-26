@@ -57,14 +57,14 @@ Consider the following example: ::
     r = requests.get('https://httpbin.org/get')
     if r.status_code == 200:
         js = r.json()
-        yield Option(f"User Agent: {js['headers']['User-Agent']}")
+        yield Result(f"User Agent: {js['headers']['User-Agent']}")
 
     # good
     async with aiohttp.ClientSession() as session:
         async with session.get('https://httpbin.org/get') as r:
             if r.status == 200:
                 js = await r.json()
-                yield Option(f"User Agent: {js['headers']['User-Agent']}")
+                yield Result(f"User Agent: {js['headers']['User-Agent']}")
 
 General
 ---------

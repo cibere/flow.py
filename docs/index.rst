@@ -29,12 +29,8 @@ If you're having trouble with something, these resources might help.
 .. toctree::
    :caption: API Reference
    
-   plugin
-   search_handlers
-   ctx_menu_handlers
-   flow_api
-   jsonrpc
-   errors
+   api
    events
-   whats_new
    faq
+   search_handlers
+   whats_new

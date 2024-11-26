@@ -19,7 +19,6 @@ from typing import (
 import aioconsole
 
 from .conditions import PlainTextCondition, RegexCondition
-from .context_menu_handler import ContextMenuHandler
 from .default_events import get_default_events
 from .errors import (
     ContextMenuHandlerNotFound,
@@ -27,7 +26,7 @@ from .errors import (
     PluginNotInitialized,
 )
 from .flow_api.client import FlowLauncherAPI, PluginMetadata
-from .jsonrpc import Action, ExecuteResponse, JsonRPCClient, Option, QueryResponse
+from .jsonrpc import ExecuteResponse, JsonRPCClient, QueryResponse, Result
 from .jsonrpc.responses import BaseResponse
 from .query import Query
 from .search_handler import SearchHandler
@@ -64,7 +63,7 @@ class Plugin:
             self
         )
         self._search_handlers: list[SearchHandler] = []
-        self._context_menu_handlers: dict[str, ContextMenuHandler] = {}
+        self._results: dict[str, Result] = {}
 
     async def _run_event(
         self,
@@ -114,25 +113,23 @@ class Plugin:
         if event_callback:
             return self._schedule_event(event_callback, method, args, kwargs)
 
-    async def _coro_or_gen_to_options(
+    async def _coro_or_gen_to_results(
         self, coro: Awaitable | AsyncIterable
-    ) -> AsyncIterable[Option]:
-        raw_options = await coro_or_gen(coro)
-        if isinstance(raw_options, dict):
-            yield Option.from_dict(raw_options)
-            raise StopAsyncIteration
-        if not isinstance(raw_options, list):
-            raw_options = [raw_options]
-        for raw_option in raw_options:
-            yield Option.from_anything(raw_option)
-
-    async def _context_menu_wrapper(self, context_data: list[Any]) -> QueryResponse:
-        callback = self._events["on_context_menu"]
-
-        options = [
-            opt async for opt in self._coro_or_gen_to_options(callback(context_data))
-        ]
-        return QueryResponse(options, self.settings._changes)
+    ) -> list[Result]:
+        results = []
+        raw_results = await coro_or_gen(coro)
+        if isinstance(raw_results, dict):
+            res = Result.from_dict(raw_results)
+            self._results[res.slug] = res
+            results.append(res)
+        else:
+            if not isinstance(raw_results, list):
+                raw_results = [raw_results]
+            for raw_res in raw_results:
+                res = Result.from_anything(raw_res)
+                self._results[res.slug] = res
+                results.append(res)
+        return results
 
     async def _populate_settings_from_file(self) -> None:
         def read_file(fp: str) -> dict:
@@ -151,6 +148,37 @@ class Plugin:
         self.dispatch("initialization")
         return ExecuteResponse(hide=False)
 
+    async def process_context_menus(self, data: list[Any]) -> QueryResponse:
+        r"""|coro|
+
+        Runs and processes context menus.
+
+        Parameters
+        ----------
+        data: list[Any]
+            The context data sent from flow
+        """
+
+        LOG.debug(f"Context Menu Handler: {data=}")
+
+        if not data:
+            raise InvalidContextDataReceived()
+
+        result = self._results.get(data[0])
+
+        if result is not None:
+            task = self._schedule_event(
+                self._coro_or_gen_to_results,
+                event_name=f"ContextMenu-{result.slug}",
+                args=[result.context_menu()],
+                error_handler_event_name="on_context_menu_error",
+            )
+            results = await task
+        else:
+            results = []
+
+        return QueryResponse(results, self.settings._changes)
+
     async def process_search_handlers(self, query: Query) -> QueryResponse:
         r"""|coro|
 
@@ -163,51 +191,19 @@ class Plugin:
             The query object to be give to the search handlers
         """
 
-        options = []
+        results = []
         for handler in self._search_handlers:
             if handler.condition(query):
                 task = self._schedule_event(
-                    handler.invoke,
+                    self._coro_or_gen_to_results,
                     event_name=f"SearchHandler-{handler.name}",
-                    args=[query],
+                    args=[handler.callback(query)],
                     error_handler_event_name="on_search_error",
                 )
-                options = await task
+                results = await task
                 break
 
-        return QueryResponse(options, self.settings._changes)
-
-    async def process_context_menu_handlers(self, data: list[str]) -> QueryResponse:
-        r"""|coro|
-
-        Runs and processes the registered search handlers.
-        See the :ref:`context menu handler section <ctx_menu_handlers>` for more information about using context menu handlers.
-
-        Parameters
-        ----------
-        data: list[Any]
-            The context data sent from flow
-        """
-
-        LOG.debug(f"Context Menu Handler: {data=}")
-        LOG.debug(f"Registered Context Menu Handlers: {self._context_menu_handlers=}")
-
-        if not data:
-            raise InvalidContextDataReceived()
-
-        handler = self._context_menu_handlers.get(data[0])
-
-        if handler is None:
-            raise ContextMenuHandlerNotFound()
-
-        task = self._schedule_event(
-            handler.invoke,
-            event_name=f"ContextMenu-{handler.name}",
-            error_handler_event_name="on_context_menu_error",
-        )
-        options = await task
-
-        return QueryResponse(options, self.settings._changes)
+        return QueryResponse(results, self.settings._changes)
 
     @property
     def metadata(self) -> PluginMetadata:
@@ -222,9 +218,18 @@ class Plugin:
         if self._metadata:
             return self._metadata
         raise PluginNotInitialized()
+    
+    async def start(self):
+        r"""|coro|
+        
+        The default startup/setup method. This can be overriden for advanced startup behavior, but make sure to run ``await super().start()`` to actually start your plugin.
+        """
+
+        reader, writer = await aioconsole.get_standard_streams()
+        await self.jsonrpc.start_listening(reader, writer)
 
     def run(self, *, setup_default_log_handler: bool = True) -> None:
-        r"""The default runner.
+        r"""The default runner. This runs the :func:`~flowpy.plugin.Plugin.start` coroutine, and setups up logging.
 
         Parameters
         --------
@@ -235,11 +240,7 @@ class Plugin:
         if setup_default_log_handler:
             setup_logging()
 
-        async def main():
-            reader, writer = await aioconsole.get_standard_streams()
-            await self.jsonrpc.start_listening(reader, writer)
-
-        asyncio.run(main())
+        asyncio.run(self.start())
 
     def register_search_handler(self, handler: SearchHandler) -> None:
         r"""Register a new search handler
@@ -254,20 +255,6 @@ class Plugin:
 
         self._search_handlers.append(handler)
         LOG.info(f"Registered search handler: {handler}")
-
-    def register_context_menu_handler(self, handler: ContextMenuHandler) -> None:
-        r"""Register a new context menu handler
-
-        See the :ref:`context menu handler section <ctx_menu_handlers>` for more information about using context menu handlers.
-
-        Parameters
-        -----------
-        handler: :class:`~flowpy.search_handler.SearchHandler`
-            The search handler to be registered
-        """
-
-        self._context_menu_handlers[handler.slug] = handler
-        LOG.info(f"Registered context menu handler: {handler}")
 
     def event[T: Callable[..., Any]](self, callback: T) -> T:
         """A decorator that registers an event to listen for.
@@ -350,64 +337,9 @@ class Plugin:
                 condition = RegexCondition(pattern)
 
         def inner(func: SearchHandlerCallback) -> SearchHandler:
-            handler = SearchHandler(func, condition)
+            handler = SearchHandler(condition)
+            handler.callback = func # type: ignore # type is the same
             self.register_search_handler(handler)
             return handler
 
         return inner
-
-    def action[
-        **P
-    ](self, method: Callable[P, Coroutine[Any, Any, ExecuteResponse]]) -> Callable[
-        P, Action
-    ]:
-        """A decorator to easily and quickly turn a function into a :class:`~flowpy.jsonrpc.option.Action` object.
-
-        All events must be a :ref:`coroutine <coroutine>`.
-
-        Example
-        -------
-
-        .. code-block:: python3
-
-            @plugin.action
-            async def my_action(param: str):
-                ...
-
-            # later on
-
-            Option("...", action=my_action("param"))
-        """
-
-        def inner(*args):
-            return Action(method, args)  # type: ignore
-
-        return inner  # type: ignore
-
-    def context_menu[
-        **P
-    ](self, method: Callable[P, Any]) -> Callable[P, ContextMenuHandler]:
-        """A decorator to easily and quickly turn a function into a :class:`~flowpy.context_menu_handler.ContextMenuHandler` object.
-
-        All handlers must be a :ref:`coroutine <coroutine>`.
-
-        Example
-        -------
-
-        .. code-block:: python3
-
-            @plugin.context_menu
-            async def my_context_menu_handler(param: str):
-                ...
-
-            # later on
-
-            Option("...", context_menu_handler=my_context_menu_handler("param"))
-        """
-
-        def inner(*args, **kwargs):
-            handler = ContextMenuHandler(method, *args, **kwargs)  # type: ignore
-            self.register_context_menu_handler(handler)
-            return handler
-
-        return inner  # type: ignore

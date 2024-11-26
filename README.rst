@@ -30,13 +30,13 @@ Basic Example
 -------------
 .. code:: py
 
-    from flowpy import Option, Plugin, Query
+    from flowpy import Plugin, Query
 
     plugin = Plugin()
 
     @plugin.event
     async def on_query(data: Query):
-        yield Option(f"You wrote {data.text}")
+        return f"You wrote {data.text}"
     
     plugin.run()
 

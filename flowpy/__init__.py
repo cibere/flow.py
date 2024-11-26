@@ -1,12 +1,11 @@
 __title__ = "flow.py"
 __author__ = "cibere"
-__version__ = "0.0.1"
+__version__ = "0.0.1a"
 
 
 from typing import Literal, NamedTuple
 
 from .conditions import *
-from .context_menu_handler import *
 from .errors import *
 from .jsonrpc import *
 from .plugin import *
@@ -20,11 +19,9 @@ class VersionInfo(NamedTuple):
     minor: int
     micro: int
     releaselevel: Literal["alpha", "beta", "candidate", "final"]
-    serial: int
-
 
 version_info: VersionInfo = VersionInfo(
-    major=2, minor=5, micro=0, releaselevel="alpha", serial=0
+    major=0, minor=0, micro=1, releaselevel="alpha"
 )
 
 del NamedTuple, Literal, VersionInfo

@@ -45,7 +45,7 @@ A quick example code to showcase this:
 
 .. code:: py
 
-    from flowpy import Option, Plugin, Query
+    from flowpy import Plugin, Query
 
     plugin = Plugin()
 
@@ -60,7 +60,7 @@ Search handlers
 
 For handling search/query requests with flow.py, you will use :ref:`search handlers <search_handlers>`. See the :ref:`search handlers section <search_handlers>` for an in-depth look at them, but for now, here is a quick version:
 
-You can use the :func:`~flowpy.plugin.Plugin.search` decorator to register a search handler, with an async callback. The callback takes a single argument (:class:`~flowpy.query.Query`), and returns an :class:`~flowpy.jsonrpc.option.Option` object, a list of :class:`~flowpy.jsonrpc.option.Option` objects, or anything that will get casted to a string and converted into an :class:`~flowpy.jsonrpc.option.Option` object.
+You can use the :func:`~flowpy.plugin.Plugin.search` decorator to register a search handler, with an async callback. The callback takes a single argument (:class:`~flowpy.query.Query`), and returns an :class:`~flowpy.jsonrpc.results.Result` object, a list of :class:`~flowpy.jsonrpc.results.Result` objects, or anything that will get casted to a string and converted into an :class:`~flowpy.jsonrpc.results.Result` object.
 
 .. NOTE::
     Unlike :func:`~flowpy.plugin.Plugin.event`, with :func:`~flowpy.plugin.Plugin.search` you must call the decorator, as there are optional arguments that could be passed.
@@ -73,9 +73,22 @@ You can use the :func:`~flowpy.plugin.Plugin.search` decorator to register a sea
     async def my_search_handler(query):
         return "Hello!"
 
-Options & Actions
-~~~~~~~~~~~~~~~~~
+Results
+~~~~~~~
 
-When flow sends a query or context menu request, you'll receive them via the :ref:`on_query <on_query>` and :ref:`on_context_menu <on_context_menu>` events. To respond to these requests, you give them a list of :class:`~flowpy.jsonrpc.option.Option` objects, which in the case of a query request, acts as the user's results.
+You can use the :class:`~flowpy.jsonrpc.results.Result` object constructor to pass most options.
 
-You can use an :class:`~flowpy.jsonrpc.option.Action` to wrap the :ref:`coroutine <coroutine>` that you want to run when a user clicks on the :class:`~flowpy.jsonrpc.option.Option` that the :class:`~flowpy.jsonrpc.option.Action` has been assigned to via the :attr:`~flowpy.jsonrpc.option.Option.action` parameter/attribute.
+.. NOTE::
+    For handling what happens when the result gets clicked or customizing the context menu, subclass the object and override the methods. See :class:`~flowpy.jsonrpc.results.Result` for more info.
+
+.. code:: py
+    
+    plugin = Plugin()
+    
+    @plugin.search()
+    async def my_search_handler(query):
+        return Option(
+            title=f"Your text: {query.text}",
+            sub="boo",
+            copy_text=query.text
+        )
