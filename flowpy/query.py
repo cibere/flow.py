@@ -7,7 +7,18 @@ __all__ = ("Query",)
 
 
 class Query[T]:
-    r"""This class represents the query data sent from flow launcher"""
+    r"""This class represents the query data sent from flow launcher
+    
+    .. container:: operations
+
+        .. describe:: x == y
+
+            Compare the keywords, text, and is_query values of two query objects.
+        
+        .. describe:: hash(x)
+
+            Gets the hash of the query's raw text
+    """
 
     def __init__(self, data: dict[str, Any]) -> None:
         self.__data = data
@@ -41,3 +52,9 @@ class Query[T]:
     @condition_data.setter
     def condition_data(self, value: T) -> None:
         self.__search_condition_data = value
+
+    def __eq__(self, other: Any) -> bool:
+        return isinstance(other, Query) and other.raw_text == self.raw_text and other.is_requery == self.is_requery
+    
+    def __hash__(self) -> int:
+        return hash(self.raw_text)
