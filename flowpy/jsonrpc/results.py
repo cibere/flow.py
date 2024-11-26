@@ -25,16 +25,16 @@ class Result(Base):
     Subclassing
     ------------
     Subclassing lets you override the following methods: :func:`~flowpy.jsonrpc.results.Result.callback` and :func:`~flowpy.jsonrpc.results.Result.context_menu`. It also lets you create "universal" result properties (eg: same icon). Example:
-    
+
     .. code-block:: python3
 
         class MyResult(Result):
             def __init__(self, title: str) -> None:
                 super().__init__(self, title, icon="Images/app.png")
-            
+
             async def callback(self):
                 # handle what happens when the result gets clicked
-            
+
             async def context_menu(self):
                 # add context menu options to this result's context menu
 
@@ -86,10 +86,11 @@ class Result(Base):
         :class:`~flowpy.jsonrpc.responses.ExecuteResponse`
             A response to flow determining whether or not to hide flow's menu
         """
-        
+
         return ExecuteResponse(False)
 
     if TYPE_CHECKING:
+
         def context_menu(self) -> SearchHandlerCallbackReturns:
             r"""|coro|
 
@@ -108,7 +109,9 @@ class Result(Base):
                 A result object or something that can be converted into a result object.
             """
             ...
+
     else:
+
         async def context_menu(self):
             r"""|coro|
 
@@ -127,7 +130,6 @@ class Result(Base):
                 A result object or something that can be converted into a result object.
             """
             return []
-
 
     def to_dict(self) -> dict[str, Any]:
         r"""This converts the result into a json serializable dictionary

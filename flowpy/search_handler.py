@@ -3,7 +3,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from ._types import SearchHandlerCallback, SearchHandlerCondition, SearchHandlerCallbackReturns
+    from ._types import (
+        SearchHandlerCallback,
+        SearchHandlerCallbackReturns,
+        SearchHandlerCondition,
+    )
     from .query import Query
 
 __all__ = ("SearchHandler",)
@@ -36,8 +40,9 @@ class SearchHandler:
             condition = _default_condition
 
         self.condition = condition
-    
+
     if TYPE_CHECKING:
+
         def callback(self, query: Query) -> SearchHandlerCallbackReturns:
             r"""|coro|
 
@@ -56,7 +61,9 @@ class SearchHandler:
                 A result object or something that can be converted into a result object.
             """
             ...
+
     else:
+
         async def callback(self, query: Query):
             r"""|coro|
 
@@ -75,7 +82,6 @@ class SearchHandler:
                 A result object or something that can be converted into a result object.
             """
             raise RuntimeError("Callback was not overriden")
-
 
     @property
     def name(self) -> str:

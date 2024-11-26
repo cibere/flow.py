@@ -218,10 +218,10 @@ class Plugin:
         if self._metadata:
             return self._metadata
         raise PluginNotInitialized()
-    
+
     async def start(self):
         r"""|coro|
-        
+
         The default startup/setup method. This can be overriden for advanced startup behavior, but make sure to run ``await super().start()`` to actually start your plugin.
         """
 
@@ -338,7 +338,7 @@ class Plugin:
 
         def inner(func: SearchHandlerCallback) -> SearchHandler:
             handler = SearchHandler(condition)
-            handler.callback = func # type: ignore # type is the same
+            handler.callback = func  # type: ignore # type is the same
             self.register_search_handler(handler)
             return handler
 
