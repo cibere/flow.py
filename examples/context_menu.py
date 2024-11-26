@@ -1,18 +1,17 @@
-from flowpy import Option, Plugin, Query
+from flowpy import Result, Plugin, Query
 
 plugin = Plugin()
 
 
-@plugin.context_menu
-async def my_ctx_menu(options: list[str]):
-    return options
-
+class ContextMenuResult(Result):
+    async def context_menu(self):
+        yield "This is an example of context menus with flow.py"
+        yield "flow.py is a python library for working with flow"
+        yield "flow.py was made by cibere"
 
 @plugin.search()
 async def on_search(data: Query):
-    return Option(
-        "This is a test", context_menu_handler=my_ctx_menu(["test1", "t2", "t3"])
-    )
+    return ContextMenuResult("I worky")
 
 
 if __name__ == "__main__":

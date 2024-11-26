@@ -1,21 +1,16 @@
-from flowpy import Action, ExecuteResponse, Option, Plugin, Query
+from flowpy import Result, Plugin, Query, ExecuteResponse
 
 plugin = Plugin()
 
 
-@plugin.action
-async def my_action(text: str):
-    await plugin.api.show_notification("Test Plugin", f"Your text is: {text}")
-    return ExecuteResponse(hide=False)
-
+class ActionResult(Result):
+    async def callback(self):
+        await plugin.api.show_notification("flow.py plugin", "I worky!")
+        return ExecuteResponse(hide=False)
 
 @plugin.search()
 async def on_search(data: Query):
-    return Option(
-        f"Your text is: {data.text}",
-        sub="Click this to initiate the action",
-        action=my_action(data.text),
-    )
+    return ActionResult("I worky")
 
 
 if __name__ == "__main__":

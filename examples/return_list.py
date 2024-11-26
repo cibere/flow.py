@@ -1,4 +1,4 @@
-from flowpy import Option, Plugin, Query
+from flowpy import Result, Plugin, Query
 
 plugin = Plugin()
 
@@ -8,7 +8,7 @@ async def on_search(data: Query):
     return [
         f"Your text is: {data.text}",
         f"Your keyword is: {data.keyword}",
-        Option(f"Your raw text is: {data.raw_text}", sub="keyword + text"),
+        Result(f"Your raw text is: {data.raw_text}", sub="keyword + text"),
     ]
 
 
