@@ -1,11 +1,11 @@
-from flowpy import ExecuteResponse, Plugin, Query, Result
+from flogin import ExecuteResponse, Plugin, Query, Result
 
 plugin = Plugin()
 
 
 class ActionResult(Result):
     async def callback(self):
-        await plugin.api.show_notification("flow.py plugin", "I worky!")
+        await plugin.api.show_notification("flogin plugin", "I worky!")
         return ExecuteResponse(hide=False)
 
 

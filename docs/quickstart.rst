@@ -19,7 +19,7 @@ Let's make a plugin which compares how similar the user's query is with the word
 .. code-block:: python3
     :linenos:
 
-    from flowpy import Plugin, Query
+    from flogin import Plugin, Query
 
     plugin = Plugin()
 
@@ -36,14 +36,14 @@ There's a lot going on here, so let's walk you through it line by line.
 1. The first line just imports the library, if this raises a :exc:`ModuleNotFoundError` or :exc:`ImportError`
    then head on over to :ref:`installing` section to properly install.
 2. Empty Line to increase readability
-3. Now we create an instance of :class:`~flowpy.plugin.Plugin`, which will let us work with Flow.
+3. Now we create an instance of :class:`~flogin.plugin.Plugin`, which will let us work with Flow.
 4. Empty Line to increase readability
-5. Now, in line 5, we use the :func:`~flowpy.plugin.Plugin.search` decorator to create and register a :class:`~flowpy.search_handler.SearchHandler` object using the function defined in line 6.
-6. Now in line 6, we define our handler's callback, which takes a single argument: ``data`` of the type :class:`~flowpy.query.Query`
-7. In line 7, we access the :class:`~flowpy.flow_api.client.FlowLauncherAPI` client, and use its :func:`~flowpy.flow_api.client.FlowLauncherAPI.fuzzy_search` method to tell flow to use fuzzy search to compare the two strings inputted. In this case, we are telling Flow to compare whatever the user gave as their query. See :class:`~flowpy.query.Query` for more info on working with the query object.
-8. We are returning a string that contains our ``Flow`` string and the results score. See the :class:`~flowpy.flow_api.fuzzy_search.FuzzySearchResult` class for more information on using the result object.
+5. Now, in line 5, we use the :func:`~flogin.plugin.Plugin.search` decorator to create and register a :class:`~flogin.search_handler.SearchHandler` object using the function defined in line 6.
+6. Now in line 6, we define our handler's callback, which takes a single argument: ``data`` of the type :class:`~flogin.query.Query`
+7. In line 7, we access the :class:`~flogin.flow_api.client.FlowLauncherAPI` client, and use its :func:`~flogin.flow_api.client.FlowLauncherAPI.fuzzy_search` method to tell flow to use fuzzy search to compare the two strings inputted. In this case, we are telling Flow to compare whatever the user gave as their query. See :class:`~flogin.query.Query` for more info on working with the query object.
+8. We are returning a string that contains our ``Flow`` string and the results score. See the :class:`~flogin.flow_api.fuzzy_search.FuzzySearchResult` class for more information on using the result object.
 9. Empty Line to increase readability
-10. Now we call plugin's :class:`~flowpy.plugin.Plugin.run` method to start the plugin.
+10. Now we call plugin's :class:`~flogin.plugin.Plugin.run` method to start the plugin.
 
 Now although we've just made a plugin, we can't use it yet, because it isn't as simple as running the program.
 

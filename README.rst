@@ -1,6 +1,6 @@
-flow.py
-========
-A wrapper for Flow Lancher's V2 python api using jsonrpc.
+flogin
+=================================================
+A wrapper for Flow Lancher's V2 jsonrpc api using python, to easily and quickly make **Flo**\ w launcher plu\ **gin**\ s.
 
 .. WARNING::
     This library is still in alpha development, so expect breaking changes
@@ -17,20 +17,23 @@ Installing
 
 **Python 3.12 or higher is required**
 
-.. NOTE::
-    The ``flow.py`` package on PyPi is NOT the same package
-
-To install flow.py, do the following:
+To install flogin, do the following:
 
 .. code:: sh
 
-    pip install git+https://github.com/cibere/flow.py
+    pip install flogin
+
+To install the development version, ensure `git <https://git-scm.com/>`_ is installed, then do the following:
+
+.. code:: sh
+
+    pip install git+https://github.com/cibere/flogin
 
 Basic Example
 -------------
 .. code:: py
 
-    from flowpy import Plugin, Query
+    from flogin import Plugin, Query
 
     plugin = Plugin()
 
@@ -45,7 +48,7 @@ You can find more examples in the examples directory.
 Links
 ------
 
-- `Documentation <https://flowpy.readthedocs.io/en/latest/index.html>`_
+- `Documentation <https://flogin.readthedocs.io/en/latest/index.html>`_
 - `Flow Launcher's Official Discord Server <https://discord.gg/QDbDfUJaGH>`_
 
 Contributing

@@ -1,4 +1,4 @@
-from flowpy import Plugin, Query, Result
+from flogin import Plugin, Query, Result
 
 plugin = Plugin()
 

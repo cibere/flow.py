@@ -4,7 +4,7 @@ API Reference
 Plugin
 ------
 
-.. autoclass:: flowpy.plugin.Plugin
+.. autoclass:: flogin.plugin.Plugin
     :members:
 
 .. autodecorator:: Plugin.event()
@@ -14,10 +14,10 @@ Plugin
 Classes
 ~~~~~~~
 
-.. autoclass:: flowpy.settings.Settings
+.. autoclass:: flogin.settings.Settings
     :members:
 
-.. autoclass:: flowpy.query.Query
+.. autoclass:: flogin.query.Query
     :members:
 
 JSON RPC
@@ -26,22 +26,22 @@ JSON RPC
 Result
 ~~~~~~
 
-.. autoclass:: flowpy.jsonrpc.results.Result
+.. autoclass:: flogin.jsonrpc.results.Result
     :members:
 
 Responses
 ~~~~~~~~~
 
-.. autoclass:: flowpy.jsonrpc.responses.BaseResponse
+.. autoclass:: flogin.jsonrpc.responses.BaseResponse
     :members:
 
-.. autoclass:: flowpy.jsonrpc.responses.ErrorResponse
+.. autoclass:: flogin.jsonrpc.responses.ErrorResponse
     :members:
 
-.. autoclass:: flowpy.jsonrpc.responses.QueryResponse
+.. autoclass:: flogin.jsonrpc.responses.QueryResponse
     :members:
 
-.. autoclass:: flowpy.jsonrpc.responses.ExecuteResponse
+.. autoclass:: flogin.jsonrpc.responses.ExecuteResponse
     :members:
 
 Flow API
@@ -50,16 +50,16 @@ Flow API
 Client
 ~~~~~~~~
 
-.. autoclass:: flowpy.flow_api.client.FlowLauncherAPI
+.. autoclass:: flogin.flow_api.client.FlowLauncherAPI
     :members:
 
 Classes
 ~~~~~~~~
 
-.. autoclass:: flowpy.flow_api.fuzzy_search.FuzzySearchResult
+.. autoclass:: flogin.flow_api.fuzzy_search.FuzzySearchResult
     :members:
 
-.. autoclass:: flowpy.flow_api.plugin_metadata.PluginMetadata
+.. autoclass:: flogin.flow_api.plugin_metadata.PluginMetadata
     :members:
 
 .. _search_handlers_api_reference:
@@ -67,7 +67,7 @@ Classes
 Search Handlers
 ---------------
 
-.. autoclass:: flowpy.search_handler.SearchHandler
+.. autoclass:: flogin.search_handler.SearchHandler
     :members:
 
 .. _builtin_search_conditions:
@@ -75,16 +75,16 @@ Search Handlers
 Builtin Search Conditions
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. autoclass:: flowpy.conditions.PlainTextCondition
+.. autoclass:: flogin.conditions.PlainTextCondition
     :members:
 
-.. autoclass:: flowpy.conditions.RegexCondition
+.. autoclass:: flogin.conditions.RegexCondition
     :members:
 
-.. autoclass:: flowpy.conditions.KeywordCondition
+.. autoclass:: flogin.conditions.KeywordCondition
     :members:
 
-.. autoclass:: flowpy.conditions.MultiCondition
+.. autoclass:: flogin.conditions.MultiCondition
     :members:
 
 Errors
@@ -93,36 +93,36 @@ Errors
 Plugin Errors
 ~~~~~~~~~~~~~
 
-.. autoclass:: flowpy.errors.PluginException
+.. autoclass:: flogin.errors.PluginException
     :members:
 
-.. autoclass:: flowpy.errors.SettingNotFound
+.. autoclass:: flogin.errors.SettingNotFound
     :members:
 
-.. autoclass:: flowpy.errors.PluginNotInitialized
+.. autoclass:: flogin.errors.PluginNotInitialized
     :members:
 
 JSON-RPC Errors
 ~~~~~~~~~~~~~~~
 
-.. autoclass:: flowpy.jsonrpc.errors.JsonRPCException
+.. autoclass:: flogin.jsonrpc.errors.JsonRPCException
     :members:
 
-.. autoclass:: flowpy.jsonrpc.errors.JsonRPCVersionMismatch
+.. autoclass:: flogin.jsonrpc.errors.JsonRPCVersionMismatch
     :members:
 
 Utils
 -----
 
-.. autofunction:: flowpy.utils.setup_logging
+.. autofunction:: flogin.utils.setup_logging
 
-.. autofunction:: flowpy.utils.coro_or_gen
+.. autofunction:: flogin.utils.coro_or_gen
 
-.. attribute:: flowpy.utils.MISSING
+.. attribute:: flogin.utils.MISSING
 
     A type safe sentinel used in the library to represent something as missing. Used to distinguish from ``None`` values.
 
-.. decorator:: flowpy.utils.cached_property()
+.. decorator:: flogin.utils.cached_property()
 
     A version of :func:`functools.cached_property` that is safe for async programs.
 
@@ -135,4 +135,4 @@ Utils
             def bar(self):
                 ...
 
-.. autodecorator:: flowpy.utils.cached_coro()
+.. autodecorator:: flogin.utils.cached_coro()

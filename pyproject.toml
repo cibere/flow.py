@@ -3,7 +3,7 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "flow.py"
+name = "flogin"
 description = "A Python wrapper for Flow Launcher's v2 python api"
 readme = { file = "README.rst", content-type = "text/x-rst" }
 requires-python = ">=3.12"
@@ -23,7 +23,7 @@ classifiers = [
 dynamic = ["version", "dependencies"]
 
 [project.urls]
-"Issue tracker" = "https://github.com/cibere/flow.py/issues"
+"Issue tracker" = "https://github.com/cibere/flogin/issues"
 
 [project.optional-dependencies]
 docs = [
@@ -39,7 +39,7 @@ dependencies = { file = "requirements.txt" }
 
 [tool.setuptools]
 packages = [
-    "flowpy",
-    "flowpy.flow_api",
-    "flowpy.jsonrpc",
+    "flogin",
+    "flogin.flow_api",
+    "flogin.jsonrpc",
 ]

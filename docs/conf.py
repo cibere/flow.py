@@ -9,14 +9,14 @@
 import re
 from datetime import date
 
-project = "flow.py"
+project = "flogin"
 
 # source:
 # https://github.com/Rapptz/discord.py/blob/61eddfcb189f11a293011d43b09fe4ec52641dd2/docs/conf.py#L95C1-L100C18
 version = "0.0.0"
 author = "Unknown Author"
 try:
-    with open("../flowpy/__init__.py") as f:
+    with open("../flogin/__init__.py") as f:
         read = f.read()
         version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', read, re.MULTILINE).group(1)  # type: ignore
         author = re.search(r'^__author__\s*=\s*[\'"]([^\'"]*)[\'"]', read, re.MULTILINE).group(1)  # type: ignore
@@ -101,6 +101,6 @@ intersphinx_mapping = {
 html_theme_options = {
     "announcement": (
         "<b>In Developement</b> Please note that this extension is still in developement. "
-        "If you find any bugs, please report them om the <a href='https://github.com/cibere/flow.py/issues'>GitHub repository</a>."
+        "If you find any bugs, please report them om the <a href='https://github.com/cibere/flogin/issues'>GitHub repository</a>."
     ),
 }

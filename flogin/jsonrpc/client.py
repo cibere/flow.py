@@ -97,8 +97,8 @@ class JsonRPCClient:
 
         self.request_id = request["id"]
 
-        if method.startswith("flow.py.action"):
-            slug = method.removeprefix("flow.py.action.")
+        if method.startswith("flogin.action"):
+            slug = method.removeprefix("flogin.action.")
             result = self.plugin._results.get(slug)
             if result:
                 callback = result.callback

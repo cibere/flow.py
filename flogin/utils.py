@@ -78,7 +78,7 @@ def cached_coro[T: Callable[..., Coroutine[Any, Any, Any]]](coro: T) -> T:
 
 
 def setup_logging(*, formatter: logging.Formatter | None = None) -> None:
-    r"""Sets up flow.py's default logger.
+    r"""Sets up flogin's default logger.
 
     Parameters
     ----------
@@ -89,7 +89,7 @@ def setup_logging(*, formatter: logging.Formatter | None = None) -> None:
     level = logging.DEBUG
 
     handler = logging.handlers.RotatingFileHandler(
-        "flowpy.log", maxBytes=1000000, encoding="UTF-8"
+        "flogin.log", maxBytes=1000000, encoding="UTF-8"
     )
 
     if formatter is None:

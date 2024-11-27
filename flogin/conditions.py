@@ -38,7 +38,7 @@ class RegexCondition:
     See the :ref:`search handler section <search_handlers>` for more information about using search handlers and conditions.
 
     .. NOTE::
-        This condition will set the query's :attr:`~flowpy.query.Query.condition_data` attribute to the :class:`re.Match` object.
+        This condition will set the query's :attr:`~flogin.query.Query.condition_data` attribute to the :class:`re.Match` object.
 
     Attributes
     ----------
@@ -66,7 +66,7 @@ class MultiCondition:
     See the :ref:`search handler section <search_handlers>` for more information about using search handlers and conditions.
 
     .. NOTE::
-        This condition will set the query's :attr:`~flowpy.query.Query.condition_data` attribute to a dictionary object where the key is the condition and the value is the extra data it provided.
+        This condition will set the query's :attr:`~flogin.query.Query.condition_data` attribute to a dictionary object where the key is the condition and the value is the extra data it provided.
 
     """
 
@@ -90,8 +90,8 @@ class MultiCondition:
 class KeywordCondition:
     r"""A builtin search condition to check what keyword was used with the query.
 
-    If the :attr:`~flowpy.conditions.KeywordCondition.allowed_keywords` attribute is given, the handler will only run if the query's keyword is in the list of allowed keywords.
-    If the :attr:`~flowpy.conditions.KeywordCondition.disallowed_keywords` attribute is given, the handler will only run if the query's keyword is not in the list of allowed keywords.
+    If the :attr:`~flogin.conditions.KeywordCondition.allowed_keywords` attribute is given, the handler will only run if the query's keyword is in the list of allowed keywords.
+    If the :attr:`~flogin.conditions.KeywordCondition.disallowed_keywords` attribute is given, the handler will only run if the query's keyword is not in the list of allowed keywords.
 
     See the :ref:`search handler section <search_handlers>` for more information about using search handlers and conditions.
 

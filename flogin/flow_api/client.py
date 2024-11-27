@@ -17,7 +17,7 @@ class FlowLauncherAPI:
     r"""This class is a wrapper around Flow's API to make it easy to make requests and receive results.
 
     .. NOTE::
-        Do not initialize this class yourself, instead use :class:`~flowpy.plugin.Plugin`'s :attr:`~flowpy.plugin.Plugin.api` attribute to get an instance.
+        Do not initialize this class yourself, instead use :class:`~flogin.plugin.Plugin`'s :attr:`~flogin.plugin.Plugin.api` attribute to get an instance.
     """
 
     def __init__(self, jsonrpc: JsonRPCClient):
@@ -45,7 +45,7 @@ class FlowLauncherAPI:
 
         Returns
         --------
-        :class:`~flowpy.flow_api.fuzzy_search.FuzzySearchResult`
+        :class:`~flogin.flow_api.fuzzy_search.FuzzySearchResult`
         """
 
         from ..jsonrpc import ErrorResponse  # circular import
@@ -322,7 +322,7 @@ class FlowLauncherAPI:
 
         Returns
         --------
-        list[:class:`~flowpy.flow_api.plugin_metadata.PluginMetadata`]
+        list[:class:`~flogin.flow_api.plugin_metadata.PluginMetadata`]
         """
 
         from ..jsonrpc import ErrorResponse  # circular import
@@ -409,7 +409,7 @@ class FlowLauncherAPI:
         ----------
         raw_query: :class:`str`
             Only change the results if the current raw query is the same as this
-        results: list[:class:`~flowpy.jsonrpc.results.Result`]
+        results: list[:class:`~flogin.jsonrpc.results.Result`]
             The new results
 
         Returns

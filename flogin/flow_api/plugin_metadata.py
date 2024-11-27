@@ -82,7 +82,7 @@ class PluginMetadata(Base):
 
         Registers a new keyword with flow for the plugin.
 
-        This is a shortcut to :func:`~flowpy.flow_api.client.FlowLauncherAPI.add_keyword`
+        This is a shortcut to :func:`~flogin.flow_api.client.FlowLauncherAPI.add_keyword`
 
         Parameters
         --------
@@ -101,7 +101,7 @@ class PluginMetadata(Base):
 
         Removes a keyword from the plugin.
 
-        This is a shortcut to :func:`~flowpy.flow_api.client.FlowLauncherAPI.remove_keyword`
+        This is a shortcut to :func:`~flogin.flow_api.client.FlowLauncherAPI.remove_keyword`
 
         Parameters
         --------

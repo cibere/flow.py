@@ -13,22 +13,22 @@ Search Handler Callback
 
     See the :ref:`registering search handlers section <register_search_handler>` for information on how to register your search handler.
 
-    Flow.py will attemp to convert whatever the callback returns into a list of results. If a dictionary is given, flow.py will try and convert it into an :class:`~flowpy.jsonrpc.results.Result` via :func:`~flowpy.jsonrpc.results.Result.from_dict`
+    flogin will attemp to convert whatever the callback returns into a list of results. If a dictionary is given, flogin will try and convert it into an :class:`~flogin.jsonrpc.results.Result` via :func:`~flogin.jsonrpc.results.Result.from_dict`
     
     The callback can also be an async iterator, and yield the results.
 
     :param query: The query data
-    :type query: :class:`~flowpy.query.Query`
-    :rtype: :class:`~flowpy.jsonrpc.results.Result` | list[:class:`~flowpy.jsonrpc.results.Result`] | dict | str | int | Any
-    :yields: :class:`~flowpy.jsonrpc.results.Result` | dict | str | int | Any
-    :returns: Flow.py will take the output in whatever form it is in, and try its best to convert it into a list of results. Worst case, it casts the item to a string and handles it accordingly.
+    :type query: :class:`~flogin.query.Query`
+    :rtype: :class:`~flogin.jsonrpc.results.Result` | list[:class:`~flogin.jsonrpc.results.Result`] | dict | str | int | Any
+    :yields: :class:`~flogin.jsonrpc.results.Result` | dict | str | int | Any
+    :returns: flogin will take the output in whatever form it is in, and try its best to convert it into a list of results. Worst case, it casts the item to a string and handles it accordingly.
 
 .. code:: py
 
     # Return a string, which gets turned into a result
     async def search_handler_callback_example(query):
         return "This is a string"
-    # Flow.py will return a single result to flow launcher, which will look something like this:
+    # flogin will return a single result to flow launcher, which will look something like this:
     # Result(title="This is a string")
 
 .. code:: py
@@ -36,7 +36,7 @@ Search Handler Callback
     # Return a list of strings, which gets turned into a list of strings
     async def search_handler_callback_example(query):
         return ["Foo", "Bar", "Apple", "Pear"]
-    # Flow.py will return a list of results to flow launcher, which will look something like this:
+    # flogin will return a list of results to flow launcher, which will look something like this:
     # [
     #   Result(title="Foo"),
     #   Result(title="Bar"),
@@ -49,7 +49,7 @@ Search Handler Callback
     # Return an int, which gets casted to a string and turned into a result.
     async def search_handler_callback_example(query):
         return 25
-    # Flow.py will return a single result to flow launcher, which will look something like this:
+    # flogin will return a single result to flow launcher, which will look something like this:
     # Result(title=str(25))
 
 .. code:: py
@@ -60,7 +60,7 @@ Search Handler Callback
         yield 3
         yield 25
         yield 30
-    # Flow.py will return a list of results to flow launcher, which will look something like this:
+    # flogin will return a list of results to flow launcher, which will look something like this:
     # [
     #   Result(title=str(2)),
     #   Result(title=str(3)),
@@ -71,7 +71,7 @@ Search Handler Callback
 Conditions
 -----------
 
-Flow.py uses condition functions to determine which handler should be used on a certain query. A condition function should take a single parameter (:class:`~flowpy.query.Query`), and return a bool. ``True`` means the search handler that this condition is associated with should be used on this query, and ``False`` means that the search handler shouldn't be used on this query. See the :ref:`builtin conditions section <builtin_search_conditions>` of this page's api reference for a list of builtin conditions.
+flogin uses condition functions to determine which handler should be used on a certain query. A condition function should take a single parameter (:class:`~flogin.query.Query`), and return a bool. ``True`` means the search handler that this condition is associated with should be used on this query, and ``False`` means that the search handler shouldn't be used on this query. See the :ref:`builtin conditions section <builtin_search_conditions>` of this page's api reference for a list of builtin conditions.
 
 .. _condition_example:
 
@@ -80,10 +80,10 @@ Condition Example
 
 .. function:: def condition(query)
 
-    This is called when flow.py is determining if a certain query handler should be used for a certain query or not.
+    This is called when flogin is determining if a certain query handler should be used for a certain query or not.
 
     :param query: The query that will be give to the search handler
-    :type query: :class:`~flowpy.query.Query`
+    :type query: :class:`~flogin.query.Query`
     :rtype: :class:`bool`
     :returns: A bool. ``True`` means the search handler that this condition is associated with should be used on this query, and ``False`` means that the search handler shouldn't be used on this query.
 
@@ -102,7 +102,7 @@ There are 2 main ways to register handlers:
 
 Plugin.search decorator
 ~~~~~~~~~~~~~~~~~~~~~~~
-If you want to create a handler outside of your :class:`~flowpy.plugin.Plugin` class using a decorator, you can use the :func:`~flowpy.plugin.Plugin.search` decorator. ::
+If you want to create a handler outside of your :class:`~flogin.plugin.Plugin` class using a decorator, you can use the :func:`~flogin.plugin.Plugin.search` decorator. ::
 
     @plugin.search()
     async def my_handler(query: Query):
@@ -112,7 +112,7 @@ If you want to create a handler outside of your :class:`~flowpy.plugin.Plugin` c
 
 Subclassing and registering a search handler
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Using the decorator isn't the only weay to create search handlers, you can also subclass the :class:`~flowpy.search_handler.SearchHandler` object and register the handler. ::
+Using the decorator isn't the only weay to create search handlers, you can also subclass the :class:`~flogin.search_handler.SearchHandler` object and register the handler. ::
 
     class MyHandler(SearchHandler):
         def __init__(self) -> None:
@@ -123,7 +123,7 @@ Using the decorator isn't the only weay to create search handlers, you can also 
 
 Error Handling
 --------------
-flow.py is callback focused, so callbacks are used to handle errors in search handlers. If you are using the :func:`~flowpy.plugin.Plugin.search` decorator to make your handler, you can use the :func:`~flowpy.search_handlers.SearchHandler.error` decorator to register an error handler. ::
+flogin is callback focused, so callbacks are used to handle errors in search handlers. If you are using the :func:`~flogin.plugin.Plugin.search` decorator to make your handler, you can use the :func:`~flogin.search_handlers.SearchHandler.error` decorator to register an error handler. ::
 
     @plugin.search()
     async def my_handler(query: Query):
@@ -133,7 +133,7 @@ flow.py is callback focused, so callbacks are used to handle errors in search ha
     async def my_error_handler(error: Exception):
         return f"An error occured! {error!r}"
 
-Alternatively, if you are subclassing your handler, you can override the :func:`~flowpy.search_handlers.SearchHandler.on_error` method to handle your error. ::
+Alternatively, if you are subclassing your handler, you can override the :func:`~flogin.search_handlers.SearchHandler.on_error` method to handle your error. ::
 
     class MyHandler(SearchHandler):
         async def callback(self, query: Query):

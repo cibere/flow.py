@@ -76,7 +76,7 @@ class QueryResponse(BaseResponse):
 
     Attributes
     --------
-    results: list[:class:`~flowpy.jsonrpc.results.Result`]
+    results: list[:class:`~flogin.jsonrpc.results.Result`]
         The results to be sent as the result of the query
     settings_changes: dict[:class:`str`, Any]
         Any changes to be made to the plugin's settings.

@@ -45,7 +45,7 @@ class Query[T]:
 
     @property
     def condition_data(self) -> T | None:
-        """Any | None: If used in a :class:`~flowpy.search_handler.SearchHandler`, this attribute will return any extra data that the condition gave."""
+        """Any | None: If used in a :class:`~flogin.search_handler.SearchHandler`, this attribute will return any extra data that the condition gave."""
         return self.__search_condition_data
 
     @condition_data.setter

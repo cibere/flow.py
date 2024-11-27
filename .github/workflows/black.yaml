@@ -33,4 +33,4 @@ jobs:
       - name: Run black
         if: ${{ always() && steps.install-deps.outcome == 'success' }}
         run: |
-          black --check flowpy examples
+          black --check flogin examples

@@ -3,7 +3,7 @@
 Frequently Asked Questions
 ===========================
 
-This is a list of Frequently Asked Questions regarding using ``flow.py`` and its extension modules. Feel free to suggest a
+This is a list of Frequently Asked Questions regarding using ``flogin`` and its extension modules. Feel free to suggest a
 new question or submit one via pull requests.
 
 Coroutines
@@ -74,13 +74,13 @@ General questions regarding library usage belong here.
 Where can I find usage examples?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Example code can be found in the `examples folder <https://github.com/cibere/flow.py/tree/master/examples>`_ in the repository.
+Example code can be found in the `examples folder <https://github.com/cibere/flogin/tree/master/examples>`_ in the repository.
 
 For live projects that you can use as references for "advanced" plugins, see the following plugins:
 
 - `FirefoxKeywordBookmarks <https://github.com/cibere/FirefoxKeywordBookmarks>`_
 
-- `WordnikDictionary <https://github.com/cibere/Flow.Launcher.Plugin.WordNikDictionary>`_ *(The development version uses flow.py)*
+- `WordnikDictionary <https://github.com/cibere/Flow.Launcher.Plugin.WordNikDictionary>`_ *(The development version uses flogin)*
 
 Where can I get help with using the library?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

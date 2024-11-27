@@ -3,7 +3,7 @@
 Event Reference
 ================
 
-You can register an event using the :func:`~flowpy.plugin.Plugin.event` decorator using your :class:`~flowpy.plugin.Plugin` instance. For example: ::
+You can register an event using the :func:`~flogin.plugin.Plugin.event` decorator using your :class:`~flogin.plugin.Plugin` instance. For example: ::
 
     @plugin.event
     async def on_initialization():
@@ -17,7 +17,7 @@ You can register an event using the :func:`~flowpy.plugin.Plugin.event` decorato
 
 Error Handling Events
 ---------------------
-These events are triggered by flow.py to handle errors
+These events are triggered by flogin to handle errors
 
 on_error
 ~~~~~~~~
@@ -33,4 +33,4 @@ on_error
     :param args: The positional arguments that were passed to the event
     :param kwargs: The keyword arguments that were passed to the event
     :returns: Any valid response object for the given event
-    :rtype: :class:`~flowpy.jsonrpc.responses.BaseResponse`
+    :rtype: :class:`~flogin.jsonrpc.responses.BaseResponse`

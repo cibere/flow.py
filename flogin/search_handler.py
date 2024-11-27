@@ -20,11 +20,11 @@ def _default_condition(q: Query) -> bool:
 class SearchHandler:
     r"""This represents a search handler.
 
-    When creating this on your own, the :func:`~flowpy.plugin.Plugin.register_search_handler` method can be used to register it.
+    When creating this on your own, the :func:`~flogin.plugin.Plugin.register_search_handler` method can be used to register it.
 
     See the :ref:`search handler section <search_handlers>` for more information about using search handlers.
 
-    There is a provided decorator to easily create search handlers: :func:`~flowpy.plugin.Plugin.search`
+    There is a provided decorator to easily create search handlers: :func:`~flogin.plugin.Plugin.search`
 
     Attributes
     ------------
@@ -48,16 +48,16 @@ class SearchHandler:
 
             Override this function to add the search handler behavior you want for the set condition.
 
-            This method can return/yield almost anything, and flow.py will convert it into a list of :class:`~flowpy.jsonrpc.results.Result` objects before sending it to flow.
+            This method can return/yield almost anything, and flogin will convert it into a list of :class:`~flogin.jsonrpc.results.Result` objects before sending it to flow.
 
             Returns
             -------
-            list[:class:`~flowpy.jsonrpc.results.Result`] | :class:`~flowpy.jsonrpc.results.Result` | str | Any
+            list[:class:`~flogin.jsonrpc.results.Result`] | :class:`~flogin.jsonrpc.results.Result` | str | Any
                 A list of results, an results, or something that can be converted into a list of results.
 
             Yields
             ------
-            :class:`~flowpy.jsonrpc.results.Result` | str | Any
+            :class:`~flogin.jsonrpc.results.Result` | str | Any
                 A result object or something that can be converted into a result object.
             """
             ...
@@ -68,10 +68,10 @@ class SearchHandler:
             Override this function to add an error response behavior to this handler's callback.
 
             If the error was handled:
-                You can return/yield almost anything, and flow.py will convert it into a list of :class:`~flowpy.jsonrpc.results.Result` objects before sending it to flow.
+                You can return/yield almost anything, and flogin will convert it into a list of :class:`~flogin.jsonrpc.results.Result` objects before sending it to flow.
 
             If the error was not handled:
-                Return a :class:`~flowpy.jsonrpc.responses.ErrorResponse` object
+                Return a :class:`~flogin.jsonrpc.responses.ErrorResponse` object
 
             Parameters
             ----------
@@ -80,12 +80,12 @@ class SearchHandler:
 
             Returns
             -------
-            :class:`~flowpy.jsonrpc.responses.ErrorResponse` | list[:class:`~flowpy.jsonrpc.results.Result`] | :class:`~flowpy.jsonrpc.results.Result` | str | Any
+            :class:`~flogin.jsonrpc.responses.ErrorResponse` | list[:class:`~flogin.jsonrpc.results.Result`] | :class:`~flogin.jsonrpc.results.Result` | str | Any
                 A list of results, an results, or something that can be converted into a list of results.
 
             Yields
             ------
-            :class:`~flowpy.jsonrpc.results.Result` | str | Any
+            :class:`~flogin.jsonrpc.results.Result` | str | Any
                 A result object or something that can be converted into a result object.
             """
             ...
@@ -97,16 +97,16 @@ class SearchHandler:
 
             Override this function to add the search handler behavior you want for the set condition.
 
-            This method can return/yield almost anything, and flow.py will convert it into a list of :class:`~flowpy.jsonrpc.results.Result` objects before sending it to flow.
+            This method can return/yield almost anything, and flogin will convert it into a list of :class:`~flogin.jsonrpc.results.Result` objects before sending it to flow.
 
             Returns
             -------
-            list[:class:`~flowpy.jsonrpc.results.Result`] | :class:`~flowpy.jsonrpc.results.Result` | str | Any
+            list[:class:`~flogin.jsonrpc.results.Result`] | :class:`~flogin.jsonrpc.results.Result` | str | Any
                 A list of results, an results, or something that can be converted into a list of results.
 
             Yields
             ------
-            :class:`~flowpy.jsonrpc.results.Result` | str | Any
+            :class:`~flogin.jsonrpc.results.Result` | str | Any
                 A result object or something that can be converted into a result object.
             """
             raise RuntimeError("Callback was not overriden")
@@ -117,10 +117,10 @@ class SearchHandler:
             Override this function to add an error response behavior to this handler's callback.
 
             If the error was handled:
-                You can return/yield almost anything, and flow.py will convert it into a list of :class:`~flowpy.jsonrpc.results.Result` objects before sending it to flow.
+                You can return/yield almost anything, and flogin will convert it into a list of :class:`~flogin.jsonrpc.results.Result` objects before sending it to flow.
 
             If the error was not handled:
-                Return a :class:`~flowpy.jsonrpc.responses.ErrorResponse` object
+                Return a :class:`~flogin.jsonrpc.responses.ErrorResponse` object
 
             Parameters
             ----------
@@ -129,12 +129,12 @@ class SearchHandler:
 
             Returns
             -------
-            :class:`~flowpy.jsonrpc.responses.ErrorResponse` | list[:class:`~flowpy.jsonrpc.results.Result`] | :class:`~flowpy.jsonrpc.results.Result` | str | Any
+            :class:`~flogin.jsonrpc.responses.ErrorResponse` | list[:class:`~flogin.jsonrpc.results.Result`] | :class:`~flogin.jsonrpc.results.Result` | str | Any
                 A list of results, an results, or something that can be converted into a list of results.
 
             Yields
             ------
-            :class:`~flowpy.jsonrpc.results.Result` | str | Any
+            :class:`~flogin.jsonrpc.results.Result` | str | Any
                 A result object or something that can be converted into a result object.
             """
             LOG.exception(
@@ -152,7 +152,7 @@ class SearchHandler:
     ](self, func: T) -> T:
         """A decorator that registers a error handler for this search handler.
 
-        For more information see :class:`~flowpy.search_handler.SearchHandler.on_error`
+        For more information see :class:`~flogin.search_handler.SearchHandler.on_error`
 
         Example
         ---------

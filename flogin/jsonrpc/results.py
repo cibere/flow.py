@@ -27,7 +27,7 @@ class Result(Base):
 
     Subclassing
     ------------
-    Subclassing lets you override the following methods: :func:`~flowpy.jsonrpc.results.Result.callback` and :func:`~flowpy.jsonrpc.results.Result.context_menu`. It also lets you create "universal" result properties (eg: same icon). Example:
+    Subclassing lets you override the following methods: :func:`~flogin.jsonrpc.results.Result.callback` and :func:`~flogin.jsonrpc.results.Result.context_menu`. It also lets you create "universal" result properties (eg: same icon). Example:
 
     .. code-block:: python3
 
@@ -101,7 +101,7 @@ class Result(Base):
 
         Returns
         -------
-        :class:`~flowpy.jsonrpc.responses.ExecuteResponse`
+        :class:`~flogin.jsonrpc.responses.ExecuteResponse`
             A response to flow determining whether or not to hide flow's menu
         """
 
@@ -114,16 +114,16 @@ class Result(Base):
 
             Override this function to add a context menu behavior to your result. This method will run when the user gets the context menu to your result.
 
-            This method can return/yield almost anything, and flow.py will convert it into a list of :class:`~flowpy.jsonrpc.results.Result` objects before sending it to flow.
+            This method can return/yield almost anything, and flogin will convert it into a list of :class:`~flogin.jsonrpc.results.Result` objects before sending it to flow.
 
             Returns
             -------
-            list[:class:`~flowpy.jsonrpc.results.Result`] | :class:`~flowpy.jsonrpc.results.Result` | str | Any
+            list[:class:`~flogin.jsonrpc.results.Result`] | :class:`~flogin.jsonrpc.results.Result` | str | Any
                 A list of results, an results, or something that can be converted into a list of results.
 
             Yields
             ------
-            :class:`~flowpy.jsonrpc.results.Result` | str | Any
+            :class:`~flogin.jsonrpc.results.Result` | str | Any
                 A result object or something that can be converted into a result object.
             """
             ...
@@ -136,10 +136,10 @@ class Result(Base):
             Override this function to add an error response behavior to this result's context menu callback.
 
             If the error was handled:
-                You can return/yield almost anything, and flow.py will convert it into a list of :class:`~flowpy.jsonrpc.results.Result` objects before sending it to flow.
+                You can return/yield almost anything, and flogin will convert it into a list of :class:`~flogin.jsonrpc.results.Result` objects before sending it to flow.
 
             If the error was not handled:
-                Return a :class:`~flowpy.jsonrpc.responses.ErrorResponse` object
+                Return a :class:`~flogin.jsonrpc.responses.ErrorResponse` object
 
             Parameters
             ----------
@@ -148,12 +148,12 @@ class Result(Base):
 
             Returns
             -------
-            :class:`~flowpy.jsonrpc.responses.ErrorResponse` | list[:class:`~flowpy.jsonrpc.results.Result`] | :class:`~flowpy.jsonrpc.results.Result` | str | Any
+            :class:`~flogin.jsonrpc.responses.ErrorResponse` | list[:class:`~flogin.jsonrpc.results.Result`] | :class:`~flogin.jsonrpc.results.Result` | str | Any
                 A list of results, an results, or something that can be converted into a list of results.
 
             Yields
             ------
-            :class:`~flowpy.jsonrpc.results.Result` | str | Any
+            :class:`~flogin.jsonrpc.results.Result` | str | Any
                 A result object or something that can be converted into a result object.
             """
             ...
@@ -165,16 +165,16 @@ class Result(Base):
 
             Override this function to add a context menu behavior to your result. This method will run when the user gets the context menu to your result.
 
-            This method can return/yield almost anything, and flow.py will convert it into a list of :class:`~flowpy.jsonrpc.results.Result` objects before sending it to flow.
+            This method can return/yield almost anything, and flogin will convert it into a list of :class:`~flogin.jsonrpc.results.Result` objects before sending it to flow.
 
             Returns
             -------
-            list[:class:`~flowpy.jsonrpc.results.Result`] | :class:`~flowpy.jsonrpc.results.Result` | str | Any
+            list[:class:`~flogin.jsonrpc.results.Result`] | :class:`~flogin.jsonrpc.results.Result` | str | Any
                 A list of results, an results, or something that can be converted into a list of results.
 
             Yields
             ------
-            :class:`~flowpy.jsonrpc.results.Result` | str | Any
+            :class:`~flogin.jsonrpc.results.Result` | str | Any
                 A result object or something that can be converted into a result object.
             """
             return []
@@ -185,10 +185,10 @@ class Result(Base):
             Override this function to add an error response behavior to this result's context menu callback.
 
             If the error was handled:
-                You can return/yield almost anything, and flow.py will convert it into a list of :class:`~flowpy.jsonrpc.results.Result` objects before sending it to flow.
+                You can return/yield almost anything, and flogin will convert it into a list of :class:`~flogin.jsonrpc.results.Result` objects before sending it to flow.
 
             If the error was not handled:
-                Return a :class:`~flowpy.jsonrpc.responses.ErrorResponse` object
+                Return a :class:`~flogin.jsonrpc.responses.ErrorResponse` object
 
             Parameters
             ----------
@@ -197,12 +197,12 @@ class Result(Base):
 
             Returns
             -------
-            :class:`~flowpy.jsonrpc.responses.ErrorResponse` | list[:class:`~flowpy.jsonrpc.results.Result`] | :class:`~flowpy.jsonrpc.results.Result` | str | Any
+            :class:`~flogin.jsonrpc.responses.ErrorResponse` | list[:class:`~flogin.jsonrpc.results.Result`] | :class:`~flogin.jsonrpc.results.Result` | str | Any
                 A list of results, an results, or something that can be converted into a list of results.
 
             Yields
             ------
-            :class:`~flowpy.jsonrpc.results.Result` | str | Any
+            :class:`~flogin.jsonrpc.results.Result` | str | Any
                 A result object or something that can be converted into a result object.
             """
             LOG.exception(
@@ -235,7 +235,7 @@ class Result(Base):
         if self.copy_text is not None:
             x["copyText"] = self.copy_text
         if self.callback is not None:
-            x["jsonRPCAction"] = {"method": f"flow.py.action.{self.slug}"}
+            x["jsonRPCAction"] = {"method": f"flogin.action.{self.slug}"}
         if self.context_menu is not None:
             x["ContextData"] = [self.slug]
         if self.score is not None:
@@ -247,7 +247,7 @@ class Result(Base):
         r"""Creates a Result from a dictionary
 
         .. NOTE::
-            This method does NOT fill the :func:`~flowpy.jsonrpc.results.Result.callback` or :func:`~flowpy.jsonrpc.results.Result.context_menu` attributes.
+            This method does NOT fill the :func:`~flogin.jsonrpc.results.Result.callback` or :func:`~flogin.jsonrpc.results.Result.context_menu` attributes.
 
         Parameters
         ----------

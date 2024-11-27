@@ -50,9 +50,9 @@ class Plugin:
 
     Attributes
     --------
-    settings: :class:`~flowpy.settings.Settings`
+    settings: :class:`~flogin.settings.Settings`
         The plugin's settings set by the user
-    api: :class:`~flowpy.flow_api.client.FlowLauncherAPI`
+    api: :class:`~flogin.flow_api.client.FlowLauncherAPI`
         An easy way to acess Flow Launcher's API
     """
 
@@ -98,7 +98,7 @@ class Plugin:
         wrapped = self._run_event(
             coro, event_name, args or [], kwargs or {}, error_handler
         )
-        return asyncio.create_task(wrapped, name=f"flow.py: {event_name}")
+        return asyncio.create_task(wrapped, name=f"flogin: {event_name}")
 
     def dispatch(
         self, event: str, *args: Any, **kwargs: Any
@@ -202,7 +202,7 @@ class Plugin:
 
         Parameters
         ----------
-        query: :class:`~flowpy.query.Query`
+        query: :class:`~flogin.query.Query`
             The query object to be give to the search handlers
         """
 
@@ -231,7 +231,7 @@ class Plugin:
 
         Raises
         --------
-        :class:`~flowpy.errors.PluginNotInitialized`
+        :class:`~flogin.errors.PluginNotInitialized`
             This gets raised if the plugin hasn't been initialized yet
         """
         if self._metadata:
@@ -248,7 +248,7 @@ class Plugin:
         await self.jsonrpc.start_listening(reader, writer)
 
     def run(self, *, setup_default_log_handler: bool = True) -> None:
-        r"""The default runner. This runs the :func:`~flowpy.plugin.Plugin.start` coroutine, and setups up logging.
+        r"""The default runner. This runs the :func:`~flogin.plugin.Plugin.start` coroutine, and setups up logging.
 
         Parameters
         --------
@@ -268,7 +268,7 @@ class Plugin:
 
         Parameters
         -----------
-        handler: :class:`~flowpy.search_handler.SearchHandler`
+        handler: :class:`~flogin.search_handler.SearchHandler`
             The search handler to be registered
         """
 
@@ -334,9 +334,9 @@ class Plugin:
         condition: Optional[:ref:`condition <condition_example>`]
             The condition to determine which queries this handler should run on. If given, this should be the only argument given.
         text: Optional[:class:`str`]
-            A kwarg to quickly add a :class:`~flowpy.conditions.PlainTextCondition`. If given, this should be the only argument given.
+            A kwarg to quickly add a :class:`~flogin.conditions.PlainTextCondition`. If given, this should be the only argument given.
         pattern: Optional[:class:`re.Pattern`]
-            A kwarg to quickly add a :class:`~flowpy.conditions.RegexCondition`. If given, this should be the only argument given.
+            A kwarg to quickly add a :class:`~flogin.conditions.RegexCondition`. If given, this should be the only argument given.
 
         Example
         ---------
