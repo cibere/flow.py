@@ -33,4 +33,3 @@ If you're having trouble with something, these resources might help.
    events
    faq
    search_handlers
-   whats_new
