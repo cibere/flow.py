@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING, Any, Awaitable, Callable
-from .settings import Settings
+
 from .jsonrpc import ErrorResponse
 from .query import Query
+from .settings import Settings
 
 if TYPE_CHECKING:
     from .plugin import Plugin

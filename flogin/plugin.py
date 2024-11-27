@@ -33,7 +33,7 @@ from .jsonrpc.responses import BaseResponse
 from .query import Query
 from .search_handler import SearchHandler
 from .settings import Settings
-from .utils import MISSING, coro_or_gen, setup_logging, cached_property
+from .utils import MISSING, cached_property, coro_or_gen, setup_logging
 
 if TYPE_CHECKING:
     from ._types import SearchHandlerCallback, SearchHandlerCondition

@@ -2,7 +2,18 @@ from __future__ import annotations
 
 import logging
 import random
-from typing import TYPE_CHECKING, Any, Callable, Coroutine, Iterable, Self, TypeVarTuple, TypedDict, NotRequired, Unpack
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    Coroutine,
+    Iterable,
+    NotRequired,
+    Self,
+    TypedDict,
+    TypeVarTuple,
+    Unpack,
+)
 
 from ..utils import cached_property
 from .base_object import Base
@@ -17,6 +28,7 @@ LOG = logging.getLogger(__name__)
 
 __all__ = ("Result",)
 
+
 class ResultConstructorArgs(TypedDict):
     title: str
     sub: NotRequired[str | None]
@@ -26,6 +38,7 @@ class ResultConstructorArgs(TypedDict):
     sub_tooltip: NotRequired[str | None]
     copy_text: NotRequired[str | None]
     score: NotRequired[int | None]
+
 
 class Result(Base):
     r"""This represents a result that would be returned as a result for a query or context menu.
@@ -296,13 +309,13 @@ class Result(Base):
     def create_with_partial(
         cls: type[Result],
         partial_callback: Callable[[], Coroutine[Any, Any, Any]],
-        **kwargs: Unpack[ResultConstructorArgs]
+        **kwargs: Unpack[ResultConstructorArgs],
     ) -> Result:
         r"""A quick and easy way to create a result with a callback without subclassing.
-        
+
         .. NOTE::
             This is meant to be used with :class:`~flogin.flow_api.client.FlowLauncherAPI` methods
-        
+
         Example
         --------
         .. code-block:: python3
@@ -316,7 +329,7 @@ class Result(Base):
                 title="Result title",
                 sub="Result subtitle"
             )
-        
+
         Parameters
         ----------
         partial_callback: partial :ref:`coroutine <coroutine>`
