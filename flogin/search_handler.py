@@ -1,15 +1,17 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any, Callable, Coroutine
+from typing import TYPE_CHECKING, Any, Callable, TypeVar
 
 from .jsonrpc import ErrorResponse
 
 if TYPE_CHECKING:
     from ._types import SearchHandlerCallbackReturns, SearchHandlerCondition
     from .query import Query
+    ErrorHandlerT = TypeVar("ErrorHandlerT", bound=Callable[[Query, Exception], SearchHandlerCallbackReturns])
 
 LOG = logging.getLogger(__name__)
+
 __all__ = ("SearchHandler",)
 
 
@@ -153,9 +155,7 @@ class SearchHandler:
         """:class:`str`: The name of the search handler's callback"""
         return self.callback.__name__
 
-    def error[
-        T: Callable[[Query, Exception], SearchHandlerCallbackReturns]
-    ](self, func: T) -> T:
+    def error(self, func: ErrorHandlerT) -> ErrorHandlerT:
         """A decorator that registers a error handler for this search handler.
 
         For more information see :class:`~flogin.search_handler.SearchHandler.on_error`

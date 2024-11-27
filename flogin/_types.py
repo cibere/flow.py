@@ -4,7 +4,10 @@ from typing import TYPE_CHECKING, Any, AsyncIterable, Callable, Coroutine
 
 if TYPE_CHECKING:
     from .query import Query
+else:
+    Query = Any
 
-type SearchHandlerCallbackReturns[T] = Coroutine[Any, Any, T] | AsyncIterable[T]
-type SearchHandlerCallback = Callable[[Query], SearchHandlerCallbackReturns]
-type SearchHandlerCondition = Callable[[Query], bool]
+SearchHandlerCallbackReturns = Coroutine[Any, Any, Any] | AsyncIterable[Any]
+SearchHandlerCallback = Callable[[Query], SearchHandlerCallbackReturns]
+SearchHandlerCondition = Callable[[Query], bool]
+RawSettings = dict[str, Any]

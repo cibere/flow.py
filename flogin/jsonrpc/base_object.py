@@ -27,7 +27,7 @@ class Base:
         args = []
         for item in self.__slots__:
             args.append(f"{item}={getattr(self, item)!r}")
-        return f"<{self.__class__.__name__} {" ".join(args)}>"
+        return f"<{self.__class__.__name__} {' '.join(args)}>"
 
 
 class ToMessageBase(Base):

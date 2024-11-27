@@ -1,11 +1,13 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, TypeVar, Generic
+
+T = TypeVar("T")
 
 __all__ = ("Query",)
 
 
-class Query[T]:
+class Query(Generic[T]):
     r"""This class represents the query data sent from flow launcher
 
     .. container:: operations

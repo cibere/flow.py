@@ -3,7 +3,10 @@ import logging
 import logging.handlers
 from functools import _make_key as make_cached_key
 from inspect import isasyncgen, iscoroutine
-from typing import TYPE_CHECKING, Any, AsyncIterable, Awaitable, Callable, Coroutine
+from typing import TYPE_CHECKING, Any, AsyncIterable, Awaitable, Callable, Coroutine, TypeVar
+
+Coro = TypeVar("Coro", bound=Callable[..., Coroutine[Any, Any, Any]])
+T = TypeVar("T")
 
 LOG = logging.getLogger(__name__)
 
@@ -47,7 +50,7 @@ class _MissingSentinel:
 MISSING: Any = _MissingSentinel()
 
 
-def cached_coro[T: Callable[..., Coroutine[Any, Any, Any]]](coro: T) -> T:
+def cached_coro(coro: Coro) -> Coro:
     r"""A decorator to cache a coro's contents based on the passed arguments. This is provided to cache search results.
 
     .. NOTE::
@@ -104,7 +107,7 @@ def setup_logging(*, formatter: logging.Formatter | None = None) -> None:
     logger.addHandler(handler)
 
 
-async def coro_or_gen[T](coro: Awaitable[T] | AsyncIterable[T]) -> list[T] | T:
+async def coro_or_gen(coro: Awaitable[T] | AsyncIterable[T]) -> list[T] | T:
     """|coro|
 
     Executes an AsyncIterable or a Coroutine, and returns the result

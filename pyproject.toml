@@ -6,13 +6,14 @@ build-backend = "setuptools.build_meta"
 name = "flogin"
 description = "A Python wrapper for Flow Launcher's v2 python api"
 readme = { file = "README.rst", content-type = "text/x-rst" }
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 authors = [{ name = "cibere" }]
 classifiers = [
     "License :: OSI Approved :: MIT License",
     "Intended Audience :: Developers",
     "Natural Language :: English",
     "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Topic :: Software Development :: Libraries",
     "Topic :: Software Development :: Libraries :: Python Modules",

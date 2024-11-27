@@ -1,12 +1,13 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, TYPE_CHECKING
 
 from .errors import SettingNotFound
 
-__all__ = ("Settings",)
+if TYPE_CHECKING:
+    from ._types import RawSettings
 
-type RawSettings = dict[str, Any]
+__all__ = ("Settings",)
 
 
 class Settings:

@@ -14,10 +14,8 @@ from typing import (
     Iterable,
     TypeVarTuple,
     overload,
+    TypeVar
 )
-
-import aioconsole
-
 from .conditions import PlainTextCondition, RegexCondition
 from .default_events import get_default_events
 from .errors import InvalidContextDataReceived, PluginNotInitialized
@@ -38,7 +36,7 @@ from .utils import MISSING, cached_property, coro_or_gen, setup_logging
 if TYPE_CHECKING:
     from ._types import SearchHandlerCallback, SearchHandlerCondition
 TS = TypeVarTuple("TS")
-
+EventCallbackT = TypeVar("EventCallbackT", bound=Callable[..., Any])
 LOG = logging.getLogger(__name__)
 
 __all__ = ("Plugin",)
@@ -221,6 +219,8 @@ class Plugin:
         The default startup/setup method. This can be overriden for advanced startup behavior, but make sure to run ``await super().start()`` to actually start your plugin.
         """
 
+        import aioconsole
+
         reader, writer = await aioconsole.get_standard_streams()
         await self.jsonrpc.start_listening(reader, writer)
 
@@ -252,7 +252,7 @@ class Plugin:
         self._search_handlers.append(handler)
         LOG.info(f"Registered search handler: {handler}")
 
-    def event[T: Callable[..., Any]](self, callback: T) -> T:
+    def event(self, callback: EventCallbackT) -> EventCallbackT:
         """A decorator that registers an event to listen for.
 
         All events must be a :ref:`coroutine <coroutine>`.
