@@ -17,7 +17,7 @@ Key Features
 Installing
 ----------
 
-**Python 3.12 or higher is required**
+**Python 3.11 or higher is required**
 
 To install flogin, do the following:
 

@@ -10,14 +10,17 @@ This is an introduction to the flogin library, which aims to make it easy for py
 Prerequisites
 ---------------
 
-flogin requires python 3.12 or higher.
+flogin requires python 3.11 or higher.
 
 .. _installing:
 
 Installing
 ----------
 
-**Python 3.12 or higher is required**
+**Python 3.11 or higher is required**
+
+.. NOTE::
+    It is best to test your plugin on python 3.11, as that is the default embedded version of python installed with flow launcher.
 
 .. note::
 
