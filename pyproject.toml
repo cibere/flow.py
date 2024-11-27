@@ -22,6 +22,7 @@ classifiers = [
 dynamic = ["version", "dependencies"]
 
 [project.urls]
+Documentation = "https://flogin.readthedocs.io/en/latest/"
 "Issue tracker" = "https://github.com/cibere/flogin/issues"
 
 [project.optional-dependencies]

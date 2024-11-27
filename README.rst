@@ -1,6 +1,8 @@
 flogin
-=================================================
+=======
 A wrapper for Flow Lancher's V2 jsonrpc api using python, to easily and quickly make **Flo**\ w launcher plu\ **gin**\ s.
+
+Flogin's `documentation can be viewed online <https://flogin.readthedocs.io/en/latest/>`_
 
 .. WARNING::
     This library is still in alpha development, so expect breaking changes
