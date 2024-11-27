@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import random
-from typing import TYPE_CHECKING, Any, Iterable, Self, TypeVarTuple
+from typing import TYPE_CHECKING, Any, Callable, Coroutine, Iterable, Self, TypeVarTuple, TypedDict, NotRequired, Unpack
 
 from ..utils import cached_property
 from .base_object import Base
@@ -17,6 +17,15 @@ LOG = logging.getLogger(__name__)
 
 __all__ = ("Result",)
 
+class ResultConstructorArgs(TypedDict):
+    title: str
+    sub: NotRequired[str | None]
+    icon: NotRequired[str | None]
+    title_highlight_data: NotRequired[Iterable[int] | None]
+    title_tooltip: NotRequired[str | None]
+    sub_tooltip: NotRequired[str | None]
+    copy_text: NotRequired[str | None]
+    score: NotRequired[int | None]
 
 class Result(Base):
     r"""This represents a result that would be returned as a result for a query or context menu.
@@ -282,6 +291,43 @@ class Result(Base):
             return item
         else:
             return cls(str(item))
+
+    @classmethod
+    def create_with_partial(
+        cls: type[Result],
+        partial_callback: Callable[[], Coroutine[Any, Any, Any]],
+        **kwargs: Unpack[ResultConstructorArgs]
+    ) -> Result:
+        r"""A quick and easy way to create a result with a callback without subclassing.
+        
+        .. NOTE::
+            This is meant to be used with :class:`~flogin.flow_api.client.FlowLauncherAPI` methods
+        
+        Example
+        --------
+        .. code-block:: python3
+
+            result = Result.create_with_partial(
+                functools.partial(
+                    plugin.api.show_notification,
+                    "notification title",
+                    "notification content"
+                ),
+                title="Result title",
+                sub="Result subtitle"
+            )
+        
+        Parameters
+        ----------
+        partial_callback: partial :ref:`coroutine <coroutine>`
+            The callback wrapped in :obj:`functools.partial`
+        kwargs: See allowed kwargs here: :class:`~flogin.jsonrpc.results.Result`
+            The args that will be passed to the :class:`~flogin.jsonrpc.results.Result` constructor
+        """
+
+        self = cls(**kwargs)
+        self.callback = partial_callback
+        return self
 
     @cached_property
     def slug(self) -> str:
