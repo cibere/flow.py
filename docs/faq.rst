@@ -74,8 +74,13 @@ General questions regarding library usage belong here.
 Where can I find usage examples?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Example code can be found in the `examples folder <https://github.com/cibere/flow.py/tree/master/examples>`_
-in the repository.
+Example code can be found in the `examples folder <https://github.com/cibere/flow.py/tree/master/examples>`_ in the repository.
+
+For live projects that you can use as references for "advanced" plugins, see the following plugins:
+
+- `FirefoxKeywordBookmarks <https://github.com/cibere/FirefoxKeywordBookmarks>`_
+
+- `WordnikDictionary <https://github.com/cibere/Flow.Launcher.Plugin.WordNikDictionary>`_ *(The development version uses flow.py)*
 
 Where can I get help with using the library?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
