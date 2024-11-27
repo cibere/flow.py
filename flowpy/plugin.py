@@ -20,13 +20,15 @@ import aioconsole
 
 from .conditions import PlainTextCondition, RegexCondition
 from .default_events import get_default_events
-from .errors import (
-    ContextMenuHandlerNotFound,
-    InvalidContextDataReceived,
-    PluginNotInitialized,
-)
+from .errors import InvalidContextDataReceived, PluginNotInitialized
 from .flow_api.client import FlowLauncherAPI, PluginMetadata
-from .jsonrpc import ExecuteResponse, JsonRPCClient, QueryResponse, Result
+from .jsonrpc import (
+    ErrorResponse,
+    ExecuteResponse,
+    JsonRPCClient,
+    QueryResponse,
+    Result,
+)
 from .jsonrpc.responses import BaseResponse
 from .query import Query
 from .search_handler import SearchHandler
@@ -71,16 +73,19 @@ class Plugin:
         event_name: str,
         args: Iterable[Any],
         kwargs: dict[str, Any],
-        error_handler_event_name: str = MISSING,
+        error_handler: Callable[[Exception], Coroutine[Any, Any, Any]] | str = MISSING,
     ) -> Any:
         try:
             return await coro(*args, **kwargs)
         except asyncio.CancelledError:
             pass
         except Exception as e:
-            return await self._events[error_handler_event_name or "on_error"](
-                event_name, e, *args, **kwargs
-            )
+            if error_handler is MISSING:
+                error_handler = "on_error"
+            if isinstance(error_handler, str):
+                return await self._events[error_handler](event_name, e, *args, **kwargs)
+            else:
+                return await error_handler(e)
 
     def _schedule_event(
         self,
@@ -88,10 +93,10 @@ class Plugin:
         event_name: str,
         args: Iterable[Any] = MISSING,
         kwargs: dict[str, Any] = MISSING,
-        error_handler_event_name: str = MISSING,
+        error_handler: Callable[[Exception], Coroutine[Any, Any, Any]] | str = MISSING,
     ) -> asyncio.Task:
         wrapped = self._run_event(
-            coro, event_name, args or [], kwargs or {}, error_handler_event_name
+            coro, event_name, args or [], kwargs or {}, error_handler
         )
         return asyncio.create_task(wrapped, name=f"flow.py: {event_name}")
 
@@ -115,9 +120,11 @@ class Plugin:
 
     async def _coro_or_gen_to_results(
         self, coro: Awaitable | AsyncIterable
-    ) -> list[Result]:
+    ) -> list[Result] | ErrorResponse:
         results = []
         raw_results = await coro_or_gen(coro)
+        if isinstance(raw_results, ErrorResponse):
+            return raw_results
         if isinstance(raw_results, dict):
             res = Result.from_dict(raw_results)
             self._results[res.slug] = res
@@ -148,7 +155,9 @@ class Plugin:
         self.dispatch("initialization")
         return ExecuteResponse(hide=False)
 
-    async def process_context_menus(self, data: list[Any]) -> QueryResponse:
+    async def process_context_menus(
+        self, data: list[Any]
+    ) -> QueryResponse | ErrorResponse:
         r"""|coro|
 
         Runs and processes context menus.
@@ -171,15 +180,21 @@ class Plugin:
                 self._coro_or_gen_to_results,
                 event_name=f"ContextMenu-{result.slug}",
                 args=[result.context_menu()],
-                error_handler_event_name="on_context_menu_error",
+                error_handler=lambda e: self._coro_or_gen_to_results(
+                    result.on_context_menu_error(e)
+                ),
             )
             results = await task
         else:
             results = []
 
+        if isinstance(results, ErrorResponse):
+            return results
         return QueryResponse(results, self.settings._changes)
 
-    async def process_search_handlers(self, query: Query) -> QueryResponse:
+    async def process_search_handlers(
+        self, query: Query
+    ) -> QueryResponse | ErrorResponse:
         r"""|coro|
 
         Runs and processes the registered search handlers.
@@ -198,11 +213,15 @@ class Plugin:
                     self._coro_or_gen_to_results,
                     event_name=f"SearchHandler-{handler.name}",
                     args=[handler.callback(query)],
-                    error_handler_event_name="on_search_error",
+                    error_handler=lambda e: self._coro_or_gen_to_results(
+                        handler.on_error(e)
+                    ),
                 )
                 results = await task
                 break
 
+        if isinstance(results, ErrorResponse):
+            return results
         return QueryResponse(results, self.settings._changes)
 
     @property

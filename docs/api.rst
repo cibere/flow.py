@@ -62,6 +62,8 @@ Classes
 .. autoclass:: flowpy.flow_api.plugin_metadata.PluginMetadata
     :members:
 
+.. _search_handlers_api_reference:
+
 Search Handlers
 ---------------
 

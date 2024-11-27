@@ -1,7 +1,7 @@
 .. _events:
 
 Event Reference
-===========
+================
 
 You can register an event using the :func:`~flowpy.plugin.Plugin.event` decorator using your :class:`~flowpy.plugin.Plugin` instance. For example: ::
 
@@ -14,54 +14,6 @@ You can register an event using the :func:`~flowpy.plugin.Plugin.event` decorato
     All the events must be a |coroutine_link|_. If they aren't, then you might get unexpected
     errors. In order to turn a function into a coroutine they must be ``async def``
     functions.
-
-API Events
-----------
-These events are triggered by flow
-
-.. _on_initialization:
-
-on_initialization
-~~~~~~~~~~~~~~~~~
-
-.. function:: async def on_initialization()
-
-    Called when the plugin gets initialized.
-
-.. _on_query:
-
-on_query
-~~~~~~~~
-
-.. function:: async def on_query(raw_query, raw_settings)
-
-    Called when flow says a query request.
-
-    .. WARNING::
-        Overriding this event will stop plugin's :attr:`~flowpy.plugin.Plugin.settings` attribute from updating, and stop flow from receiving setting updates from the attribute.
-    
-    .. WARNING::
-        Overriding this event will stop all search handlers from running. If you must override this event and have search handlers running, use the :func:`~flowpy.plugin.Plugin.process_search_handlers` method to run the search handlers.
-
-    :param raw_query: The raw query data.
-    :type raw_query: dict[:class:`str`, Any]
-    :param raw_settings: The raw settings data.
-    :type raw_settings: dict[:class:`str`, Any]
-    :rtype: :class:`~flowpy.jsonrpc.responses.QueryResponse`
-
-.. _on_context_menu:
-
-on_context_menu
-~~~~~~~~~~~~~~~
-
-.. function:: async def on_context_menu(data)
-
-    Called when flow sends a context menu request
-
-    :param data: Raw context menu data from flow
-    :type data: list[Any]
-    :rtype: list[:class:`~flowpy.jsonrpc.results.Result`]
-    :yields: :class:`~flowpy.jsonrpc.results.Result`
 
 Error Handling Events
 ---------------------
@@ -78,37 +30,7 @@ on_error
     :type event: :class:`str`
     :param error: The error that occured
     :type error: :class:`Exception`
-    :param *args: The positional arguments that were passed to the event
-    :param **kwargs: The keyword arguments that were passed to the event
+    :param args: The positional arguments that were passed to the event
+    :param kwargs: The keyword arguments that were passed to the event
     :returns: Any valid response object for the given event
     :rtype: :class:`~flowpy.jsonrpc.responses.BaseResponse`
-
-on_action_error
-~~~~~~~~~~~~~~~
-
-.. function:: async def on_action_error(action_name, error)
-
-    This is called when an error occurs within an action
-
-    :param action_name: The action's name (see :attr:`~flowpy.jsonrpc.option.Action.name` for more info)
-    :type action_name: :class:`str`
-    :param error: The error that occured
-    :type error: :class:`Exception`
-    :returns: The response to be returned to flow. Use :class:`~flowpy.jsonrpc.responses.ExecuteResponse` if the error was successfully handled, use :class:`~flowpy.jsonrpc.responses.ErrorResponse` if the error was not successfully handled.
-    :rtype: :class:`~flowpy.jsonrpc.responses.ExecuteResponse` | :class:`~flowpy.jsonrpc.responses.ErrorResponse`
-
-on_search_error
-~~~~~~~~~~~~~~~
-
-.. function:: async def on_search_error(handler_name, error, query)
-
-    This is called when an error occurs in a search handler.
-
-    :param handler_name: The search handler's name (see :attr:`~flowpy.search_handler.SearchHandler.name` for more info)
-    :type handler_name: :class:`str`
-    :param error: The error that occured
-    :type error: :class:`Exception`
-    :param query: The query given to the search handler
-    :type query: :class:`~flowpy.query.Query`
-    :returns: The response to be returned to flow. Use :class:`~flowpy.jsonrpc.responses.QueryResponse` if the error was successfully handled, use :class:`~flowpy.jsonrpc.responses.ErrorResponse` if the error was not successfully handled.
-    :rtype: :class:`~flowpy.jsonrpc.responses.QueryResponse` | :class:`~flowpy.jsonrpc.responses.ErrorResponse`

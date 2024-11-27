@@ -4,7 +4,7 @@ import asyncio
 import json
 import logging
 from asyncio.streams import StreamReader, StreamWriter
-from typing import TYPE_CHECKING, Any, Callable, Coroutine
+from typing import TYPE_CHECKING, Any
 
 from .errors import JsonRPCException
 from .requests import Request
@@ -93,6 +93,7 @@ class JsonRPCClient:
         method: str = request["method"]
         params: list[Any] = request["params"]
         callback = None
+        error_handler = "on_error"
 
         self.request_id = request["id"]
 
@@ -101,6 +102,7 @@ class JsonRPCClient:
             result = self.plugin._results.get(slug)
             if result:
                 callback = result.callback
+                error_handler = result.on_error
 
         if callback is None:
             task = self.plugin.dispatch(method, *params)
@@ -110,7 +112,7 @@ class JsonRPCClient:
             task = self.plugin._schedule_event(
                 callback,
                 method,
-                error_handler_event_name="on_action_error",
+                error_handler=error_handler,
             )
         self.tasks[request["id"]] = task
         result = await task

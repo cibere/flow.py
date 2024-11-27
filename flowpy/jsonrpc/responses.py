@@ -7,7 +7,6 @@ from ..utils import MISSING
 from .base_object import ToMessageBase
 
 if TYPE_CHECKING:
-    from .client import JsonRPCClient
     from .results import Result
 
 __all__ = (
@@ -73,10 +72,7 @@ class ErrorResponse(BaseResponse):
 
 
 class QueryResponse(BaseResponse):
-    r"""This response represents the response from the :ref:`on_query <on_query>` and :ref:`on_context_menu <on_context_menu>` events.
-
-    .. NOTE::
-        Search handlers are the suggested way of handling query/search requests. See the :ref:`search handler section <search_handlers>` for more information about using search handlers.
+    r"""This response represents the response from search handler's callbacks and context menus. See the :ref:`search handler section <search_handlers>` for more information about using search handlers.
 
     Attributes
     --------

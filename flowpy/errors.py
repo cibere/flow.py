@@ -43,13 +43,3 @@ class InvalidContextDataReceived(ContextMenuHandlerException):
 
     def __init__(self):
         return super().__init__(f"Invalid context menu data received")
-
-
-class ContextMenuHandlerNotFound(ContextMenuHandlerException):
-    r"""This is raised when a context menu handler is not found.
-
-    The soul purpose for this error to exist is incase you want to impliment a default context menu handler.
-    """
-
-    def __init__(self):
-        return super().__init__("Context Menu Handler Not Found")

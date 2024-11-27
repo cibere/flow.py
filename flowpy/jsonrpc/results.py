@@ -1,16 +1,19 @@
 from __future__ import annotations
 
+import logging
 import random
 from typing import TYPE_CHECKING, Any, Iterable, Self, TypeVarTuple
 
 from ..utils import cached_property
 from .base_object import Base
+from .responses import ErrorResponse
 
 if TYPE_CHECKING:
     from .._types import SearchHandlerCallbackReturns
     from .responses import ExecuteResponse
 
 TS = TypeVarTuple("TS")
+LOG = logging.getLogger(__name__)
 
 __all__ = ("Result",)
 
@@ -76,6 +79,21 @@ class Result(Base):
         self.copy_text = copy_text
         self.score = score
 
+    async def on_error(self, error: Exception) -> ErrorResponse | ExecuteResponse:
+        r"""|coro|
+
+        Override this function to add an error response behavior to this result's callback.
+
+        Parameters
+        ----------
+        error: :class:`Exception`
+            The error that occured
+        """
+        LOG.exception(
+            f"Ignoring exception in reuslt callback ({self!r})", exc_info=error
+        )
+        return ErrorResponse.internal_error(error)
+
     async def callback(self) -> ExecuteResponse:
         r"""|coro|
 
@@ -110,6 +128,36 @@ class Result(Base):
             """
             ...
 
+        def on_context_menu_error(
+            self, error: Exception
+        ) -> SearchHandlerCallbackReturns:
+            r"""|coro|
+
+            Override this function to add an error response behavior to this result's context menu callback.
+
+            If the error was handled:
+                You can return/yield almost anything, and flow.py will convert it into a list of :class:`~flowpy.jsonrpc.results.Result` objects before sending it to flow.
+
+            If the error was not handled:
+                Return a :class:`~flowpy.jsonrpc.responses.ErrorResponse` object
+
+            Parameters
+            ----------
+            error: :class:`Exception`
+                The error that occured
+
+            Returns
+            -------
+            :class:`~flowpy.jsonrpc.responses.ErrorResponse` | list[:class:`~flowpy.jsonrpc.results.Result`] | :class:`~flowpy.jsonrpc.results.Result` | str | Any
+                A list of results, an results, or something that can be converted into a list of results.
+
+            Yields
+            ------
+            :class:`~flowpy.jsonrpc.results.Result` | str | Any
+                A result object or something that can be converted into a result object.
+            """
+            ...
+
     else:
 
         async def context_menu(self):
@@ -130,6 +178,38 @@ class Result(Base):
                 A result object or something that can be converted into a result object.
             """
             return []
+
+        async def on_context_menu_error(self, error: Exception):
+            r"""|coro|
+
+            Override this function to add an error response behavior to this result's context menu callback.
+
+            If the error was handled:
+                You can return/yield almost anything, and flow.py will convert it into a list of :class:`~flowpy.jsonrpc.results.Result` objects before sending it to flow.
+
+            If the error was not handled:
+                Return a :class:`~flowpy.jsonrpc.responses.ErrorResponse` object
+
+            Parameters
+            ----------
+            error: :class:`Exception`
+                The error that occured
+
+            Returns
+            -------
+            :class:`~flowpy.jsonrpc.responses.ErrorResponse` | list[:class:`~flowpy.jsonrpc.results.Result`] | :class:`~flowpy.jsonrpc.results.Result` | str | Any
+                A list of results, an results, or something that can be converted into a list of results.
+
+            Yields
+            ------
+            :class:`~flowpy.jsonrpc.results.Result` | str | Any
+                A result object or something that can be converted into a result object.
+            """
+            LOG.exception(
+                f"Ignoring exception in result's context menu callback ({self!r})",
+                exc_info=error,
+            )
+            return ErrorResponse.internal_error(error)
 
     def to_dict(self) -> dict[str, Any]:
         r"""This converts the result into a json serializable dictionary

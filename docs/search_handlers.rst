@@ -120,3 +120,28 @@ Using the decorator isn't the only weay to create search handlers, you can also 
         
         async def callback(self, query: Query):
             return "You found the easter egg!"
+
+Error Handling
+--------------
+flow.py is callback focused, so callbacks are used to handle errors in search handlers. If you are using the :func:`~flowpy.plugin.Plugin.search` decorator to make your handler, you can use the :func:`~flowpy.search_handlers.SearchHandler.error` decorator to register an error handler. ::
+
+    @plugin.search()
+    async def my_handler(query: Query):
+        ...
+    
+    @my_handler.error
+    async def my_error_handler(error: Exception):
+        return f"An error occured! {error!r}"
+
+Alternatively, if you are subclassing your handler, you can override the :func:`~flowpy.search_handlers.SearchHandler.on_error` method to handle your error. ::
+
+    class MyHandler(SearchHandler):
+        async def callback(self, query: Query):
+            ...
+        
+        async def on_error(error: Exception):
+            return f"An error occured! {error!r}"
+
+API Reference
+-------------
+You can see the API reference for search handlers & conditions :ref:`here <search_handlers_api_reference>`

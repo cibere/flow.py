@@ -12,13 +12,7 @@ if TYPE_CHECKING:
 
 LOG = logging.getLogger(__name__)
 
-__all__ = (
-    "on_error",
-    "on_action_error",
-    "on_context_menu",
-    "on_search_error",
-    "on_context_menu_error",
-)
+__all__ = ("on_error",)
 
 
 async def on_error(
@@ -26,36 +20,6 @@ async def on_error(
 ) -> ErrorResponse:
     """gets called when an error occurs in an event"""
     LOG.exception(f"Ignoring exception in event {event_method!r}", exc_info=error)
-    return ErrorResponse.internal_error(error)
-
-
-async def on_action_error(
-    action_name: str, error: Exception, *args, **kwargs
-) -> ErrorResponse:
-    """gets called when an error occurs in an action"""
-    LOG.exception(f"Ignoring exception in action ({action_name!r})", exc_info=error)
-    return ErrorResponse.internal_error(error)
-
-
-async def on_context_menu(data: list[Any]):
-    return []
-
-
-async def on_search_error(
-    handler_name: str, error: Exception, query: Query
-) -> ErrorResponse:
-    """gets called when an error occurs in a search handler"""
-    LOG.exception(f"Ignoring exception in action ({handler_name!r})", exc_info=error)
-    return ErrorResponse.internal_error(error)
-
-
-async def on_context_menu_error(
-    handler_name: str, error: Exception, *args, **kwargs
-) -> ErrorResponse:
-    """gets called when an error occurs in a context menu handler"""
-    LOG.exception(
-        f"Ignoring exception in context menu handler ({handler_name!r})", exc_info=error
-    )
     return ErrorResponse.internal_error(error)
 
 
@@ -74,9 +38,6 @@ def get_default_events(plugin: Plugin) -> dict[str, Callable[..., Awaitable[Any]
             on_error,
             on_query,
             on_context_menu,
-            on_search_error,
             plugin._initialize_wrapper,
-            on_action_error,
-            on_context_menu_error,
         )
     }
