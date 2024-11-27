@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from typing import TYPE_CHECKING, Any, Awaitable, Callable
-
+from .settings import Settings
 from .jsonrpc import ErrorResponse
 from .query import Query
 
@@ -26,7 +26,10 @@ async def on_error(
 def get_default_events(plugin: Plugin) -> dict[str, Callable[..., Awaitable[Any]]]:
     def on_query(data: dict[str, Any], raw_settings: dict[str, Any]):
         query = Query(data)
-        plugin.settings._update(raw_settings)
+        if plugin._settings_are_populated is False:
+            plugin.settings = Settings(raw_settings)
+        else:
+            plugin.settings._update(raw_settings)
         return plugin.process_search_handlers(query)
 
     def on_context_menu(data: list[str]):

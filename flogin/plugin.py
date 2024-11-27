@@ -33,7 +33,7 @@ from .jsonrpc.responses import BaseResponse
 from .query import Query
 from .search_handler import SearchHandler
 from .settings import Settings
-from .utils import MISSING, coro_or_gen, setup_logging
+from .utils import MISSING, coro_or_gen, setup_logging, cached_property
 
 if TYPE_CHECKING:
     from ._types import SearchHandlerCallback, SearchHandlerCondition
@@ -57,7 +57,6 @@ class Plugin:
     """
 
     def __init__(self) -> None:
-        self.settings = Settings({})
         self.jsonrpc: JsonRPCClient = JsonRPCClient(self)
         self.api = FlowLauncherAPI(self.jsonrpc)
         self._metadata: PluginMetadata | None = None
@@ -66,6 +65,16 @@ class Plugin:
         )
         self._search_handlers: list[SearchHandler] = []
         self._results: dict[str, Result] = {}
+        self._settings_are_populated: bool = False
+
+    @cached_property
+    def settings(self) -> Settings:
+        fp = f"../../Settings/Plugins/{self.metadata.name}/Settings.json"
+        with open(fp, "r") as f:
+            data = json.load(f)
+        self._settings_are_populated = True
+        LOG.debug(f"Settings filled from file: {data!r}")
+        return Settings(data)
 
     async def _run_event(
         self,
@@ -138,36 +147,15 @@ class Plugin:
                 results.append(res)
         return results
 
-    async def _populate_settings_from_file(self) -> None:
-        def read_file(fp: str) -> dict:
-            with open(fp, "r") as f:
-                return json.load(f)
-
-        fp = f"../../Settings/Plugins/{self.metadata.name}/Settings.json"
-        data = await asyncio.to_thread(read_file, fp)
-        self.settings = Settings(data)
-        LOG.info(f"Settings successfully loaded from file")
-
     async def _initialize_wrapper(self, arg: dict[str, Any]) -> ExecuteResponse:
         LOG.info(f"Initialize: {json.dumps(arg)}")
         self._metadata = PluginMetadata(arg["currentPluginMetadata"], self.api)
-        await self._populate_settings_from_file()
         self.dispatch("initialization")
         return ExecuteResponse(hide=False)
 
     async def process_context_menus(
         self, data: list[Any]
     ) -> QueryResponse | ErrorResponse:
-        r"""|coro|
-
-        Runs and processes context menus.
-
-        Parameters
-        ----------
-        data: list[Any]
-            The context data sent from flow
-        """
-
         LOG.debug(f"Context Menu Handler: {data=}")
 
         if not data:
@@ -195,17 +183,6 @@ class Plugin:
     async def process_search_handlers(
         self, query: Query
     ) -> QueryResponse | ErrorResponse:
-        r"""|coro|
-
-        Runs and processes the registered search handlers.
-        See the :ref:`search handler section <search_handlers>` for more information about using search handlers.
-
-        Parameters
-        ----------
-        query: :class:`~flogin.query.Query`
-            The query object to be give to the search handlers
-        """
-
         results = []
         for handler in self._search_handlers:
             if handler.condition(query):
