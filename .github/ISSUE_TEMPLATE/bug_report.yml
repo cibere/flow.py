@@ -55,7 +55,7 @@ body:
       required: true
   - type: textarea
     attributes:
-      label: If applicable: Flow Launcher Log File
+      label: If applicable, Flow Launcher Log File
       description: Use the `Open Log Location` command with the `System Commands` plugin to open the log file folder, and upload the newest file here.
   - type: textarea
     attributes:
