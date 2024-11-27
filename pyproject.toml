@@ -32,7 +32,10 @@ docs = [
     "sphinx-autodoc-typehints>=1.25.0,<2.0.0",  # https://github.com/tox-dev/sphinx-autodoc-typehints
     "sphinx-toolbox>=3.5,<4.0",  # https://sphinx-toolbox.readthedocs.io/en/latest/extensions/index.html
 ]
-dev = ["black", "isort"]
+dev = [
+    "black==24.10.0",
+    "isort==5.13.2",
+]
 
 [tool.setuptools.dynamic]
 dependencies = { file = "requirements.txt" }
