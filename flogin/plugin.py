@@ -214,7 +214,7 @@ class Plugin:
                     event_name=f"SearchHandler-{handler.name}",
                     args=[handler.callback(query)],
                     error_handler=lambda e: self._coro_or_gen_to_results(
-                        handler.on_error(e)
+                        handler.on_error(query, e)
                     ),
                 )
                 results = await task

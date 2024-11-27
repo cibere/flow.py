@@ -62,7 +62,7 @@ class SearchHandler:
             """
             ...
 
-        def on_error(self, error: Exception) -> SearchHandlerCallbackReturns:
+        def on_error(self, query: Query, error: Exception) -> SearchHandlerCallbackReturns:
             r"""|coro|
 
             Override this function to add an error response behavior to this handler's callback.
@@ -75,6 +75,8 @@ class SearchHandler:
 
             Parameters
             ----------
+            query: :class:`~flogin.query.Query`
+                The query that was being handled when the error occured.
             error: :class:`Exception`
                 The error that occured
 
@@ -111,7 +113,7 @@ class SearchHandler:
             """
             raise RuntimeError("Callback was not overriden")
 
-        async def on_error(self, error: Exception):
+        async def on_error(self, query: Query, error: Exception):
             r"""|coro|
 
             Override this function to add an error response behavior to this handler's callback.
@@ -124,6 +126,8 @@ class SearchHandler:
 
             Parameters
             ----------
+            query: :class:`~flogin.query.Query`
+                The query that was being handled when the error occured.
             error: :class:`Exception`
                 The error that occured
 
@@ -148,7 +152,7 @@ class SearchHandler:
         return self.callback.__name__
 
     def error[
-        T: Callable[[Exception], SearchHandlerCallbackReturns]
+        T: Callable[[Query, Exception], SearchHandlerCallbackReturns]
     ](self, func: T) -> T:
         """A decorator that registers a error handler for this search handler.
 
@@ -164,7 +168,7 @@ class SearchHandler:
                 ..
 
             @my_handler.error
-            async def my_error_handler(error):
+            async def my_error_handler(query, error):
                 ...
 
         """
