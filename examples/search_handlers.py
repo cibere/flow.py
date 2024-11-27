@@ -11,6 +11,7 @@ class MyHandler(SearchHandler):
         """Handle errors from the 'callback' method"""
         return f"An error occured: {error}"
 
+
 plugin.register_search_handler(MyHandler())
 
 

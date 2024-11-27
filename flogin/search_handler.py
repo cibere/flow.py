@@ -62,7 +62,9 @@ class SearchHandler:
             """
             ...
 
-        def on_error(self, query: Query, error: Exception) -> SearchHandlerCallbackReturns:
+        def on_error(
+            self, query: Query, error: Exception
+        ) -> SearchHandlerCallbackReturns:
             r"""|coro|
 
             Override this function to add an error response behavior to this handler's callback.
