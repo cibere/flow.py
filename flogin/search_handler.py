@@ -8,6 +8,7 @@ from .jsonrpc import ErrorResponse
 if TYPE_CHECKING:
     from ._types import SearchHandlerCallbackReturns, SearchHandlerCondition
     from .query import Query
+    from .plugin import Plugin
     ErrorHandlerT = TypeVar("ErrorHandlerT", bound=Callable[[Query, Exception], SearchHandlerCallbackReturns])
 
 LOG = logging.getLogger(__name__)
@@ -32,6 +33,8 @@ class SearchHandler:
     ------------
     condition: :ref:`condition <condition_example>`
         A function which is used to determine if this search handler should be used to handle a given query or not
+    plugin: :class:`~flogin.plugin.Plugin` | None
+        Your plugin instance. This is filled before :func:`~flogin.search_handler.SearchHandler.callback` is triggered.
     """
 
     def __init__(
@@ -42,6 +45,7 @@ class SearchHandler:
             condition = _default_condition
 
         self.condition = condition
+        self.plugin: Plugin | None = None
 
     if TYPE_CHECKING:
 

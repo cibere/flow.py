@@ -162,6 +162,7 @@ class Plugin:
         result = self._results.get(data[0])
 
         if result is not None:
+            result.plugin = self
             task = self._schedule_event(
                 self._coro_or_gen_to_results,
                 event_name=f"ContextMenu-{result.slug}",
@@ -184,6 +185,7 @@ class Plugin:
         results = []
         for handler in self._search_handlers:
             if handler.condition(query):
+                handler.plugin = self
                 task = self._schedule_event(
                     self._coro_or_gen_to_results,
                     event_name=f"SearchHandler-{handler.name}",
