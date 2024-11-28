@@ -16,6 +16,8 @@ Flogin provides some CLI commands to easily and quickly make new plugins.
         `plugin.json <#create-plugin-json>`_
             Creates a new plugin.json file
 
+.. _cli-create-plugin-json:
+
 create plugin.json
 ~~~~~~~~~~~~~~~~~~
 
