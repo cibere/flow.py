@@ -3,6 +3,7 @@ import logging
 import logging.handlers
 from functools import _make_key as make_cached_key
 from inspect import isasyncgen, iscoroutine
+from inspect import signature as _signature
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -41,6 +42,13 @@ else:
 
 __all__ = ("setup_logging", "coro_or_gen", "MISSING", "cached_property", "cached_coro")
 
+def copy_doc(original: Callable[..., Any]) -> Callable[[T], T]:
+    def decorator(overridden: T) -> T:
+        overridden.__doc__ = original.__doc__
+        overridden.__signature__ = _signature(original)  # type: ignore
+        return overridden
+
+    return decorator
 
 class _MissingSentinel:
     """A type safe sentinel used in the library to represent something as missing. Used to distinguish from ``None`` values."""
