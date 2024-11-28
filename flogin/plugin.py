@@ -254,7 +254,7 @@ class Plugin:
 
         self._search_handlers.append(handler)
         LOG.info(f"Registered search handler: {handler}")
-    
+
     def register_search_handlers(self, handlers: list[SearchHandler]) -> None:
         r"""Register new search handlers
 
