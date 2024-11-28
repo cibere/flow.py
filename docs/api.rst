@@ -44,24 +44,6 @@ Responses
 .. autoclass:: flogin.jsonrpc.responses.ExecuteResponse
     :members:
 
-Flow API
-----------
-
-Client
-~~~~~~~~
-
-.. autoclass:: flogin.flow_api.client.FlowLauncherAPI
-    :members:
-
-Classes
-~~~~~~~~
-
-.. autoclass:: flogin.flow_api.fuzzy_search.FuzzySearchResult
-    :members:
-
-.. autoclass:: flogin.flow_api.plugin_metadata.PluginMetadata
-    :members:
-
 .. _search_handlers_api_reference:
 
 Search Handlers
@@ -85,6 +67,25 @@ Builtin Search Conditions
     :members:
 
 .. autoclass:: flogin.conditions.MultiCondition
+    :members:
+
+
+Flow API
+----------
+
+Client
+~~~~~~~~
+
+.. autoclass:: flogin.flow_api.client.FlowLauncherAPI
+    :members:
+
+Classes
+~~~~~~~~
+
+.. autoclass:: flogin.flow_api.fuzzy_search.FuzzySearchResult
+    :members:
+
+.. autoclass:: flogin.flow_api.plugin_metadata.PluginMetadata
     :members:
 
 Errors
