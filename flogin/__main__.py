@@ -24,7 +24,7 @@ def create_file() -> None:
         "What file should flow execute to start the plugin? Leave blank for `main.py`\n> "
     )
     data = {
-        "ID": uuid.uuid4(),
+        "ID": uuid.uuid4().int,
         "ActionKeyword": "test",
         "Name": name,
         "Description": desc,
