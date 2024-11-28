@@ -1,6 +1,6 @@
 __title__ = "flogin"
 __author__ = "cibere"
-__version__ = "0.0.4"
+__version__ = "0.0.5a"
 
 
 from typing import Literal, NamedTuple
@@ -21,6 +21,6 @@ class VersionInfo(NamedTuple):
     releaselevel: Literal["alpha", "beta", "candidate", "final"]
 
 
-version_info: VersionInfo = VersionInfo(major=0, minor=0, micro=4, releaselevel="final")
+version_info: VersionInfo = VersionInfo(major=0, minor=0, micro=5, releaselevel="alpha")
 
 del NamedTuple, Literal, VersionInfo
