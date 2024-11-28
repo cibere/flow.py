@@ -15,6 +15,21 @@ You can register an event using the :func:`~flogin.plugin.Plugin.event` decorato
     errors. In order to turn a function into a coroutine they must be ``async def``
     functions.
 
+API Events
+----------
+These events are serialized versions of the raw api events
+
+.. _on_initialization:
+
+on_initialization
+~~~~~~~~~~~~~~~~~~
+
+.. function:: async def on_initialization()
+
+    |coro|
+    
+    This is called when flow sends the ``initialize`` request, which happens when the plugin gets started for the first time.
+
 Error Handling Events
 ---------------------
 These events are triggered by flogin to handle errors
@@ -24,6 +39,8 @@ on_error
 
 .. function:: async def on_error(event, error, *args, **kwargs)
 
+    |coro|
+    
     This is called when an error occurs inside of another event.
 
     :param event: The name of the event
