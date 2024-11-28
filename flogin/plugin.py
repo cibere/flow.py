@@ -37,7 +37,7 @@ from .utils import MISSING, cached_property, coro_or_gen, setup_logging
 if TYPE_CHECKING:
     from ._types import SearchHandlerCallback, SearchHandlerCondition
 TS = TypeVarTuple("TS")
-EventCallbackT = TypeVar("EventCallbackT", bound=Callable[..., Any])
+EventCallbackT = TypeVar("EventCallbackT", bound=Callable[..., Coroutine[Any, Any, Any]])
 LOG = logging.getLogger(__name__)
 
 __all__ = ("Plugin",)
@@ -268,6 +268,24 @@ class Plugin:
 
         for handler in handlers:
             self.register_search_handler(handler)
+    
+    def register_event(self, callback: Callable[..., Coroutine[Any, Any, Any]], name: str | None = None) -> None:
+        """Registers an event to listen for. See the :func:`~flogin.plugin.Plugin.event` decorator for another method of registering events.
+
+        All events must be a :ref:`coroutine <coroutine>`.
+
+        .. NOTE::
+            See the :ref:`event reference <events>` to see what valid events there are.
+
+        Parameters
+        -----------
+        callback: :ref:`coroutine <coroutine>`
+            The :ref:`coroutine <coroutine>` to be executed with the event
+        name: Optional[:class:`str`]
+            The name of the event to be registered. Defaults to the callback's name.
+        """
+
+        self._events[name or callback.__name__] = callback
 
     def event(self, callback: EventCallbackT) -> EventCallbackT:
         """A decorator that registers an event to listen for.
@@ -288,8 +306,7 @@ class Plugin:
 
         """
 
-        name = callback.__name__
-        self._events[name] = callback
+        self.register_event(callback)
         return callback
 
     @overload

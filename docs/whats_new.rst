@@ -11,6 +11,7 @@ New Features
 
 - Add :func:`~flogin.plugin.Plugin.register_search_handlers`
 - Add the :doc:`whats_new` section in the docs
+- Add :func:`~flogin.plugin.Plugin.register_event`
 
 Bug Fixes
 ~~~~~~~~~

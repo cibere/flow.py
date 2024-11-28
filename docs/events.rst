@@ -7,7 +7,14 @@ You can register an event using the :func:`~flogin.plugin.Plugin.event` decorato
 
     @plugin.event
     async def on_initialization():
-        print('Ready!')
+        ...
+
+Alternatively, you can use the :func:`~flogin.plugin.Plugin.register_event` method to manually register events. For example: ::
+
+    async def my_event():
+        ...
+    
+    plugin.register_event(my_event, name="on_initialization")
 
 .. warning::
 
