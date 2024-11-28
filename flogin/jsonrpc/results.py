@@ -152,9 +152,7 @@ class Result(Base):
         """
         ...
 
-    def on_context_menu_error(
-        self, error: Exception
-    ) -> SearchHandlerCallbackReturns:
+    def on_context_menu_error(self, error: Exception) -> SearchHandlerCallbackReturns:
         r"""|coro|
 
         Override this function to add an error response behavior to this result's context menu callback.
@@ -183,7 +181,7 @@ class Result(Base):
         ...
 
     if not TYPE_CHECKING:
-        
+
         @copy_doc(context_menu)
         async def context_menu(self):
             return []

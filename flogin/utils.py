@@ -42,6 +42,7 @@ else:
 
 __all__ = ("setup_logging", "coro_or_gen", "MISSING", "cached_property", "cached_coro")
 
+
 def copy_doc(original: Callable[..., Any]) -> Callable[[T], T]:
     def decorator(overridden: T) -> T:
         overridden.__doc__ = original.__doc__
@@ -49,6 +50,7 @@ def copy_doc(original: Callable[..., Any]) -> Callable[[T], T]:
         return overridden
 
     return decorator
+
 
 class _MissingSentinel:
     """A type safe sentinel used in the library to represent something as missing. Used to distinguish from ``None`` values."""

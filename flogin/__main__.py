@@ -1,13 +1,17 @@
+import json
 import os
+import uuid
 
-import click, json, uuid
+import click
 
 
 @click.group
 def cli(): ...
 
+
 @cli.group(name="create", help="Create specific files")
 def create_group(): ...
+
 
 @create_group.command(name="plugin.json", help="Creates a new plugin.json file")
 def create_file() -> None:
@@ -16,7 +20,9 @@ def create_file() -> None:
     author = input("Author Name\n> ")
     plugin_website = input("Plugin Website\n> ")
     icon_path = input("Icon Path (leave blank for `Images/app.png`)\n> ")
-    main_file = input("What file should flow execute to start the plugin? Leave blank for `main.py`\n> ")
+    main_file = input(
+        "What file should flow execute to start the plugin? Leave blank for `main.py`\n> "
+    )
     data = {
         "ID": uuid.uuid4(),
         "ActionKeyword": "test",
@@ -27,18 +33,23 @@ def create_file() -> None:
         "Language": "python_v2",
         "Website": plugin_website,
         "IcoPath": icon_path,
-        "ExecuteFileName": main_file
+        "ExecuteFileName": main_file,
     }
     with open("plugin.json", "w") as f:
         json.dump(data, f)
 
+
 @create_group.group("gh", help="Create files in the .github directory")
 def create_gh_file_group(): ...
+
 
 @create_gh_file_group.group("issue_template", help="Github issue templates")
 def create_issue_template_group(): ...
 
-@create_issue_template_group.command(name="bug_report", help="Create a detailed bug report template for github issues")
+
+@create_issue_template_group.command(
+    name="bug_report", help="Create a detailed bug report template for github issues"
+)
 def create_bug_report_issue_template():
     content = f"""
 name: Bug Report
@@ -125,9 +136,10 @@ body:
         os.mkdir(".github")
     if not os.path.isdir(".github/ISSUE_TEMPLATE"):
         os.mkdir(".github/ISSUE_TEMPLATE")
-    
+
     with open(".github/ISSUE_TEMPLATE/bug_report.yml", "w") as f:
         f.write(content)
+
 
 @create_gh_file_group.command(name="pr_template", help="Create a basic PR template")
 def pr_template():
@@ -149,18 +161,23 @@ def pr_template():
     """.strip()
     if not os.path.isdir(".github"):
         os.mkdir(".github")
-    
+
     with open(".github/PULL_REQUEST_TEMPLATE.md", "w") as f:
         f.write(content)
+
 
 @create_gh_file_group.group("workflows", help="Create github workflows")
 def create_gh_workflows_group(): ...
 
-@create_gh_workflows_group.command(name="publish_release", help="A standard workflow to publish and release a new version of your plugin")
+
+@create_gh_workflows_group.command(
+    name="publish_release",
+    help="A standard workflow to publish and release a new version of your plugin",
+)
 @click.option(
     "--changelog",
     is_flag=True,
-    help="If passed, a `CHANGLOG.txt` file will be created in the root directory. When the workflow gets run, the contents of that file will be used as the release's changelog/description."
+    help="If passed, a `CHANGLOG.txt` file will be created in the root directory. When the workflow gets run, the contents of that file will be used as the release's changelog/description.",
 )
 def create_publish_and_release_workflow(changelog: bool = False):
     content = """
@@ -216,9 +233,10 @@ jobs:
         os.mkdir(".github")
     if not os.path.isdir(".github/workflows"):
         os.mkdir(".github/workflows")
-    
+
     with open(".github/workflows/publish_release.yml", "w") as f:
         f.write(content)
+
 
 if __name__ == "__main__":
     cli()

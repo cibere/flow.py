@@ -71,9 +71,7 @@ class SearchHandler:
         """
         ...
 
-    def on_error(
-        self, query: Query, error: Exception
-    ) -> SearchHandlerCallbackReturns:
+    def on_error(self, query: Query, error: Exception) -> SearchHandlerCallbackReturns:
         r"""|coro|
 
         Override this function to add an error response behavior to this handler's callback.
@@ -104,6 +102,7 @@ class SearchHandler:
         ...
 
     if not TYPE_CHECKING:
+
         @copy_doc(callback)
         async def callback(self, query: Query):
             raise RuntimeError("Callback was not overriden")
