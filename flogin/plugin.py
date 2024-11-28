@@ -37,7 +37,9 @@ from .utils import MISSING, cached_property, coro_or_gen, setup_logging
 if TYPE_CHECKING:
     from ._types import SearchHandlerCallback, SearchHandlerCondition
 TS = TypeVarTuple("TS")
-EventCallbackT = TypeVar("EventCallbackT", bound=Callable[..., Coroutine[Any, Any, Any]])
+EventCallbackT = TypeVar(
+    "EventCallbackT", bound=Callable[..., Coroutine[Any, Any, Any]]
+)
 LOG = logging.getLogger(__name__)
 
 __all__ = ("Plugin",)
@@ -268,8 +270,10 @@ class Plugin:
 
         for handler in handlers:
             self.register_search_handler(handler)
-    
-    def register_event(self, callback: Callable[..., Coroutine[Any, Any, Any]], name: str | None = None) -> None:
+
+    def register_event(
+        self, callback: Callable[..., Coroutine[Any, Any, Any]], name: str | None = None
+    ) -> None:
         """Registers an event to listen for. See the :func:`~flogin.plugin.Plugin.event` decorator for another method of registering events.
 
         All events must be a :ref:`coroutine <coroutine>`.

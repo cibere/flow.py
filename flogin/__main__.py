@@ -42,12 +42,16 @@ def create_file() -> None:
 @create_group.group("gh", help="Create files in the .github directory")
 def create_gh_file_group(): ...
 
-@create_gh_file_group.command("gitignore", help="Creates a basic .gitignore file in the base directory")
+
+@create_gh_file_group.command(
+    "gitignore", help="Creates a basic .gitignore file in the base directory"
+)
 def create_gitignore():
     to_ignore = ["", "__pycache__", "*.log", "venv", "lib", "*.logs", "*.pyc"]
     nl = "\n"
     with open(".gitignore", "a") as f:
-        f.write(f'{nl}'.join(to_ignore))
+        f.write(f"{nl}".join(to_ignore))
+
 
 @create_gh_file_group.group("issue_template", help="Github issue templates")
 def create_issue_template_group(): ...
