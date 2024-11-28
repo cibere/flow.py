@@ -7,9 +7,13 @@ from .jsonrpc import ErrorResponse
 
 if TYPE_CHECKING:
     from ._types import SearchHandlerCallbackReturns, SearchHandlerCondition
-    from .query import Query
     from .plugin import Plugin
-    ErrorHandlerT = TypeVar("ErrorHandlerT", bound=Callable[[Query, Exception], SearchHandlerCallbackReturns])
+    from .query import Query
+
+    ErrorHandlerT = TypeVar(
+        "ErrorHandlerT",
+        bound=Callable[[Query, Exception], SearchHandlerCallbackReturns],
+    )
 
 LOG = logging.getLogger(__name__)
 

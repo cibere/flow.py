@@ -3,7 +3,15 @@ import logging
 import logging.handlers
 from functools import _make_key as make_cached_key
 from inspect import isasyncgen, iscoroutine
-from typing import TYPE_CHECKING, Any, AsyncIterable, Awaitable, Callable, Coroutine, TypeVar
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    AsyncIterable,
+    Awaitable,
+    Callable,
+    Coroutine,
+    TypeVar,
+)
 
 Coro = TypeVar("Coro", bound=Callable[..., Coroutine[Any, Any, Any]])
 T = TypeVar("T")

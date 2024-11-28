@@ -12,10 +12,11 @@ from typing import (
     Callable,
     Coroutine,
     Iterable,
+    TypeVar,
     TypeVarTuple,
     overload,
-    TypeVar
 )
+
 from .conditions import PlainTextCondition, RegexCondition
 from .default_events import get_default_events
 from .errors import InvalidContextDataReceived, PluginNotInitialized

@@ -21,8 +21,8 @@ from .responses import ErrorResponse
 
 if TYPE_CHECKING:
     from .._types import SearchHandlerCallbackReturns
-    from .responses import ExecuteResponse
     from ..plugin import Plugin
+    from .responses import ExecuteResponse
 
 TS = TypeVarTuple("TS")
 LOG = logging.getLogger(__name__)

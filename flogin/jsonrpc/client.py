@@ -104,13 +104,15 @@ class JsonRPCClient:
                 callback = result.callback
                 error_handler = result.on_error
                 result.plugin = self.plugin
-                task = self.plugin._schedule_event(callback, method, error_handler=error_handler)
+                task = self.plugin._schedule_event(
+                    callback, method, error_handler=error_handler
+                )
 
         if task is None:
             task = self.plugin.dispatch(method, *params)
             if not task:
                 return
-            
+
         self.tasks[request["id"]] = task
         result = await task
 
