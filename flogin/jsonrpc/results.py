@@ -15,7 +15,7 @@ from typing import (
     Unpack,
 )
 
-from ..utils import cached_property
+from ..utils import cached_property, copy_doc
 from .base_object import Base
 from .responses import ErrorResponse
 
@@ -133,104 +133,63 @@ class Result(Base):
 
         return ExecuteResponse(False)
 
-    if TYPE_CHECKING:
+    def context_menu(self) -> SearchHandlerCallbackReturns:
+        r"""|coro|
 
-        def context_menu(self) -> SearchHandlerCallbackReturns:
-            r"""|coro|
+        Override this function to add a context menu behavior to your result. This method will run when the user gets the context menu to your result.
 
-            Override this function to add a context menu behavior to your result. This method will run when the user gets the context menu to your result.
+        This method can return/yield almost anything, and flogin will convert it into a list of :class:`~flogin.jsonrpc.results.Result` objects before sending it to flow.
 
-            This method can return/yield almost anything, and flogin will convert it into a list of :class:`~flogin.jsonrpc.results.Result` objects before sending it to flow.
+        Returns
+        -------
+        list[:class:`~flogin.jsonrpc.results.Result`] | :class:`~flogin.jsonrpc.results.Result` | str | Any
+            A list of results, an results, or something that can be converted into a list of results.
 
-            Returns
-            -------
-            list[:class:`~flogin.jsonrpc.results.Result`] | :class:`~flogin.jsonrpc.results.Result` | str | Any
-                A list of results, an results, or something that can be converted into a list of results.
+        Yields
+        ------
+        :class:`~flogin.jsonrpc.results.Result` | str | Any
+            A result object or something that can be converted into a result object.
+        """
+        ...
 
-            Yields
-            ------
-            :class:`~flogin.jsonrpc.results.Result` | str | Any
-                A result object or something that can be converted into a result object.
-            """
-            ...
+    def on_context_menu_error(
+        self, error: Exception
+    ) -> SearchHandlerCallbackReturns:
+        r"""|coro|
 
-        def on_context_menu_error(
-            self, error: Exception
-        ) -> SearchHandlerCallbackReturns:
-            r"""|coro|
+        Override this function to add an error response behavior to this result's context menu callback.
 
-            Override this function to add an error response behavior to this result's context menu callback.
+        If the error was handled:
+            You can return/yield almost anything, and flogin will convert it into a list of :class:`~flogin.jsonrpc.results.Result` objects before sending it to flow.
 
-            If the error was handled:
-                You can return/yield almost anything, and flogin will convert it into a list of :class:`~flogin.jsonrpc.results.Result` objects before sending it to flow.
+        If the error was not handled:
+            Return a :class:`~flogin.jsonrpc.responses.ErrorResponse` object
 
-            If the error was not handled:
-                Return a :class:`~flogin.jsonrpc.responses.ErrorResponse` object
+        Parameters
+        ----------
+        error: :class:`Exception`
+            The error that occured
 
-            Parameters
-            ----------
-            error: :class:`Exception`
-                The error that occured
+        Returns
+        -------
+        :class:`~flogin.jsonrpc.responses.ErrorResponse` | list[:class:`~flogin.jsonrpc.results.Result`] | :class:`~flogin.jsonrpc.results.Result` | str | Any
+            A list of results, an results, or something that can be converted into a list of results.
 
-            Returns
-            -------
-            :class:`~flogin.jsonrpc.responses.ErrorResponse` | list[:class:`~flogin.jsonrpc.results.Result`] | :class:`~flogin.jsonrpc.results.Result` | str | Any
-                A list of results, an results, or something that can be converted into a list of results.
+        Yields
+        ------
+        :class:`~flogin.jsonrpc.results.Result` | str | Any
+            A result object or something that can be converted into a result object.
+        """
+        ...
 
-            Yields
-            ------
-            :class:`~flogin.jsonrpc.results.Result` | str | Any
-                A result object or something that can be converted into a result object.
-            """
-            ...
-
-    else:
-
+    if not TYPE_CHECKING:
+        
+        @copy_doc(context_menu)
         async def context_menu(self):
-            r"""|coro|
-
-            Override this function to add a context menu behavior to your result. This method will run when the user gets the context menu to your result.
-
-            This method can return/yield almost anything, and flogin will convert it into a list of :class:`~flogin.jsonrpc.results.Result` objects before sending it to flow.
-
-            Returns
-            -------
-            list[:class:`~flogin.jsonrpc.results.Result`] | :class:`~flogin.jsonrpc.results.Result` | str | Any
-                A list of results, an results, or something that can be converted into a list of results.
-
-            Yields
-            ------
-            :class:`~flogin.jsonrpc.results.Result` | str | Any
-                A result object or something that can be converted into a result object.
-            """
             return []
 
+        @copy_doc(on_context_menu_error)
         async def on_context_menu_error(self, error: Exception):
-            r"""|coro|
-
-            Override this function to add an error response behavior to this result's context menu callback.
-
-            If the error was handled:
-                You can return/yield almost anything, and flogin will convert it into a list of :class:`~flogin.jsonrpc.results.Result` objects before sending it to flow.
-
-            If the error was not handled:
-                Return a :class:`~flogin.jsonrpc.responses.ErrorResponse` object
-
-            Parameters
-            ----------
-            error: :class:`Exception`
-                The error that occured
-
-            Returns
-            -------
-            :class:`~flogin.jsonrpc.responses.ErrorResponse` | list[:class:`~flogin.jsonrpc.results.Result`] | :class:`~flogin.jsonrpc.results.Result` | str | Any
-                A list of results, an results, or something that can be converted into a list of results.
-
-            Yields
-            ------
-            :class:`~flogin.jsonrpc.results.Result` | str | Any
-                A result object or something that can be converted into a result object.
-            """
             LOG.exception(
                 f"Ignoring exception in result's context menu callback ({self!r})",
                 exc_info=error,
