@@ -185,8 +185,8 @@ class Plugin:
     ) -> QueryResponse | ErrorResponse:
         results = []
         for handler in self._search_handlers:
+            handler.plugin = self
             if handler.condition(query):
-                handler.plugin = self
                 task = self._schedule_event(
                     self._coro_or_gen_to_results,
                     event_name=f"SearchHandler-{handler.name}",
