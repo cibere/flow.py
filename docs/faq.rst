@@ -78,9 +78,11 @@ Example code can be found in the `examples folder <https://github.com/cibere/flo
 
 For live projects that you can use as references for "advanced" plugins, see the following plugins:
 
-- `FirefoxKeywordBookmarks <https://github.com/cibere/FirefoxKeywordBookmarks>`_
+- `FirefoxKeywordBookmarks by cibere <https://github.com/cibere/FirefoxKeywordBookmarks>`_
 
-- `WordnikDictionary <https://github.com/cibere/Flow.Launcher.Plugin.WordNikDictionary>`_ *(The development version uses flogin)*
+- `WordnikDictionary by cibere <https://github.com/cibere/Flow.Launcher.Plugin.WordNikDictionary>`_ *(The development version uses flogin)*
+
+- `Wordle by cibere <http://github.com/cibere/flow.launcher.plugin.wordle>`_
 
 Where can I get help with using the library?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
