@@ -81,7 +81,7 @@ class Result(Base):
     copy_text: Optional[:class:`str`]
         This is the text that will be copied when the user does ``CTRL+C`` on the result.
     plugin: :class:`~flogin.plugin.Plugin` | None
-        Your plugin instance. This is filled before :func:`~flogin.jsonrpc.results.Result.callback` is triggered.
+        Your plugin instance. This is filled before :func:`~flogin.jsonrpc.results.Result.callback` or :func:`~flogin.jsonrpc.results.Result.context_menu` are triggered.
     """
 
     def __init__(
