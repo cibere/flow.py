@@ -24,7 +24,7 @@ def create_file() -> None:
         "What file should flow execute to start the plugin? Leave blank for `main.py`\n> "
     )
     data = {
-        "ID": uuid.uuid4().int,
+        "ID": str(uuid.uuid4()),
         "ActionKeyword": "test",
         "Name": name,
         "Description": desc,
@@ -32,11 +32,11 @@ def create_file() -> None:
         "Version": "0.0.1",
         "Language": "python_v2",
         "Website": plugin_website,
-        "IcoPath": icon_path,
-        "ExecuteFileName": main_file,
+        "IcoPath": icon_path or "Images/app.png",
+        "ExecuteFileName": main_file or "main.py",
     }
     with open("plugin.json", "w") as f:
-        json.dump(data, f)
+        json.dump(data, f, indent=4)
 
 
 @create_group.group("gh", help="Create files in the .github directory")
