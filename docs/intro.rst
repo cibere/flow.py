@@ -85,7 +85,7 @@ Results
 You can use the :class:`~flogin.jsonrpc.results.Result` object constructor to pass most options.
 
 .. NOTE::
-    For handling what happens when the result gets clicked or customizing the context menu, subclass the object and override the methods. See :class:`~flogin.jsonrpc.results.Result` for more info.
+    For handling what happens when the result gets clicked or customizing the context menu, subclass the object and override the methods. See :class:`~flogin.jsonrpc.results.Result` for more info. Alternatively, you can use :func:`~flogin.jsonrpc.results.Result.create_with_partial` to create a result with a callback, without subclassing.
 
 .. code:: py
     
