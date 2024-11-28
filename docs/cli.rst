@@ -47,6 +47,21 @@ create gh
             Create a basic PR template
         `workflows <#create-gh-workflows>`_
             Create github workflows
+        `gitignore <#create-gh-gitignore>`_
+            Creates a basic .gitignore file in the base directory
+
+.. _create_gitignore_cli:
+
+create gh gitignore
+~~~~~~~~~~~~~~~~~~~~
+
+.. function:: flogin create gh gitignore [OPTIONS]
+
+    Creates a basic .gitignore file in the base directory
+
+    Options:
+        --help
+            Show this message and exit.
 
 create gh issue_template
 ~~~~~~~~~~~~~~~~~~~~~~~~

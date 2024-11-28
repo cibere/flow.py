@@ -12,6 +12,7 @@ New Features
 - Add :func:`~flogin.plugin.Plugin.register_search_handlers`
 - Add the :doc:`whats_new` section in the docs
 - Add :func:`~flogin.plugin.Plugin.register_event`
+- Add :ref:`flogin gh gitignore <create_gitignore_cli>` CLI command
 
 Bug Fixes
 ~~~~~~~~~
