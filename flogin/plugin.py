@@ -254,6 +254,20 @@ class Plugin:
 
         self._search_handlers.append(handler)
         LOG.info(f"Registered search handler: {handler}")
+    
+    def register_search_handlers(self, handlers: list[SearchHandler]) -> None:
+        r"""Register new search handlers
+
+        See the :ref:`search handler section <search_handlers>` for more information about using search handlers.
+
+        Parameters
+        -----------
+        handlers: list[:class:`~flogin.search_handler.SearchHandler`]
+            The search handlers to be registered
+        """
+
+        for handler in handlers:
+            self.register_search_handler(handler)
 
     def event(self, callback: EventCallbackT) -> EventCallbackT:
         """A decorator that registers an event to listen for.
