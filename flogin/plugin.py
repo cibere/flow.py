@@ -255,14 +255,14 @@ class Plugin:
         self._search_handlers.append(handler)
         LOG.info(f"Registered search handler: {handler}")
 
-    def register_search_handlers(self, handlers: list[SearchHandler]) -> None:
+    def register_search_handlers(self, *handlers: SearchHandler) -> None:
         r"""Register new search handlers
 
         See the :ref:`search handler section <search_handlers>` for more information about using search handlers.
 
         Parameters
         -----------
-        handlers: list[:class:`~flogin.search_handler.SearchHandler`]
+        *handlers: list[:class:`~flogin.search_handler.SearchHandler`]
             The search handlers to be registered
         """
 
