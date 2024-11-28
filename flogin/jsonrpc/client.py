@@ -92,7 +92,7 @@ class JsonRPCClient:
     async def __handle_request(self, request: dict[str, Any]) -> None:
         method: str = request["method"]
         params: list[Any] = request["params"]
-        callback = None
+        task = None
         error_handler = "on_error"
 
         self.request_id = request["id"]
@@ -103,17 +103,14 @@ class JsonRPCClient:
             if result:
                 callback = result.callback
                 error_handler = result.on_error
+                result.plugin = self.plugin
+                task = self.plugin._schedule_event(callback, method, error_handler=error_handler)
 
-        if callback is None:
+        if task is None:
             task = self.plugin.dispatch(method, *params)
             if not task:
                 return
-        else:
-            task = self.plugin._schedule_event(
-                callback,
-                method,
-                error_handler=error_handler,
-            )
+            
         self.tasks[request["id"]] = task
         result = await task
 

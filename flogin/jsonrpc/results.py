@@ -22,6 +22,7 @@ from .responses import ErrorResponse
 if TYPE_CHECKING:
     from .._types import SearchHandlerCallbackReturns
     from .responses import ExecuteResponse
+    from ..plugin import Plugin
 
 TS = TypeVarTuple("TS")
 LOG = logging.getLogger(__name__)
@@ -79,6 +80,8 @@ class Result(Base):
         The text to be displayed when the user hovers over the result's subtitle
     copy_text: Optional[:class:`str`]
         This is the text that will be copied when the user does ``CTRL+C`` on the result.
+    plugin: :class:`~flogin.plugin.Plugin` | None
+        Your plugin instance. This is filled before :func:`~flogin.jsonrpc.results.Result.callback` is triggered.
     """
 
     def __init__(
@@ -100,6 +103,7 @@ class Result(Base):
         self.sub_tooltip = sub_tooltip
         self.copy_text = copy_text
         self.score = score
+        self.plugin: Plugin | None = None
 
     async def on_error(self, error: Exception) -> ErrorResponse | ExecuteResponse:
         r"""|coro|
