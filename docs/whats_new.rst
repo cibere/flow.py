@@ -13,6 +13,9 @@ New Features
 - Add the :doc:`whats_new` section in the docs
 - Add :func:`~flogin.plugin.Plugin.register_event`
 - Add :ref:`flogin gh gitignore <create_gitignore_cli>` CLI command
+- Add :class:`~flogin.jsonrpc.glyph.Glyph`
+    - Allow :class:`~flogin.jsonrpc.glyph.Glyph` objects in :attr:`~flogin.jsonrpc.results.Result.icon`
+- Add :attr:`~flogin.jsonrpc.results.Result.rounded_icon`
 
 Bug Fixes
 ~~~~~~~~~

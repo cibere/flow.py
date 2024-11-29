@@ -18,6 +18,7 @@ from typing import (
 from ..utils import cached_property, copy_doc
 from .base_object import Base
 from .responses import ErrorResponse
+from .glyph import Glyph
 
 if TYPE_CHECKING:
     from .._types import SearchHandlerCallbackReturns
@@ -28,7 +29,6 @@ TS = TypeVarTuple("TS")
 LOG = logging.getLogger(__name__)
 
 __all__ = ("Result",)
-
 
 class ResultConstructorArgs(TypedDict):
     title: str
@@ -70,8 +70,8 @@ class Result(Base):
         The title/content of the result
     sub: Optional[:class:`str`]
         The subtitle to be shown.
-    icon: Optional[:class:`str`]
-        A path to the icon to be shown with the result.
+    icon: Optional[:class:`str` | :class:`~flogin.jsonrpc.glyph.Glyph`]
+        A path to the icon to be shown with the result, or a :class:`~flogin.jsonrpc.glyph.Glyph` object that will serve as the result's icon.
     title_highlight_data: Optional[Iterable[:class:`int`]]
         The highlight data for the title. See the :ref:`FAQ section on highlights <highlights>` for more info.
     title_tooltip: Optional[:class:`str`]
@@ -82,18 +82,21 @@ class Result(Base):
         This is the text that will be copied when the user does ``CTRL+C`` on the result.
     plugin: :class:`~flogin.plugin.Plugin` | None
         Your plugin instance. This is filled before :func:`~flogin.jsonrpc.results.Result.callback` or :func:`~flogin.jsonrpc.results.Result.context_menu` are triggered.
+    rounded_icon: Optional[:class:`bool`]
+        Whether to have round the icon or not.
     """
 
     def __init__(
         self,
         title: str,
         sub: str | None = None,
-        icon: str | None = None,
+        icon: str | Glyph | None = None,
         title_highlight_data: Iterable[int] | None = None,
         title_tooltip: str | None = None,
         sub_tooltip: str | None = None,
         copy_text: str | None = None,
         score: int | None = None,
+        rounded_icon: bool | None = None,
     ) -> None:
         self.title = title
         self.sub = sub
@@ -103,6 +106,7 @@ class Result(Base):
         self.sub_tooltip = sub_tooltip
         self.copy_text = copy_text
         self.score = score
+        self.rounded_icon = rounded_icon
         self.plugin: Plugin | None = None
 
     async def on_error(self, error: Exception) -> ErrorResponse | ExecuteResponse:
@@ -208,7 +212,10 @@ class Result(Base):
         if self.sub is not None:
             x["subTitle"] = self.sub
         if self.icon is not None:
-            x["icoPath"] = self.icon
+            if isinstance(self.icon, Glyph):
+                x['Glyph'] = self.icon.to_dict()
+            else:
+                x["icoPath"] = self.icon
         if self.title_highlight_data is not None:
             x["titleHighlightData"] = self.title_highlight_data
         if self.title_tooltip is not None:
@@ -223,6 +230,8 @@ class Result(Base):
             x["ContextData"] = [self.slug]
         if self.score is not None:
             x["score"] = self.score
+        if self.rounded_icon is not None:
+            x['RoundedIcon'] = self.rounded_icon
         return x
 
     @classmethod
