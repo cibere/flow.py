@@ -15,9 +15,8 @@ from typing import (
     Unpack,
 )
 
-from ..utils import cached_property, copy_doc
+from ..utils import MISSING, cached_property, copy_doc
 from .base_object import Base
-from .glyph import Glyph
 from .responses import ErrorResponse, ExecuteResponse
 
 if TYPE_CHECKING:
@@ -27,7 +26,98 @@ if TYPE_CHECKING:
 TS = TypeVarTuple("TS")
 LOG = logging.getLogger(__name__)
 
-__all__ = ("Result",)
+__all__ = ("Result", "ResultPreview", "ProgressBar", "Glyph")
+
+
+class Glyph(Base):
+    r"""This represents a glyth object with flow launcher, which is an alternative to :class:`~flogin.jsonrpc.results.Result` icons.
+
+    Attributes
+    ----------
+    text: :class:`str`
+        The text to be shown in the glyph
+    font_family: :class:`str`
+        The font that the text should be shown in
+    """
+
+    __slots__ = "text", "font_family"
+    __jsonrpc_option_names__ = {"text": "Glyph", "font_family": "FontFamily"}
+
+    def __init__(self, text: str, font_family: str) -> None:
+        self.text = text
+        self.font_family = font_family
+
+    @classmethod
+    def from_dict(cls: type[Self], data: dict[str, Any]) -> Self:
+        r"""Converts a dictionary into a :class:`Glyph` object.
+
+        Parameters
+        ----------
+        data: dict[:class:`str`, Any]
+            The dictionary
+        """
+
+        return cls(text=data["Glyth"], font_family=data["FontFamily"])
+
+
+class ProgressBar(Base):
+    r"""This represents the progress bar than can be shown on a result.
+
+    .. NOTE::
+        Visually, the progress bar takes the same spot as the title
+
+    Attributes
+    ----------
+    percentage: :class:`int`
+        The percentage of the progress bar that should be filled. must be 0-100.
+    color: :class:`str`
+        The color that the progress bar should be in hex code form. Defaults to #26a0da.
+    """
+
+    __slots__ = "percentage", "color"
+    __jsonrpc_option_names__ = {
+        "percentage": "ProgressBar",
+        "color": "ProgressBarColor",
+    }
+
+    def __init__(self, percentage: int, color: str = MISSING) -> None:
+        self.percentage = percentage
+        self.color = color or "#26a0da"
+
+
+class ResultPreview(Base):
+    r"""Represents a result's preview.
+
+    .. NOTE::
+        Previews are finicky, and may not work 100% of the time
+
+    Attributes
+    ----------
+    image_path: :class:`str`
+        The path to the image to be shown
+    description: Optional[:class:`str]`
+        The description to be shown
+    is_media: Optional[:class:`bool`]
+        Whther the preview should be treated as media or not
+    """
+
+    __slots__ = "image_path", "description", "is_media", "preview_deligate"
+    __jsonrpc_option_names__ = {
+        "image_path": "previewImagePath",
+        "is_media": "isMedia",
+        "description": "description",
+    }
+
+    def __init__(
+        self,
+        image_path: str,
+        *,
+        description: str | None = None,
+        is_media: bool = True,
+    ) -> None:
+        self.image_path = image_path
+        self.description = description
+        self.is_media = is_media
 
 
 class ResultConstructorArgs(TypedDict):
@@ -71,8 +161,8 @@ class Result(Base):
         The title/content of the result
     sub: Optional[:class:`str`]
         The subtitle to be shown.
-    icon: Optional[:class:`str` | :class:`~flogin.jsonrpc.glyph.Glyph`]
-        A path to the icon to be shown with the result, or a :class:`~flogin.jsonrpc.glyph.Glyph` object that will serve as the result's icon.
+    icon: Optional[:class:`str` | :class:`~flogin.jsonrpc.results.Glyph`]
+        A path to the icon to be shown with the result, or a :class:`~flogin.jsonrpc.results.Glyph` object that will serve as the result's icon.
     title_highlight_data: Optional[Iterable[:class:`int`]]
         The highlight data for the title. See the :ref:`FAQ section on highlights <highlights>` for more info.
     title_tooltip: Optional[:class:`str`]
@@ -80,9 +170,15 @@ class Result(Base):
     sub_tooltip: Optional[:class:`str`]
         The text to be displayed when the user hovers over the result's subtitle
     copy_text: Optional[:class:`str`]
-        This is the text that will be copied when the user does ``CTRL+C`` on the result.
+        This is the text that will be copied when the user does ``CTRL+C`` on the result. If the text is a file/directory path, flow will copy the actual file/folder instead of just the path text.
     plugin: :class:`~flogin.plugin.Plugin` | None
         Your plugin instance. This is filled before :func:`~flogin.jsonrpc.results.Result.callback` or :func:`~flogin.jsonrpc.results.Result.context_menu` are triggered.
+    preview: Optional[:class:`~flogin.jsonrpc.results.ResultPreview`]
+        Customize the preview that is shown for the result. By default, the preview shows the result's title, subtitle, and icon
+    progress_bar: Optional[:class:`~flogin.jsonrpc.results.ProgressBar`]
+        The progress bar that could be shown in the place of the title
+    auto_complete_text: Optional[:class:`str`]
+        The text that will replace the :attr:`~flogin.query.Query.raw_text` in the flow menu when the autocomplete hotkey is used on the result. Defaults to the result's title.
     rounded_icon: Optional[:class:`bool`]
         Whether to have round the icon or not.
     """
@@ -97,6 +193,9 @@ class Result(Base):
         sub_tooltip: str | None = None,
         copy_text: str | None = None,
         score: int | None = None,
+        auto_complete_text: str | None = None,
+        preview: ResultPreview | None = None,
+        progress_bar: ProgressBar | None = None,
         rounded_icon: bool | None = None,
     ) -> None:
         self.title = title
@@ -107,6 +206,9 @@ class Result(Base):
         self.sub_tooltip = sub_tooltip
         self.copy_text = copy_text
         self.score = score
+        self.auto_complete_text = auto_complete_text
+        self.preview = preview
+        self.progress_bar = progress_bar
         self.rounded_icon = rounded_icon
         self.plugin: Plugin | None = None
 
@@ -231,6 +333,12 @@ class Result(Base):
             x["ContextData"] = [self.slug]
         if self.score is not None:
             x["score"] = self.score
+        if self.preview is not None:
+            x["preview"] = self.preview.to_dict()
+        if self.auto_complete_text is not None:
+            x["autoCompleteText"] = self.auto_complete_text
+        if self.progress_bar is not None:
+            x.update(self.progress_bar.to_dict())
         if self.rounded_icon is not None:
             x["RoundedIcon"] = self.rounded_icon
         return x
