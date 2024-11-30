@@ -244,7 +244,9 @@ class Plugin:
         try:
             asyncio.run(self.start())
         except Exception as e:
-            LOG.exception(f"A fatal error has occured which crashed flogin: {e}", exc_info=e)
+            LOG.exception(
+                f"A fatal error has occured which crashed flogin: {e}", exc_info=e
+            )
 
     def register_search_handler(self, handler: SearchHandler) -> None:
         r"""Register a new search handler

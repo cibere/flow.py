@@ -42,6 +42,7 @@ class ResultConstructorArgs(TypedDict):
     score: NotRequired[int | None]
     rounded_icon: NotRequired[bool | None]
 
+
 class Result(Base):
     r"""This represents a result that would be returned as a result for a query or context menu.
 

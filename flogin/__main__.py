@@ -12,7 +12,11 @@ def cli(): ...
 @cli.group(name="create", help="Create specific files")
 def create_group(): ...
 
-@create_group.command(name='settings', help="Creates a SettingsTemplate.yaml with a settings template already inside.")
+
+@create_group.command(
+    name="settings",
+    help="Creates a SettingsTemplate.yaml with a settings template already inside.",
+)
 def create_settings() -> None:
     content = """body:
   - type: textBlock
@@ -48,6 +52,7 @@ def create_settings() -> None:
       defaultValue: false"""
     with open("SettingsTemplate.yaml", "w") as f:
         f.write(content)
+
 
 @create_group.command(name="plugin.json", help="Creates a new plugin.json file")
 def create_file() -> None:
