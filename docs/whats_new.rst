@@ -31,3 +31,4 @@ Bug Fixes
 - Fix bug where :attr:`~flogin.search_handler.SearchHandler.plugin` is ``None`` when :obj:`~flogin.search_handler.SearchHandler.condition` is ran.
 - Fix an ``AttributeError`` that gets raised in a couple of :class:`~flogin.flow_api.client.FlowLauncherAPI` methods
 - Log fatal errors that cause startup crashes to prevent them from being hidden.
+- Fix bug where ``rounded_icon`` was not present in ``ResultConstructorArgs``
