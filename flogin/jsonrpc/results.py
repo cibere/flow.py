@@ -15,7 +15,7 @@ from typing import (
     Unpack,
 )
 
-from ..utils import cached_property, copy_doc, MISSING
+from ..utils import MISSING, cached_property, copy_doc
 from .base_object import Base
 from .responses import ErrorResponse
 
@@ -29,12 +29,13 @@ LOG = logging.getLogger(__name__)
 
 __all__ = ("Result", "ResultPreview", "ProgressBar")
 
+
 class ProgressBar(Base):
     r"""This represents the progress bar than can be shown on a result.
-    
+
     .. NOTE::
         Visually, the progress bar takes the same spot as the title
-    
+
     Attributes
     ----------
     percentage: :class:`int`
@@ -46,18 +47,20 @@ class ProgressBar(Base):
     __slots__ = "percentage", "color"
     __jsonrpc_option_names__ = {
         "percentage": "ProgressBar",
-        "color": "ProgressBarColor"
+        "color": "ProgressBarColor",
     }
+
     def __init__(self, percentage: int, color: str = MISSING) -> None:
         self.percentage = percentage
         self.color = color or "#26a0da"
 
+
 class ResultPreview(Base):
     r"""Represents a result's preview.
-    
+
     .. NOTE::
         Previews are finicky, and may not work 100% of the time
-    
+
     Attributes
     ----------
     image_path: :class:`str`
@@ -67,7 +70,7 @@ class ResultPreview(Base):
     is_media: Optional[:class:`bool`]
         Whther the preview should be treated as media or not
     """
-    
+
     __slots__ = "image_path", "description", "is_media", "preview_deligate"
     __jsonrpc_option_names__ = {
         "image_path": "previewImagePath",
@@ -85,7 +88,8 @@ class ResultPreview(Base):
         self.image_path = image_path
         self.description = description
         self.is_media = is_media
-    
+
+
 class ResultConstructorArgs(TypedDict):
     title: str
     sub: NotRequired[str | None]
@@ -158,7 +162,7 @@ class Result(Base):
         score: int | None = None,
         auto_complete_text: str | None = None,
         preview: ResultPreview | None = None,
-        progress_bar: ProgressBar | None = None
+        progress_bar: ProgressBar | None = None,
     ) -> None:
         self.title = title
         self.sub = sub
