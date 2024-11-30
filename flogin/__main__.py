@@ -12,6 +12,42 @@ def cli(): ...
 @cli.group(name="create", help="Create specific files")
 def create_group(): ...
 
+@create_group.command(name='settings', help="Creates a SettingsTemplate.yaml with a settings template already inside.")
+def create_settings() -> None:
+    content = """body:
+  - type: textBlock
+    attributes:
+      description: Welcome to the settings page for my plugin. Here you can configure the plugin to your liking.
+  - type: input
+    attributes:
+      name: user_name
+      label: How should I call you?
+      defaultValue: the user
+  - type: textarea
+    attributes:
+      name: prepend_result
+      label: Text to prepend to result output
+      description: >
+        This text will be added to the beginning of the result output. For example, if you set this to 
+        "The result is: ", and the result is "42", the output will be "The result is: 42". 
+  - type: dropdown
+    attributes:
+      name: programming_language
+      label: Programming language to prefer for answers
+      defaultValue: TypeScript
+      options:
+        - JavaScript
+        - TypeScript
+        - Python
+        - "C#"
+  - type: checkbox
+    attributes:
+      name: prefer_shorter_aswers
+      label: Prefer shorter answers
+      description: If checked, the plugin will try to give answer much shorter than the usual ones.
+      defaultValue: false"""
+    with open("SettingsTemplate.yaml", "w") as f:
+        f.write(content)
 
 @create_group.command(name="plugin.json", help="Creates a new plugin.json file")
 def create_file() -> None:

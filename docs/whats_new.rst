@@ -16,6 +16,12 @@ New Features
 - Add :class:`~flogin.jsonrpc.glyph.Glyph`
     - Allow :class:`~flogin.jsonrpc.glyph.Glyph` objects in :attr:`~flogin.jsonrpc.results.Result.icon`
 - Add :attr:`~flogin.jsonrpc.results.Result.rounded_icon`
+- Add :class:`flogin.jsonrpc.results.ResultPreview`
+    - Add :attr:`~flogin.jsonrpc.results.Result.preview`
+- Add :class:`flogin.jsonrpc.results.ProgressBar`
+    - Add :attr:`flogin.jsonrpc.results.Result.progress_bar`
+- Add :attr:`flogin.jsonrpc.results.Result.auto_complete_text`
+- Add :ref:`flogin create settings <cli-create-settings-template>` CLI command
 
 Bug Fixes
 ~~~~~~~~~

@@ -29,6 +29,20 @@ create plugin.json
         --help
             Show this message and exit.
 
+.. _cli-create-settings-template:
+
+create settings
+~~~~~~~~~~~~~~~~~~
+
+.. function:: flogin create settings [OPTIONS]
+
+    Creates a SettingsTemplate.yaml with a settings template already inside.
+
+    Options:
+        --help
+            Show this message and exit.
+
+
 create gh
 ~~~~~~~~~~
 
