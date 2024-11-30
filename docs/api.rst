@@ -29,6 +29,12 @@ Result
 .. autoclass:: flogin.jsonrpc.results.Result
     :members:
 
+.. autoclass:: flogin.jsonrpc.results.ResultPreview
+    :members:
+
+.. autoclass:: flogin.jsonrpc.results.ProgressBar
+    :members:
+
 Responses
 ~~~~~~~~~
 
