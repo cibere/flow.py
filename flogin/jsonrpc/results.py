@@ -18,12 +18,11 @@ from typing import (
 from ..utils import cached_property, copy_doc
 from .base_object import Base
 from .glyph import Glyph
-from .responses import ErrorResponse
+from .responses import ErrorResponse, ExecuteResponse
 
 if TYPE_CHECKING:
     from .._types import SearchHandlerCallbackReturns
     from ..plugin import Plugin
-    from .responses import ExecuteResponse
 
 TS = TypeVarTuple("TS")
 LOG = logging.getLogger(__name__)
