@@ -15,7 +15,7 @@ from typing import (
     Unpack,
 )
 
-from ..utils import cached_property, copy_doc
+from ..utils import cached_property, copy_doc, MISSING
 from .base_object import Base
 from .responses import ErrorResponse
 
@@ -27,8 +27,30 @@ if TYPE_CHECKING:
 TS = TypeVarTuple("TS")
 LOG = logging.getLogger(__name__)
 
-__all__ = ("Result", "ResultPreview")
+__all__ = ("Result", "ResultPreview", "ProgressBar")
 
+class ProgressBar(Base):
+    r"""This represents the progress bar than can be shown on a result.
+    
+    .. NOTE::
+        Visually, the progress bar takes the same spot as the title
+    
+    Attributes
+    ----------
+    percentage: :class:`int`
+        The percentage of the progress bar that should be filled. must be 0-100.
+    color: :class:`str`
+        The color that the progress bar should be in hex code form. Defaults to #26a0da.
+    """
+
+    __slots__ = "percentage", "color"
+    __jsonrpc_option_names__ = {
+        "percentage": "ProgressBar",
+        "color": "ProgressBarColor"
+    }
+    def __init__(self, percentage: int, color: str = MISSING) -> None:
+        self.percentage = percentage
+        self.color = color or "#26a0da"
 
 class ResultPreview(Base):
     r"""Represents a result's preview.
@@ -59,7 +81,6 @@ class ResultPreview(Base):
         *,
         description: str | None = None,
         is_media: bool = True,
-        preview_deligate: str | None = None,
     ) -> None:
         self.image_path = image_path
         self.description = description
@@ -119,6 +140,10 @@ class Result(Base):
         Your plugin instance. This is filled before :func:`~flogin.jsonrpc.results.Result.callback` or :func:`~flogin.jsonrpc.results.Result.context_menu` are triggered.
     preview: Optional[:class:`~flogin.jsonrpc.results.ResultPreview`]
         Customize the preview that is shown for the result. By default, the preview shows the result's title, subtitle, and icon
+    progress_bar: Optional[:class:`~flogin.jsonrpc.results.ProgressBar`]
+        The progress bar that could be shown in the place of the title
+    auto_complete_text: Optional[:class:`str`]
+        The text that will replace the :attr:`~flogin.query.Query.raw_text` in the flow menu when the autocomplete hotkey is used on the result. Defaults to the result's title.
     """
 
     def __init__(
@@ -133,6 +158,7 @@ class Result(Base):
         score: int | None = None,
         auto_complete_text: str | None = None,
         preview: ResultPreview | None = None,
+        progress_bar: ProgressBar | None = None
     ) -> None:
         self.title = title
         self.sub = sub
@@ -144,6 +170,7 @@ class Result(Base):
         self.score = score
         self.auto_complete_text = auto_complete_text
         self.preview = preview
+        self.progress_bar = progress_bar
         self.plugin: Plugin | None = None
 
     async def on_error(self, error: Exception) -> ErrorResponse | ExecuteResponse:
@@ -268,6 +295,8 @@ class Result(Base):
             x["preview"] = self.preview.to_dict()
         if self.auto_complete_text is not None:
             x["autoCompleteText"] = self.auto_complete_text
+        if self.progress_bar is not None:
+            x.update(self.progress_bar.to_dict())
         return x
 
     @classmethod
