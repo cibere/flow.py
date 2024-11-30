@@ -44,14 +44,12 @@ class ResultPreview(Base):
         The description to be shown
     is_media: Optional[:class:`bool`]
         Whther the preview should be treated as media or not
-    preview_deligate: Optional[:class:`str`]
-        idk
     """
+    
     __slots__ = "image_path", "description", "is_media", "preview_deligate"
     __jsonrpc_option_names__ = {
         "image_path": "previewImagePath",
         "is_media": "isMedia",
-        "preview_deligate": "previewDeligate",
         "description": "description",
     }
 
@@ -66,7 +64,6 @@ class ResultPreview(Base):
         self.image_path = image_path
         self.description = description
         self.is_media = is_media
-        self.preview_deligate = preview_deligate
     
 class ResultConstructorArgs(TypedDict):
     title: str
