@@ -27,16 +27,32 @@ if TYPE_CHECKING:
 TS = TypeVarTuple("TS")
 LOG = logging.getLogger(__name__)
 
-__all__ = ("Result", "PreviewImage")
+__all__ = ("Result", "ResultPreview")
 
 
-class PreviewImage(Base):
+class ResultPreview(Base):
+    r"""Represents a result's preview.
+    
+    .. NOTE::
+        Previews are finicky, and may not work 100% of the time
+    
+    Attributes
+    ----------
+    image_path: :class:`str`
+        The path to the image to be shown
+    description: Optional[:class:`str]`
+        The description to be shown
+    is_media: Optional[:class:`bool`]
+        Whther the preview should be treated as media or not
+    preview_deligate: Optional[:class:`str`]
+        idk
+    """
     __slots__ = "image_path", "description", "is_media", "preview_deligate"
     __jsonrpc_option_names__ = {
-        "image_path": "PreviewImagePath",
-        "is_media": "IsMedia",
-        "preview_deligate": "PreviewDeligate",
-        "description": "Description",
+        "image_path": "previewImagePath",
+        "is_media": "isMedia",
+        "preview_deligate": "previewDeligate",
+        "description": "description",
     }
 
     def __init__(
@@ -44,15 +60,14 @@ class PreviewImage(Base):
         image_path: str,
         *,
         description: str | None = None,
-        is_media: bool,
+        is_media: bool = True,
         preview_deligate: str | None = None,
     ) -> None:
         self.image_path = image_path
         self.description = description
         self.is_media = is_media
         self.preview_deligate = preview_deligate
-
-
+    
 class ResultConstructorArgs(TypedDict):
     title: str
     sub: NotRequired[str | None]
@@ -105,6 +120,8 @@ class Result(Base):
         This is the text that will be copied when the user does ``CTRL+C`` on the result.
     plugin: :class:`~flogin.plugin.Plugin` | None
         Your plugin instance. This is filled before :func:`~flogin.jsonrpc.results.Result.callback` or :func:`~flogin.jsonrpc.results.Result.context_menu` are triggered.
+    preview: Optional[:class:`~flogin.jsonrpc.results.ResultPreview`]
+        Customize the preview that is shown for the result. By default, the preview shows the result's title, subtitle, and icon
     """
 
     def __init__(
@@ -118,7 +135,7 @@ class Result(Base):
         copy_text: str | None = None,
         score: int | None = None,
         auto_complete_text: str | None = None,
-        preview: PreviewImage | None = None,
+        preview: ResultPreview | None = None,
     ) -> None:
         self.title = title
         self.sub = sub
@@ -251,9 +268,9 @@ class Result(Base):
         if self.score is not None:
             x["score"] = self.score
         if self.preview is not None:
-            x["Preview"] = self.preview.to_dict()
+            x["preview"] = self.preview.to_dict()
         if self.auto_complete_text is not None:
-            x["AutoCompleteText"] = self.auto_complete_text
+            x["autoCompleteText"] = self.auto_complete_text
         return x
 
     @classmethod
