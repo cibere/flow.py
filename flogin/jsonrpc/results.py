@@ -114,7 +114,7 @@ class Result(Base):
     sub_tooltip: Optional[:class:`str`]
         The text to be displayed when the user hovers over the result's subtitle
     copy_text: Optional[:class:`str`]
-        This is the text that will be copied when the user does ``CTRL+C`` on the result.
+        This is the text that will be copied when the user does ``CTRL+C`` on the result. If the text is a file/directory path, flow will copy the actual file/folder instead of just the path text.
     plugin: :class:`~flogin.plugin.Plugin` | None
         Your plugin instance. This is filled before :func:`~flogin.jsonrpc.results.Result.callback` or :func:`~flogin.jsonrpc.results.Result.context_menu` are triggered.
     preview: Optional[:class:`~flogin.jsonrpc.results.ResultPreview`]
