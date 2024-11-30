@@ -27,8 +27,22 @@ if TYPE_CHECKING:
 TS = TypeVarTuple("TS")
 LOG = logging.getLogger(__name__)
 
-__all__ = ("Result",)
+__all__ = ("Result", "PreviewImage")
 
+class PreviewImage(Base):
+    __slots__ = "image_path", "description", "is_media", "preview_deligate"
+    __jsonrpc_option_names__ = {
+        "image_path": "PreviewImagePath",
+        "is_media": "IsMedia",
+        "preview_deligate": "PreviewDeligate",
+        "description": "Description"
+    }
+
+    def __init__(self, image_path: str, *, description: str | None = None, is_media: bool, preview_deligate: str | None = None) -> None:
+        self.image_path = image_path
+        self.description = description
+        self.is_media = is_media
+        self.preview_deligate = preview_deligate
 
 class ResultConstructorArgs(TypedDict):
     title: str
@@ -94,6 +108,8 @@ class Result(Base):
         sub_tooltip: str | None = None,
         copy_text: str | None = None,
         score: int | None = None,
+        auto_complete_text: str | None = None,
+        preview: PreviewImage | None = None,
     ) -> None:
         self.title = title
         self.sub = sub
@@ -103,6 +119,8 @@ class Result(Base):
         self.sub_tooltip = sub_tooltip
         self.copy_text = copy_text
         self.score = score
+        self.auto_complete_text = auto_complete_text
+        self.preview = preview
         self.plugin: Plugin | None = None
 
     async def on_error(self, error: Exception) -> ErrorResponse | ExecuteResponse:
@@ -223,6 +241,10 @@ class Result(Base):
             x["ContextData"] = [self.slug]
         if self.score is not None:
             x["score"] = self.score
+        if self.preview is not None:
+            x['Preview'] = self.preview.to_dict()
+        if self.auto_complete_text is not None:
+            x['AutoCompleteText'] = self.auto_complete_text
         return x
 
     @classmethod
