@@ -35,7 +35,7 @@ Results
 .. autoclass:: flogin.jsonrpc.results.ProgressBar
     :members:
     
-.. autoclass:: flogin.jsonrpc.glyph.Glyph
+.. autoclass:: flogin.jsonrpc.results.Glyph
     :members:
 
 Responses

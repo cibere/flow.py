@@ -17,7 +17,6 @@ from typing import (
 
 from ..utils import MISSING, cached_property, copy_doc
 from .base_object import Base
-from .glyph import Glyph
 from .responses import ErrorResponse, ExecuteResponse
 
 if TYPE_CHECKING:
@@ -27,7 +26,38 @@ if TYPE_CHECKING:
 TS = TypeVarTuple("TS")
 LOG = logging.getLogger(__name__)
 
-__all__ = ("Result", "ResultPreview", "ProgressBar")
+__all__ = ("Result", "ResultPreview", "ProgressBar", "Glyph")
+
+
+class Glyph(Base):
+    r"""This represents a glyth object with flow launcher, which is an alternative to :class:`~flogin.jsonrpc.results.Result` icons.
+
+    Attributes
+    ----------
+    text: :class:`str`
+        The text to be shown in the glyph
+    font_family: :class:`str`
+        The font that the text should be shown in
+    """
+
+    __slots__ = "text", "font_family"
+    __jsonrpc_option_names__ = {"text": "Glyph", "font_family": "FontFamily"}
+
+    def __init__(self, text: str, font_family: str) -> None:
+        self.text = text
+        self.font_family = font_family
+
+    @classmethod
+    def from_dict(cls: type[Self], data: dict[str, Any]) -> Self:
+        r"""Converts a dictionary into a :class:`Glyph` object.
+
+        Parameters
+        ----------
+        data: dict[:class:`str`, Any]
+            The dictionary
+        """
+
+        return cls(text=data["Glyth"], font_family=data["FontFamily"])
 
 
 class ProgressBar(Base):
@@ -131,8 +161,8 @@ class Result(Base):
         The title/content of the result
     sub: Optional[:class:`str`]
         The subtitle to be shown.
-    icon: Optional[:class:`str` | :class:`~flogin.jsonrpc.glyph.Glyph`]
-        A path to the icon to be shown with the result, or a :class:`~flogin.jsonrpc.glyph.Glyph` object that will serve as the result's icon.
+    icon: Optional[:class:`str` | :class:`~flogin.jsonrpc.results.Glyph`]
+        A path to the icon to be shown with the result, or a :class:`~flogin.jsonrpc.results.Glyph` object that will serve as the result's icon.
     title_highlight_data: Optional[Iterable[:class:`int`]]
         The highlight data for the title. See the :ref:`FAQ section on highlights <highlights>` for more info.
     title_tooltip: Optional[:class:`str`]
