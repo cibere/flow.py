@@ -17,8 +17,8 @@ from typing import (
 
 from ..utils import cached_property, copy_doc
 from .base_object import Base
-from .responses import ErrorResponse
 from .glyph import Glyph
+from .responses import ErrorResponse
 
 if TYPE_CHECKING:
     from .._types import SearchHandlerCallbackReturns
@@ -29,6 +29,7 @@ TS = TypeVarTuple("TS")
 LOG = logging.getLogger(__name__)
 
 __all__ = ("Result",)
+
 
 class ResultConstructorArgs(TypedDict):
     title: str
@@ -213,7 +214,7 @@ class Result(Base):
             x["subTitle"] = self.sub
         if self.icon is not None:
             if isinstance(self.icon, Glyph):
-                x['Glyph'] = self.icon.to_dict()
+                x["Glyph"] = self.icon.to_dict()
             else:
                 x["icoPath"] = self.icon
         if self.title_highlight_data is not None:
@@ -231,7 +232,7 @@ class Result(Base):
         if self.score is not None:
             x["score"] = self.score
         if self.rounded_icon is not None:
-            x['RoundedIcon'] = self.rounded_icon
+            x["RoundedIcon"] = self.rounded_icon
         return x
 
     @classmethod
