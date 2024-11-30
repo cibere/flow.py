@@ -52,7 +52,7 @@ class FlowLauncherAPI:
 
         res = await self.jsonrpc.request("FuzzySearch", [text, text_to_compare_it_to])
         assert not isinstance(res, ErrorResponse)
-        return FuzzySearchResult(res.data)
+        return FuzzySearchResult(res["result"])
 
     async def change_query(self, new_query: str, requery: bool = False) -> None:
         r"""|coro|
@@ -234,7 +234,7 @@ class FlowLauncherAPI:
 
         res = await self.jsonrpc.request("SavePluginSettings")
         assert not isinstance(res, ErrorResponse)
-        return res.data
+        return res["result"]
 
     async def reload_all_plugin_data(self) -> None:
         r"""|coro|
@@ -295,7 +295,7 @@ class FlowLauncherAPI:
 
         res = await self.jsonrpc.request("IsMainWindowVisible")
         assert not isinstance(res, ErrorResponse)
-        return res.data
+        return res["result"]
 
     async def check_for_updates(self) -> None:
         r"""|coro|
@@ -329,7 +329,7 @@ class FlowLauncherAPI:
 
         res = await self.jsonrpc.request("GetAllPlugins")
         assert not isinstance(res, ErrorResponse)
-        return [PluginMetadata(plugin["metadata"], self) for plugin in res.data]
+        return [PluginMetadata(plugin["metadata"], self) for plugin in res["result"]]
 
     async def add_keyword(self, plugin_id: str, keyword: str) -> None:
         r"""|coro|

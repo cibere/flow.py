@@ -23,3 +23,4 @@ Bug Fixes
 - Fixed bug with the `create plugin.json <cli-create-plugin-json>`_ CLI command dumping the wrong data.
 - Add the missing dependency `click <https://pypi.org/project/click/>`_
 - Fix bug where :attr:`~flogin.search_handler.SearchHandler.plugin` is ``None`` when :obj:`~flogin.search_handler.SearchHandler.condition` is ran.
+- Fix an ``AttributeError`` that gets raised in a couple of :class:`~flogin.flow_api.client.FlowLauncherAPI` methods
