@@ -18,10 +18,18 @@ New Features
 - Add :class:`flogin.jsonrpc.results.ProgressBar`
     - Add :attr:`flogin.jsonrpc.results.Result.progress_bar`
 - Add :attr:`flogin.jsonrpc.results.Result.auto_complete_text`
+- Add :class:`flogin.jsonrpc.glyph.Glyph`
+    - Allow :class:`~flogin.jsonrpc.glyph.Glyph` objects in :attr:`flogin.jsonrpc.results.Result.icon`
+- Add :attr:`flogin.jsonrpc.results.Result.rounded_icon`
+- Add :ref:`flogin create settings <cli-create-settings-template>` CLI command
 
 Bug Fixes
 ~~~~~~~~~
 
 - Fixed bug with the `create plugin.json <cli-create-plugin-json>`_ CLI command dumping the wrong data.
 - Add the missing dependency `click <https://pypi.org/project/click/>`_
-- Fix bug where :attr:`flogin.search_handler.SearchHandler.plugin` is ``None`` when the :obj:`~flogin.search_handler.SearchHandler.condition` is ran.
+- Fix bug where :attr:`flogin.search_handler.SearchHandler.plugin` is ``None`` when :obj:`flogin.search_handler.SearchHandler.condition` is ran.
+- Fix an ``AttributeError`` that gets raised in a couple of :class:`~flogin.flow_api.client.FlowLauncherAPI` methods
+- Log fatal errors that cause startup crashes to prevent them from being hidden.
+- Fix bug where ``rounded_icon`` was not present in ``ResultConstructorArgs``
+- Fix a ``NameError`` that gets raised in the default :func:`flogin.jsonrpc.results.Result.callback`
