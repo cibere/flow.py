@@ -17,12 +17,12 @@ from typing import (
 
 from ..utils import MISSING, cached_property, copy_doc
 from .base_object import Base
-from .responses import ErrorResponse
+from .glyph import Glyph
+from .responses import ErrorResponse, ExecuteResponse
 
 if TYPE_CHECKING:
     from .._types import SearchHandlerCallbackReturns
     from ..plugin import Plugin
-    from .responses import ExecuteResponse
 
 TS = TypeVarTuple("TS")
 LOG = logging.getLogger(__name__)
@@ -99,6 +99,7 @@ class ResultConstructorArgs(TypedDict):
     sub_tooltip: NotRequired[str | None]
     copy_text: NotRequired[str | None]
     score: NotRequired[int | None]
+    rounded_icon: NotRequired[bool | None]
 
 
 class Result(Base):
@@ -130,8 +131,8 @@ class Result(Base):
         The title/content of the result
     sub: Optional[:class:`str`]
         The subtitle to be shown.
-    icon: Optional[:class:`str`]
-        A path to the icon to be shown with the result.
+    icon: Optional[:class:`str` | :class:`~flogin.jsonrpc.glyph.Glyph`]
+        A path to the icon to be shown with the result, or a :class:`~flogin.jsonrpc.glyph.Glyph` object that will serve as the result's icon.
     title_highlight_data: Optional[Iterable[:class:`int`]]
         The highlight data for the title. See the :ref:`FAQ section on highlights <highlights>` for more info.
     title_tooltip: Optional[:class:`str`]
@@ -148,13 +149,15 @@ class Result(Base):
         The progress bar that could be shown in the place of the title
     auto_complete_text: Optional[:class:`str`]
         The text that will replace the :attr:`~flogin.query.Query.raw_text` in the flow menu when the autocomplete hotkey is used on the result. Defaults to the result's title.
+    rounded_icon: Optional[:class:`bool`]
+        Whether to have round the icon or not.
     """
 
     def __init__(
         self,
         title: str,
         sub: str | None = None,
-        icon: str | None = None,
+        icon: str | Glyph | None = None,
         title_highlight_data: Iterable[int] | None = None,
         title_tooltip: str | None = None,
         sub_tooltip: str | None = None,
@@ -163,6 +166,7 @@ class Result(Base):
         auto_complete_text: str | None = None,
         preview: ResultPreview | None = None,
         progress_bar: ProgressBar | None = None,
+        rounded_icon: bool | None = None,
     ) -> None:
         self.title = title
         self.sub = sub
@@ -175,6 +179,7 @@ class Result(Base):
         self.auto_complete_text = auto_complete_text
         self.preview = preview
         self.progress_bar = progress_bar
+        self.rounded_icon = rounded_icon
         self.plugin: Plugin | None = None
 
     async def on_error(self, error: Exception) -> ErrorResponse | ExecuteResponse:
@@ -280,7 +285,10 @@ class Result(Base):
         if self.sub is not None:
             x["subTitle"] = self.sub
         if self.icon is not None:
-            x["icoPath"] = self.icon
+            if isinstance(self.icon, Glyph):
+                x["Glyph"] = self.icon.to_dict()
+            else:
+                x["icoPath"] = self.icon
         if self.title_highlight_data is not None:
             x["titleHighlightData"] = self.title_highlight_data
         if self.title_tooltip is not None:
@@ -301,6 +309,8 @@ class Result(Base):
             x["autoCompleteText"] = self.auto_complete_text
         if self.progress_bar is not None:
             x.update(self.progress_bar.to_dict())
+        if self.rounded_icon is not None:
+            x["RoundedIcon"] = self.rounded_icon
         return x
 
     @classmethod

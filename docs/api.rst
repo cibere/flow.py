@@ -23,16 +23,19 @@ Classes
 JSON RPC
 --------
 
-Result
-~~~~~~
+Results
+~~~~~~~
 
 .. autoclass:: flogin.jsonrpc.results.Result
     :members:
-
+    
 .. autoclass:: flogin.jsonrpc.results.ResultPreview
     :members:
 
 .. autoclass:: flogin.jsonrpc.results.ProgressBar
+    :members:
+    
+.. autoclass:: flogin.jsonrpc.glyph.Glyph
     :members:
 
 Responses
