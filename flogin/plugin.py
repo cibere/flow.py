@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import os
 import re
 from typing import (
     TYPE_CHECKING,
@@ -70,7 +71,9 @@ class Plugin:
 
     @cached_property
     def settings(self) -> Settings:
-        fp = f"../../Settings/Plugins/{self.metadata.name}/Settings.json"
+        fp = os.path.join(
+            "..", "..", "Settings", "Plugin", self.metadata.name, "Settings.json"
+        )
         with open(fp, "r") as f:
             data = json.load(f)
         self._settings_are_populated = True
