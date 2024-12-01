@@ -120,7 +120,6 @@ class Plugin:
 
         # Special Event Cases
         replacements = {
-            # "on_context_menu": "_context_menu_wrapper",
             "on_initialize": "_initialize_wrapper",
         }
         method = replacements.get(method, method)
