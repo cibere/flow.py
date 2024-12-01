@@ -33,3 +33,4 @@ Bug Fixes
 - Log fatal errors that cause startup crashes to prevent them from being hidden.
 - Fix bug where ``rounded_icon`` was not present in ``ResultConstructorArgs``
 - Fix a ``NameError`` that gets raised in the default :func:`flogin.jsonrpc.results.Result.callback`
+- Fix bug where :attr:`flogin.plugin.Plugin.settings` will be replaced with a new :class:`~flogin.settings.Settings` instance every time a new query request is received, preventing making setting changes.

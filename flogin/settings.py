@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
-
+import logging
 from .errors import SettingNotFound
 
 if TYPE_CHECKING:
     from ._types import RawSettings
+
+LOG = logging.getLogger(__name__)
 
 __all__ = ("Settings",)
 
@@ -71,8 +73,15 @@ class Settings:
         self.__setitem__(name, value)
 
     def _update(self, data: RawSettings) -> None:
+        LOG.debug(f"Updating settings. Before: {self._data}, after: {data}")
         self._data = data
-        self._changes = {}
+    
+    def _get_updates(self) -> RawSettings:
+        try:
+            return self._changes
+        finally:
+            LOG.debug(f"Resetting setting changes: {self._changes}")
+            self._changes = {}
 
     def __repr__(self) -> str:
         return f"<Settings current={self._data!r}, pending_changes={self._changes}>"

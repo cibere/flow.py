@@ -182,7 +182,7 @@ class Plugin:
 
         if isinstance(results, ErrorResponse):
             return results
-        return QueryResponse(results, self.settings._changes)
+        return QueryResponse(results, self.settings._get_updates())
 
     async def process_search_handlers(
         self, query: Query
@@ -204,7 +204,7 @@ class Plugin:
 
         if isinstance(results, ErrorResponse):
             return results
-        return QueryResponse(results, self.settings._changes)
+        return QueryResponse(results, self.settings._get_updates())
 
     @property
     def metadata(self) -> PluginMetadata:
