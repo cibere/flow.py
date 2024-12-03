@@ -31,16 +31,16 @@ class FlowAPIMethod(Generic[CT]):
         self.callback = callback
         self.args = args
         self.kwargs = kwargs
-        self.api_endpoint: Callable[..., Awaitable[Any]] | None = None
+        self.api_requester: Callable[..., Awaitable[Any]] | None = None
 
     async def __call__(self) -> CT:
         gen = self.callback(*self.args, **self.kwargs)
         data = next(gen)
 
-        if self.api_endpoint is None:
+        if self.api_requester is None:
             raise RuntimeError("No API Endpoint has been set")
 
-        raw_resp = await self.api_endpoint(*data)
+        raw_resp = await self.api_requester(*data)
 
         try:
             gen.send(raw_resp)
@@ -58,14 +58,14 @@ class FlowAPIMethod(Generic[CT]):
         api_future = asyncio.Future()
         data_future = asyncio.Future()
 
-        async def api_endpoint(method: str, params: list[Any]):
+        async def api_requester(method: str, params: list[Any]):
             data = {}
             data["method"] = method
             data["params"] = params
             data_future.set_result(data)
             return await api_future
 
-        self.api_endpoint = api_endpoint
+        self.api_requester = api_requester
 
         return (
             api_future,
@@ -85,7 +85,7 @@ class _flow_api_method(Generic[CT]):
         endpoint = FlowAPIMethod(self.func, *args, **kwargs)
         if self.parent is not None:
             endpoint.args = (self.parent, *args)  # type: ignore
-            endpoint.api_endpoint = self.parent.jsonrpc.request
+            endpoint.api_requester = self.parent.jsonrpc.request
         return endpoint
 
 
