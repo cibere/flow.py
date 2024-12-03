@@ -30,6 +30,7 @@ __all__ = ("Result", "ResultPreview", "ProgressBar", "Glyph")
 
 # region Glyth
 
+
 class Glyph(Base):
     r"""This represents a glyth object with flow launcher, which is an alternative to :class:`~flogin.jsonrpc.results.Result` icons.
 
@@ -60,8 +61,10 @@ class Glyph(Base):
 
         return cls(text=data["Glyth"], font_family=data["FontFamily"])
 
+
 # endregion
 # region ProgressBar
+
 
 class ProgressBar(Base):
     r"""This represents the progress bar than can be shown on a result.
@@ -87,8 +90,10 @@ class ProgressBar(Base):
         self.percentage = percentage
         self.color = color or "#26a0da"
 
+
 # endregion
 # region ResultPreview
+
 
 class ResultPreview(Base):
     r"""Represents a result's preview.
@@ -124,8 +129,10 @@ class ResultPreview(Base):
         self.description = description
         self.is_media = is_media
 
+
 # endregion
 # region Result
+
 
 class ResultConstructorArgs(TypedDict):
     title: str
@@ -137,6 +144,7 @@ class ResultConstructorArgs(TypedDict):
     copy_text: NotRequired[str | None]
     score: NotRequired[int | None]
     rounded_icon: NotRequired[bool | None]
+
 
 class Result(Base):
     r"""This represents a result that would be returned as a result for a query or context menu.
@@ -435,4 +443,5 @@ class Result(Base):
             )
         )
 
-#endregion
+
+# endregion
