@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import inspect
-from typing import TYPE_CHECKING, Any, Generator, ParamSpec, TypeVar
+from typing import TYPE_CHECKING, ParamSpec, TypeVar
 
 from .fuzzy_search import FuzzySearchResult
 from .method import FlowAPIMethod, Gen, _flow_api_method, flow_api_method
@@ -10,9 +10,8 @@ from .plugin_metadata import PluginMetadata
 
 ATS = ParamSpec("ATS")
 T = TypeVar("T")
-
 if TYPE_CHECKING:
-    from ..jsonrpc import ExecuteResponse, JsonRPCClient, Result
+    from ..jsonrpc import JsonRPCClient, Result
 
 __all__ = ("FlowLauncherAPI",)
 
@@ -31,7 +30,7 @@ class FlowLauncherAPI:
         ):
             value.parent = self
 
-    async def __call__(self, *methods: FlowAPIMethod) -> list:
+    async def __call__(self, *methods: FlowAPIMethod[T]) -> list[T]:
         from ..jsonrpc import ErrorResponse  # circular import
 
         params = []
