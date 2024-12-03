@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
 import logging
+from typing import TYPE_CHECKING, Any
+
 from .errors import SettingNotFound
 
 if TYPE_CHECKING:
@@ -75,7 +76,7 @@ class Settings:
     def _update(self, data: RawSettings) -> None:
         LOG.debug(f"Updating settings. Before: {self._data}, after: {data}")
         self._data = data
-    
+
     def _get_updates(self) -> RawSettings:
         try:
             return self._changes
