@@ -146,3 +146,5 @@ Utils
                 ...
 
 .. autodecorator:: flogin.utils.cached_coro()
+
+.. autodecorator:: flogin.utils.cached_gen()

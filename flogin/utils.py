@@ -12,9 +12,11 @@ from typing import (
     Callable,
     Coroutine,
     TypeVar,
+    AsyncGenerator
 )
 
 Coro = TypeVar("Coro", bound=Callable[..., Coroutine[Any, Any, Any]])
+AGenT = TypeVar("AGenT", bound=Callable[..., AsyncGenerator[Any, Any]])
 T = TypeVar("T")
 
 LOG = logging.getLogger(__name__)
@@ -40,7 +42,7 @@ if TYPE_CHECKING:
 else:
     cached_property = _cached_property
 
-__all__ = ("setup_logging", "coro_or_gen", "MISSING", "cached_property", "cached_coro")
+__all__ = ("setup_logging", "coro_or_gen", "MISSING", "cached_property", "cached_coro", "cached_gen")
 
 
 def copy_doc(original: Callable[..., Any]) -> Callable[[T], T]:
@@ -92,11 +94,42 @@ def cached_coro(coro: Coro) -> Coro:
         try:
             return cache[key]
         except KeyError:
-            cache[key] = await coro(*args, **kwargs)
+            cache[key] = await coro_or_gen(coro(*args, **kwargs))
             return cache[key]
 
     return inner  # type: ignore
 
+
+def cached_gen(gen: AGenT) -> AGenT:
+    r"""A decorator to cache an async generator's contents based on the passed arguments. This is provided to cache search results.
+
+    .. NOTE::
+        The arguments passed to the generator must be hashable.
+
+    Example
+    --------
+    .. code-block:: python3
+
+        @plugin.search()
+        @utils.cached_gen
+        async def handler(query):
+            ...
+    """
+
+    cache = {}
+
+    @functools.wraps(gen)
+    async def inner(*args, **kwargs):
+        key = make_cached_key(args, kwargs, False)
+        try:
+            for item in cache[key]:
+                yield item
+        except KeyError:
+            cache[key] = await coro_or_gen(gen(*args, **kwargs))
+            for item in cache[key]:
+                yield item
+
+    return inner  # type: ignore
 
 def setup_logging(*, formatter: logging.Formatter | None = None) -> None:
     r"""Sets up flogin's default logger.

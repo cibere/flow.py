@@ -22,6 +22,7 @@ New Features
     - Allow :class:`~flogin.jsonrpc.results.Glyph` objects in :attr:`flogin.jsonrpc.results.Result.icon`
 - Add :attr:`flogin.jsonrpc.results.Result.rounded_icon`
 - Add :ref:`flogin create settings <cli-create-settings-template>` CLI command
+- Add :func:`flogin.utils.cached_gen`
 
 Bug Fixes
 ~~~~~~~~~
