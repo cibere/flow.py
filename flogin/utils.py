@@ -7,12 +7,12 @@ from inspect import signature as _signature
 from typing import (
     TYPE_CHECKING,
     Any,
+    AsyncGenerator,
     AsyncIterable,
     Awaitable,
     Callable,
     Coroutine,
     TypeVar,
-    AsyncGenerator
 )
 
 Coro = TypeVar("Coro", bound=Callable[..., Coroutine[Any, Any, Any]])
@@ -42,7 +42,14 @@ if TYPE_CHECKING:
 else:
     cached_property = _cached_property
 
-__all__ = ("setup_logging", "coro_or_gen", "MISSING", "cached_property", "cached_coro", "cached_gen")
+__all__ = (
+    "setup_logging",
+    "coro_or_gen",
+    "MISSING",
+    "cached_property",
+    "cached_coro",
+    "cached_gen",
+)
 
 
 def copy_doc(original: Callable[..., Any]) -> Callable[[T], T]:
@@ -130,6 +137,7 @@ def cached_gen(gen: AGenT) -> AGenT:
                 yield item
 
     return inner  # type: ignore
+
 
 def setup_logging(*, formatter: logging.Formatter | None = None) -> None:
     r"""Sets up flogin's default logger.
