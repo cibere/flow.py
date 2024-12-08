@@ -1,3 +1,5 @@
+.. module:: flogin
+
 Whats New
 ==========
 
@@ -14,8 +16,8 @@ Breaking Changes
 New Features
 ~~~~~~~~~~~~
 
-- Add `Query.__repr__`
-- Let :func:`flogin.search_handler.SearchHandler.callback` and :func:`flogin.search_handler.SearchHandler.context_menu` return ``None``
+- Add ``Query.__repr__``
+- Let :func:`flogin.search_handler.SearchHandler.callback` and :func:`flogin.jsonrpc.results.Result.context_menu` return ``None``
 - Add ``Generic`` to :class:`flogin.search_handler.SearchHandler` for :attr:`flogin.search_handler.SearchHandler.plugin`
 - Add ``Generic`` to :class:`flogin.jsonrpc.results.Result` for :attr:`flogin.jsonrpc.results.Result.plugin`
 
