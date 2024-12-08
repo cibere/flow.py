@@ -63,3 +63,6 @@ class Query(Generic[T]):
 
     def __hash__(self) -> int:
         return hash(self.raw_text)
+
+    def __repr__(self) -> str:
+        return f"<Query data={self.__data} condition_data={self.condition_data}>"

@@ -3,6 +3,14 @@ Whats New
 
 This page keeps a detailed human friendly rendering of what's new and changed in specific versions.
 
+v0.0.6
+------
+
+New Features
+~~~~~~~~~~~~
+
+- Add `Query.__repr__`
+
 v0.0.5
 -------
 
