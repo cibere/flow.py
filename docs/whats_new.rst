@@ -15,6 +15,7 @@ New Features
 ~~~~~~~~~~~~
 
 - Add `Query.__repr__`
+- Let :func:`flogin.search_handler.SearchHandler.callback` and :func:`flogin.search_handler.SearchHandler.context_menu` return ``None``
 
 v0.0.5
 -------

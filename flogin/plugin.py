@@ -135,6 +135,10 @@ class Plugin:
     ) -> list[Result] | ErrorResponse:
         results = []
         raw_results = await coro_or_gen(coro)
+
+        if raw_results is None:
+            return results
+        
         if isinstance(raw_results, ErrorResponse):
             return raw_results
         if isinstance(raw_results, dict):
