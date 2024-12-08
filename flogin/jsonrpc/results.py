@@ -161,8 +161,8 @@ class Result(Base):
         The title/content of the result
     sub: Optional[:class:`str`]
         The subtitle to be shown.
-    icon: Optional[:class:`str` | :class:`~flogin.jsonrpc.results.Glyph`]
-        A path to the icon to be shown with the result, or a :class:`~flogin.jsonrpc.results.Glyph` object that will serve as the result's icon.
+    icon: Optional[:class:`str`]
+        A path to the icon to be shown with the result. If this and :attr:`~flogin.jsonrpc.results.Result.glyth` are passed, the user's ``Use Segoe Fluent Icons`` setting will determine which is used.
     title_highlight_data: Optional[Iterable[:class:`int`]]
         The highlight data for the title. See the :ref:`FAQ section on highlights <highlights>` for more info.
     title_tooltip: Optional[:class:`str`]
@@ -181,13 +181,15 @@ class Result(Base):
         The text that will replace the :attr:`~flogin.query.Query.raw_text` in the flow menu when the autocomplete hotkey is used on the result. Defaults to the result's title.
     rounded_icon: Optional[:class:`bool`]
         Whether to have round the icon or not.
+    glyth: Optional[:class:`~flogin.jsonrpc.results.Glyph`]
+        The :class:`~flogin.jsonrpc.results.Glyph` object that will serve as the result's icon. If this and :attr:`~flogin.jsonrpc.results.Result.icon` are passed, the user's ``Use Segoe Fluent Icons`` setting will determine which is used.
     """
 
     def __init__(
         self,
         title: str,
         sub: str | None = None,
-        icon: str | Glyph | None = None,
+        icon: str | None = None,
         title_highlight_data: Iterable[int] | None = None,
         title_tooltip: str | None = None,
         sub_tooltip: str | None = None,
@@ -197,6 +199,7 @@ class Result(Base):
         preview: ResultPreview | None = None,
         progress_bar: ProgressBar | None = None,
         rounded_icon: bool | None = None,
+        glyph: Glyph | None = None,
     ) -> None:
         self.title = title
         self.sub = sub
@@ -210,6 +213,7 @@ class Result(Base):
         self.preview = preview
         self.progress_bar = progress_bar
         self.rounded_icon = rounded_icon
+        self.glyph = glyph
         self.plugin: Plugin | None = None
 
     async def on_error(self, error: Exception) -> ErrorResponse | ExecuteResponse:
@@ -315,10 +319,7 @@ class Result(Base):
         if self.sub is not None:
             x["subTitle"] = self.sub
         if self.icon is not None:
-            if isinstance(self.icon, Glyph):
-                x["Glyph"] = self.icon.to_dict()
-            else:
-                x["icoPath"] = self.icon
+            x["icoPath"] = self.icon
         if self.title_highlight_data is not None:
             x["titleHighlightData"] = self.title_highlight_data
         if self.title_tooltip is not None:
@@ -341,6 +342,8 @@ class Result(Base):
             x.update(self.progress_bar.to_dict())
         if self.rounded_icon is not None:
             x["RoundedIcon"] = self.rounded_icon
+        if self.glyph is not None:
+            x["Glyph"] = self.glyph.to_dict()
         return x
 
     @classmethod

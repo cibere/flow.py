@@ -3,8 +3,13 @@ Whats New
 
 This page keeps a detailed human friendly rendering of what's new and changed in specific versions.
 
-v0.0.6
+v0.1.0
 ------
+
+Breaking Changes
+~~~~~~~~~~~~~~~~
+
+- Move :class:`flogin.jsonrpc.results.Glyph` support from :attr:`flogin.jsonrpc.results.Result.icon` to :class:`flogin.jsonrpc.results.Result.gylph`
 
 New Features
 ~~~~~~~~~~~~
