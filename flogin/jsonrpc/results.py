@@ -7,6 +7,7 @@ from typing import (
     Any,
     Callable,
     Coroutine,
+    Generic,
     Iterable,
     NotRequired,
     Self,
@@ -15,13 +16,10 @@ from typing import (
     Unpack,
 )
 
+from .._types import PluginT, SearchHandlerCallbackReturns
 from ..utils import MISSING, cached_property, copy_doc
 from .base_object import Base
 from .responses import ErrorResponse, ExecuteResponse
-
-if TYPE_CHECKING:
-    from .._types import SearchHandlerCallbackReturns
-    from ..plugin import Plugin
 
 TS = TypeVarTuple("TS")
 LOG = logging.getLogger(__name__)
@@ -132,7 +130,7 @@ class ResultConstructorArgs(TypedDict):
     rounded_icon: NotRequired[bool | None]
 
 
-class Result(Base):
+class Result(Base, Generic[PluginT]):
     r"""This represents a result that would be returned as a result for a query or context menu.
 
     For simple useage: create instances of this class as-is.
@@ -214,7 +212,7 @@ class Result(Base):
         self.progress_bar = progress_bar
         self.rounded_icon = rounded_icon
         self.glyph = glyph
-        self.plugin: Plugin | None = None
+        self.plugin: PluginT | None = None
 
     async def on_error(self, error: Exception) -> ErrorResponse | ExecuteResponse:
         r"""|coro|

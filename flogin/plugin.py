@@ -138,7 +138,7 @@ class Plugin:
 
         if raw_results is None:
             return results
-        
+
         if isinstance(raw_results, ErrorResponse):
             return raw_results
         if isinstance(raw_results, dict):

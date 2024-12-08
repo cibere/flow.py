@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any, Callable, TypeVar
+from typing import TYPE_CHECKING, Callable, Generic, TypeVar
 
+from ._types import PluginT, SearchHandlerCallbackReturns, SearchHandlerCondition
 from .jsonrpc import ErrorResponse
 from .utils import copy_doc
 
 if TYPE_CHECKING:
-    from ._types import SearchHandlerCallbackReturns, SearchHandlerCondition
     from .plugin import Plugin
     from .query import Query
 
@@ -25,7 +25,7 @@ def _default_condition(q: Query) -> bool:
     return True
 
 
-class SearchHandler:
+class SearchHandler(Generic[PluginT]):
     r"""This represents a search handler.
 
     When creating this on your own, the :func:`~flogin.plugin.Plugin.register_search_handler` method can be used to register it.
@@ -50,7 +50,7 @@ class SearchHandler:
             condition = _default_condition
 
         self.condition = condition
-        self.plugin: Plugin | None = None
+        self.plugin: PluginT | None = None
 
     def callback(self, query: Query) -> SearchHandlerCallbackReturns:
         r"""|coro|
