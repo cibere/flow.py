@@ -419,6 +419,8 @@ class FlowLauncherAPI:
 
         from ..jsonrpc import ErrorResponse, QueryResponse  # circular import
 
+        self.jsonrpc.plugin._results.update({res.slug: res for res in results})
+
         res = await self.jsonrpc.request(
             "UpdateResults", [raw_query, QueryResponse(results).to_dict()]
         )

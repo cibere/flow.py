@@ -21,6 +21,11 @@ New Features
 - Add ``Generic`` to :class:`flogin.search_handler.SearchHandler` for :attr:`flogin.search_handler.SearchHandler.plugin`
 - Add ``Generic`` to :class:`flogin.jsonrpc.results.Result` for :attr:`flogin.jsonrpc.results.Result.plugin`
 
+Bug Fixes
+~~~~~~~~~
+
+- Fix bug where :func:`FlowLauncherAPI.update_results` does not register the results, so callbacks do not get triggered.
+
 v0.0.5
 -------
 
