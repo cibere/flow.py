@@ -47,7 +47,7 @@ class JsonRPCClient:
         await self.write(msg, drain=False)
         return await fut
 
-    async def __handle_cancellation(self, id: int) -> None:
+    async def handle_cancellation(self, id: int) -> None:
         if id in self.tasks:
             task = self.tasks.pop(id)
             success = task.cancel()
@@ -82,7 +82,7 @@ class JsonRPCClient:
 
     async def handle_notification(self, method: str, params: dict[str, Any]) -> None:
         if method == "$/cancelRequest":
-            await self.__handle_cancellation(params["id"])
+            await self.handle_cancellation(params["id"])
         else:
             LOG.exception(
                 f"Unknown notification method received: {method}",
@@ -151,9 +151,11 @@ class JsonRPCClient:
         self.reader = reader
         self.writer = writer
 
+        stream_log = logging.getLogger("flogin.stream_reader")
+
         while 1:
             async for line in reader:
-                LOG.debug(f"Received line: {line!r} of type {type(line)!r}")
+                stream_log.info(f"Received line: {line!r} of type {type(line)!r}")
                 line = line.decode("utf-8")
                 if line == "":
                     continue
