@@ -40,4 +40,5 @@ packages = [
     "flogin",
     "flogin.flow_api",
     "flogin.jsonrpc",
+    "flogin.testing"
 ]
