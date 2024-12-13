@@ -1,5 +1,3 @@
-.. module:: flogin
-
 Whats New
 ==========
 

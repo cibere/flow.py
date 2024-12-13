@@ -1,3 +1,5 @@
+.. module:: flogin
+
 API Reference
 =============
 
@@ -119,6 +121,12 @@ JSON-RPC Errors
     :members:
 
 .. autoclass:: flogin.jsonrpc.errors.JsonRPCVersionMismatch
+    :members:
+
+Testing
+-------
+
+.. autoclass:: flogin.testing.plugin_tester.PluginTester
     :members:
 
 Utils
