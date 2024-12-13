@@ -8,7 +8,6 @@ from .jsonrpc import ErrorResponse
 from .utils import copy_doc
 
 if TYPE_CHECKING:
-    from .plugin import Plugin
     from .query import Query
 
     ErrorHandlerT = TypeVar(
