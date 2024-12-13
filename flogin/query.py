@@ -19,31 +19,35 @@ class Query(Generic[T]):
         .. describe:: hash(x)
 
             Gets the hash of the query's raw text
+    
+    Attributes
+    ----------
+    raw_text: :class:`str`:
+        The raw and complete query, which includes the keyword
+    is_requery: :class:`bool`
+        Whether the query is a requery or not
+    text: :class:`str`
+        The actual query, excluding any keywords
+    keyword: :class:`str`
+        The keyword used to initiate the query
     """
 
-    def __init__(self, data: dict[str, Any]) -> None:
-        self.__data = data
+    def __init__(self, *, raw_text: str, is_requery: bool = False, text: str, keyword: str) -> None:
         self.__search_condition_data: T | None = None
 
-    @property
-    def raw_text(self) -> str:
-        """:class:`str`: The raw and complete query, which includes the keyword"""
-        return self.__data["rawQuery"]
-
-    @property
-    def is_requery(self) -> bool:
-        """:class:`bool`: Whether the query is a requery or not"""
-        return self.__data["isReQuery"]
-
-    @property
-    def text(self) -> str:
-        """:class:`str`: The actual query, excluding any keywords"""
-        return self.__data["search"]
-
-    @property
-    def keyword(self) -> str:
-        """:class:`str`: The keyword used to initiate the query"""
-        return self.__data["actionKeyword"]
+        self.raw_text = raw_text
+        self.is_requery = is_requery
+        self.text = text
+        self.keyword = keyword
+    
+    @classmethod
+    def from_json(cls: type[Query], data: dict[str, Any]) -> Query:
+        return cls(
+            raw_text=data['rawQuery'],
+            is_requery=data['isReQuery'],
+            text=data['search'],
+            keyword=data['actionKeyword']
+        )
 
     @property
     def condition_data(self) -> T | None:
@@ -65,4 +69,4 @@ class Query(Generic[T]):
         return hash(self.raw_text)
 
     def __repr__(self) -> str:
-        return f"<Query data={self.__data} condition_data={self.condition_data}>"
+        return f"<Query {self.raw_text=} {self.text=} {self.keyword=} {self.is_requery=} {self.condition_data=}>"
