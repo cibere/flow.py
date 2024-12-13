@@ -37,7 +37,7 @@ class PluginTester(Generic[PluginT]):
         Your plugin's metadata. If ``None`` is passed, flogin will attempt to get the metadata from your ``plugin.json`` file. The :func:`PluginTester.create_plugin_metadata` and :func:`PluginTester.create_bogus_plugin_metadata` classmethods have been provided for creating :class:`~flogin.flow_api.plugin_metadata.PluginMetadata` objects.
     flow_api_client: Optional[Any]
         If not passed, flogin will use a filler class which will raise a runtime error whenever an attribute is accessed. If passed, you should be passing an instance of a class which will replace :class:`~flogin.flow_api.client.FlowLauncherAPI`, so make sure to impliment the methods you need and handle them accordingly.
-    
+
     Attributes
     ----------
     plugin: :class:`~flogin.plugin.Plugin`
@@ -109,7 +109,7 @@ class PluginTester(Generic[PluginT]):
         if coro is None:
             raise RuntimeError("Query event handler not found")
 
-        return await coro # type: ignore
+        return await coro  # type: ignore
 
     async def test_context_menu(
         self, result: Result, *, bypass_registration: bool = False
@@ -213,7 +213,7 @@ class PluginTester(Generic[PluginT]):
             The plugin's main keyword. Defaults to the first keyword in the keywords parameter
         icon_path: Optional[:class:`str`]
             The plugin's icon. Defaults to an invalid icon path.
-        
+
         Returns
         --------
         :class:`~flogin.flow_api.plugin_metadata.PluginMetadata`

@@ -1,11 +1,15 @@
-from flogin import Plugin, Query, Result, ExecuteResponse
+from flogin import ExecuteResponse, Plugin, Query, Result
 
 my_plugin = Plugin()
 
+
 class MyResult(Result):
     async def callback(self):
-        await my_plugin.api.show_notification("Flogin", "result's callback has been triggered")
+        await my_plugin.api.show_notification(
+            "Flogin", "result's callback has been triggered"
+        )
         return ExecuteResponse()
+
 
 @my_plugin.search()
 async def blanket(q: Query):
@@ -14,8 +18,9 @@ async def blanket(q: Query):
 
 import asyncio
 
-from flogin.testing import PluginTester
 from flogin import Query
+from flogin.testing import PluginTester
+
 
 # Since we use the `show_notification` api method in our result callback, we need to impliment it in our replacement class.
 class FakeFlowAPI:
@@ -26,7 +31,7 @@ class FakeFlowAPI:
 async def main():
     # Because we don't use the metadata at all, we can just use some bogus data.
     metadata = PluginTester.create_bogus_plugin_metadata()
-    
+
     # Creating our plugin tester object
     tester = PluginTester(my_plugin, metadata=metadata, flow_api_client=FakeFlowAPI())
 
