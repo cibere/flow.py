@@ -20,6 +20,7 @@ New Features
 - Let :func:`flogin.search_handler.SearchHandler.callback` and :func:`flogin.jsonrpc.results.Result.context_menu` return ``None``
 - Add ``Generic`` to :class:`flogin.search_handler.SearchHandler` for :attr:`flogin.search_handler.SearchHandler.plugin`
 - Add ``Generic`` to :class:`flogin.jsonrpc.results.Result` for :attr:`flogin.jsonrpc.results.Result.plugin`
+- Update ``Query.__init__`` to allow for an easier time manually creating query objects.
 
 Bug Fixes
 ~~~~~~~~~
