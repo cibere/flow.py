@@ -162,7 +162,6 @@ class JsonRPCClient:
 
                 asyncio.create_task(self.process_input(line))
 
-            
     async def write(self, msg: bytes, drain: bool = True) -> None:
         LOG.debug(f"Sending: {msg!r}")
         self.writer.write(msg)

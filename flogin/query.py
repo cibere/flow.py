@@ -19,7 +19,7 @@ class Query(Generic[T]):
         .. describe:: hash(x)
 
             Gets the hash of the query's raw text
-    
+
     Attributes
     ----------
     raw_text: :class:`str`:
@@ -32,21 +32,23 @@ class Query(Generic[T]):
         The keyword used to initiate the query
     """
 
-    def __init__(self, *, raw_text: str, is_requery: bool = False, text: str, keyword: str) -> None:
+    def __init__(
+        self, *, raw_text: str, is_requery: bool = False, text: str, keyword: str
+    ) -> None:
         self.__search_condition_data: T | None = None
 
         self.raw_text = raw_text
         self.is_requery = is_requery
         self.text = text
         self.keyword = keyword
-    
+
     @classmethod
     def from_json(cls: type[Query], data: dict[str, Any]) -> Query:
         return cls(
-            raw_text=data['rawQuery'],
-            is_requery=data['isReQuery'],
-            text=data['search'],
-            keyword=data['actionKeyword']
+            raw_text=data["rawQuery"],
+            is_requery=data["isReQuery"],
+            text=data["search"],
+            keyword=data["actionKeyword"],
         )
 
     @property
