@@ -139,7 +139,11 @@ def cached_gen(gen: AGenT) -> AGenT:
     return inner  # type: ignore
 
 
-def setup_logging(*, formatter: logging.Formatter | None = None) -> None:
+def setup_logging(
+    *,
+    formatter: logging.Formatter | None = None,
+    handler: logging.Handler | None = None,
+) -> None:
     r"""Sets up flogin's default logger.
 
     Parameters
@@ -150,9 +154,10 @@ def setup_logging(*, formatter: logging.Formatter | None = None) -> None:
 
     level = logging.DEBUG
 
-    handler = logging.handlers.RotatingFileHandler(
-        "flogin.log", maxBytes=1000000, encoding="UTF-8"
-    )
+    if handler is None:
+        handler = logging.handlers.RotatingFileHandler(
+            "flogin.log", maxBytes=1000000, encoding="UTF-8"
+        )
 
     if formatter is None:
         dt_fmt = "%Y-%m-%d %H:%M:%S"

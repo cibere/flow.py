@@ -35,3 +35,4 @@ If you're having trouble with something, these resources might help.
    search_handlers
    cli
    whats_new
+   testing
