@@ -123,6 +123,8 @@ JSON-RPC Errors
 .. autoclass:: flogin.jsonrpc.errors.JsonRPCVersionMismatch
     :members:
 
+.. _testing_module_api_reference:
+
 Testing
 -------
 

@@ -1,9 +1,9 @@
 Testing your plugin
 ===================
 
-Writing Tests
---------------
-For writing tests, we can use the :class:`~flogin.testing.plugin_tester.PluginTester` class to create tests for our plugin.
+Using the testing module
+------------------------
+We can use the :class:`~flogin.testing.plugin_tester.PluginTester` class to create tests for our plugin.
 
 :class:`~flogin.testing.plugin_tester.PluginTester` takes 3 arguments:
 
@@ -115,3 +115,85 @@ That one is pretty easy due to it not returning anything, or doing anything that
                 self.plugin.metadata.keywords.append(keyword)
 
             print(f"-- Added {keyword!r} keyword to {plugin_id!r} --")
+
+Writing Tests
+-------------
+If you ever decide to write tests for your plugin, feel free to write them however you want. Though for this guide, we will be using the `pytest <https://pypi.org/project/pytest/>`_ library, with the `pytest-asyncio <https://pypi.org/project/pytest-asyncio/>`_ plugin.
+
+Here is a simple plugin: ::
+
+    from flogin import ExecuteResponse, Plugin, Query, Result
+
+    my_plugin = Plugin()
+
+
+    class MyResult(Result):
+        async def callback(self):
+            await my_plugin.api.show_notification(
+                "Flogin", "result's callback has been triggered"
+            )
+            return ExecuteResponse()
+
+
+    @my_plugin.search(text="egg")
+    async def easter_egg(q: Query):
+        return "You found the easter egg!"
+
+
+    @my_plugin.search()
+    async def blanket(q: Query):
+        return MyResult("Blanket Handler Called")
+
+Here is an example of writing tests for the plugin: ::
+
+    import pytest
+
+    from flogin import Query
+    from flogin.testing import PluginTester
+    from plugin import my_plugin
+
+
+    @pytest.fixture
+    def tester():
+        metadata = PluginTester.create_bogus_plugin_metadata()
+        return PluginTester(my_plugin, metadata=metadata)
+
+
+    @pytest.mark.asyncio
+    async def test_blanket_handler(tester: PluginTester):
+        class FakeFlowAPI:
+            async def show_notification(self, title: str, text: str):
+                assert title == "Flogin"
+                assert text == "result's callback has been triggered"
+
+        tester.set_flow_api_client(FakeFlowAPI())
+
+        query = Query(
+            raw_text="bambo",
+            keyword="bambo",
+            text="",
+        )
+        response = await tester.test_query(query)
+
+        result = response.results[0]
+
+        assert result.title == "Blanket Handler Called"
+
+        execute_response = await result.callback()
+        assert execute_response.hide == True
+
+
+    @pytest.mark.asyncio
+    async def test_easter_egg_handler(tester: PluginTester):
+        query = Query(raw_text="bambo egg", keyword="bambo", text="egg")
+        response = await tester.test_query(query)
+
+        result = response.results[0]
+
+        assert result.title == "You found the easter egg!"
+
+Good next steps:
+
+- `pytest-asyncio docs <https://pytest-asyncio.readthedocs.io/en/latest/index.html>`_
+- `pytest docs <https://docs.pytest.org/en/stable/index.html>`_
+- `Testing Module API Reference <testing_module_api_reference>`_
