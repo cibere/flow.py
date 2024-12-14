@@ -196,4 +196,4 @@ Good next steps:
 
 - `pytest-asyncio docs <https://pytest-asyncio.readthedocs.io/en/latest/index.html>`_
 - `pytest docs <https://docs.pytest.org/en/stable/index.html>`_
-- `Testing Module API Reference <testing_module_api_reference>`_
+- :ref:`Testing Module API Reference <testing_module_api_reference>`
