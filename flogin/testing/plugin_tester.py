@@ -69,6 +69,16 @@ class PluginTester(Generic[PluginT]):
 
         self.plugin._metadata = metadata
 
+        self.set_flow_api_client(flow_api_client)
+
+    def set_flow_api_client(self, flow_api_client: Any = MISSING) -> None:
+        r"""This sets the flow api client that the tests should use.
+
+        Parameters
+        ----------
+        flow_api_client: Optional[Any]
+            If not passed, flogin will use a filler class which will raise a runtime error whenever an attribute is accessed. If passed, you should be passing an instance of a class which will replace :class:`~flogin.flow_api.client.FlowLauncherAPI`, so make sure to impliment the methods you need and handle them accordingly.
+        """
         if flow_api_client is MISSING:
             flow_api_client = FillerObject(API_FILLER_TEXT)
 
@@ -243,3 +253,6 @@ class PluginTester(Generic[PluginT]):
         }
 
         return PluginMetadata(data, FillerObject(API_FILLER_TEXT))  # type: ignore
+
+    def __repr__(self):
+        return f"<PluginTester id={id(self)} {self.plugin=}>"
