@@ -21,7 +21,7 @@ class Settings:
         .. describe:: x['setting name']
 
             Get a setting by key similiar to a dictionary
-        
+
         .. describe:: x['setting name', 'default']
 
             Get a setting by key similiar to a dictionary, with a custom default.
@@ -47,12 +47,10 @@ class Settings:
         self._changes = {}
 
     @overload
-    def __getitem__(self, key: str, /) -> Any:
-        ...
-    
+    def __getitem__(self, key: str, /) -> Any: ...
+
     @overload
-    def __getitem__(self, key: tuple[str, Any], /) -> Any:
-        ...
+    def __getitem__(self, key: tuple[str, Any], /) -> Any: ...
 
     def __getitem__(self, key: tuple[str, Any] | str) -> Any:
         if isinstance(key, str):

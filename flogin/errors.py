@@ -9,6 +9,7 @@ __all__ = (
 class PluginException(Exception):
     r"""A class that represents exceptions with your plugin"""
 
+
 class PluginNotInitialized(PluginException):
     r"""This is raised when you try to access something that needs data from the initialize method, and it hasn't been called yet."""
 
