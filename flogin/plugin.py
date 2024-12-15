@@ -254,7 +254,7 @@ class Plugin:
                 f"A fatal error has occured which crashed flogin: {e}", exc_info=e
             )
 
-    def register_search_handler(self, handler: SearchHandler) -> None:
+    def register_search_handler(self, handler: SearchHandler[Any]) -> None:
         r"""Register a new search handler
 
         See the :ref:`search handler section <search_handlers>` for more information about using search handlers.
@@ -268,7 +268,7 @@ class Plugin:
         self._search_handlers.append(handler)
         LOG.info(f"Registered search handler: {handler}")
 
-    def register_search_handlers(self, *handlers: SearchHandler) -> None:
+    def register_search_handlers(self, *handlers: SearchHandler[Any]) -> None:
         r"""Register new search handlers
 
         See the :ref:`search handler section <search_handlers>` for more information about using search handlers.
