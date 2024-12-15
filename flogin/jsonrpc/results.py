@@ -138,6 +138,8 @@ class Result(Base, Generic[PluginT]):
 
     For advanced useage (handling clicks and custom context menus), it is recommended to subclass the result object to create your own subclass.
 
+    This class impliments a generic for the :attr:`~flogin.jsonrpc.results.Result.plugin` attribute, which will be used for typechecking purposes.
+
     Subclassing
     ------------
     Subclassing lets you override the following methods: :func:`~flogin.jsonrpc.results.Result.callback` and :func:`~flogin.jsonrpc.results.Result.context_menu`. It also lets you create "universal" result properties (eg: same icon). Example:
