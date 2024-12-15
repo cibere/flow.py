@@ -72,7 +72,7 @@ class MultiCondition:
 
     __slots__ = ("conditions",)
 
-    def __init__(self, conditions: Iterable[SearchHandlerCondition]) -> None:
+    def __init__(self, *conditions: SearchHandlerCondition) -> None:
         self.conditions = conditions
 
     def __call__(self, query: Query) -> bool:
