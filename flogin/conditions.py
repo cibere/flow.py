@@ -80,7 +80,7 @@ class MultiCondition:
         for condition in self.conditions:
             if condition(query) is False:
                 return False
-            condition_data[condition.__name__] = query.condition_data
+            condition_data[condition.__class__.__name__] = query.condition_data
             query.condition_data = None
 
         query.condition_data = condition_data
