@@ -128,6 +128,7 @@ class ResultConstructorArgs(TypedDict):
     copy_text: NotRequired[str | None]
     score: NotRequired[int | None]
     rounded_icon: NotRequired[bool | None]
+    glyph: NotRequired[Glyph | None]
 
 
 class Result(Base, Generic[PluginT]):

@@ -30,6 +30,7 @@ Bug Fixes
 
 - Fix bug where :func:`FlowLauncherAPI.update_results` does not register the results, so callbacks do not get triggered.
 - Fix typing bug with :func:`flogin.plugin.Plugin.register_search_handlers` and :func:`flogin.plugin.Plugin.register_search_handler` due to :class:`flogin.search_handler.SearchHandler` being a generic.
+- Fix bug where ``Glyph`` was not included in ``ResultConstructorArgs``
 
 Removals
 ~~~~~~~~~
