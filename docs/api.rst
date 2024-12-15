@@ -108,9 +108,6 @@ Plugin Errors
 .. autoclass:: flogin.errors.PluginException
     :members:
 
-.. autoclass:: flogin.errors.SettingNotFound
-    :members:
-
 .. autoclass:: flogin.errors.PluginNotInitialized
     :members:
 

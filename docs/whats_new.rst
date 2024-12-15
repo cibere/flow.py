@@ -10,6 +10,10 @@ Breaking Changes
 ~~~~~~~~~~~~~~~~
 
 - Move :class:`flogin.jsonrpc.results.Glyph` support from :attr:`flogin.jsonrpc.results.Result.icon` to :class:`flogin.jsonrpc.results.Result.gylph`
+- Make the :class:`flogin.conditions.MultiCondition` constructor go from ``conditions: list[SearchCondition]`` to ``*conditions: SearchCondition``
+- Return ``None`` if a setting is not found in :class:`flogin.settings.Setting`
+    - Remove ``flogin.errors.SettingNotFound``
+- Rewrite the CLI commands
 
 New Features
 ~~~~~~~~~~~~
@@ -19,11 +23,18 @@ New Features
 - Add ``Generic`` to :class:`flogin.search_handler.SearchHandler` for :attr:`flogin.search_handler.SearchHandler.plugin`
 - Add ``Generic`` to :class:`flogin.jsonrpc.results.Result` for :attr:`flogin.jsonrpc.results.Result.plugin`
 - Update ``Query.__init__`` to allow for an easier time manually creating query objects.
+- Add the ability to supply a default into ``flogin.errors.SettingNotFound.__getitem__``
 
 Bug Fixes
 ~~~~~~~~~
 
 - Fix bug where :func:`FlowLauncherAPI.update_results` does not register the results, so callbacks do not get triggered.
+- Fix typing bug with :func:`flogin.plugin.Plugin.register_search_handlers` and :func:`flogin.plugin.Plugin.register_search_handler` due to :class:`flogin.search_handler.SearchHandler` being a generic.
+
+Removals
+~~~~~~~~~
+- Remove the ``CLI`` docs section
+- Remove `click <https://pypi.org/project/click>`_ as a dependency.
 
 v0.0.5
 -------

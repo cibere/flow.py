@@ -3,7 +3,7 @@ Testing your plugin
 
 Using the testing module
 ------------------------
-We can use the :class:`~flogin.testing.plugin_tester.PluginTester` class to create tests for our plugin.
+We can use the :class:`~flogin.testing.plugin_tester.PluginTester` class to test our plugin.
 
 :class:`~flogin.testing.plugin_tester.PluginTester` takes 3 arguments:
 
@@ -116,9 +116,16 @@ That one is pretty easy due to it not returning anything, or doing anything that
 
             print(f"-- Added {keyword!r} keyword to {plugin_id!r} --")
 
+Testing with flow
+------------------
+To test your plugin with flow itself, you will have to clone your plugin into your userdata folder. To do this, use the ``UserData`` command with the ``System Commands`` plugin to find your userdata folder, head into the ``Plugins`` folder, create a new folder for your plugin, and clone the contents into it. Then, restart flow for the plugin to be activated and run.
+
+.. NOTE::
+    If your plugin does not initialize properly, flow will go into an infinite loop while starting up. The most common cause for an invalid initialization is an error on startup, which can be checked by simply running your plugin's entry file with the same python executable that flow is using. 
+
 Writing Tests
 -------------
-If you ever decide to write tests for your plugin, feel free to write them however you want. Though for this guide, we will be using the `pytest <https://pypi.org/project/pytest/>`_ library, with the `pytest-asyncio <https://pypi.org/project/pytest-asyncio/>`_ plugin.
+If you ever decide to write tests for your plugin, the testing module can be used for that too. For this example, we will be using the `pytest <https://pypi.org/project/pytest/>`_ library, with the `pytest-asyncio <https://pypi.org/project/pytest-asyncio/>`_ plugin.
 
 Here is a simple plugin: ::
 
