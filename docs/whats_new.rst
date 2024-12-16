@@ -10,30 +10,32 @@ Breaking Changes
 ~~~~~~~~~~~~~~~~
 
 - Move :class:`flogin.jsonrpc.results.Glyph` support from :attr:`flogin.jsonrpc.results.Result.icon` to :class:`flogin.jsonrpc.results.Result.gylph`
-- The :class:`flogin.conditions.MultiCondition` constructor has gone from taking a list of conditions to being a varargs argument.
 - Return ``None`` if a setting is not found in :class:`flogin.settings.Setting`
     - Remove ``flogin.errors.SettingNotFound``
 - Rewrite the CLI commands
+- Remove ``flogin.conditions.MultiCondition`` in favor of :class:`flogin.conditions.AnyCondition` and :class:`flogin.conditions.AllCondition`
 
 New Features
 ~~~~~~~~~~~~
 
 - Add ``Query.__repr__``
 - Let :func:`flogin.search_handler.SearchHandler.callback` and :func:`flogin.jsonrpc.results.Result.context_menu` return ``None``
-- Add ``Generic`` to :class:`flogin.search_handler.SearchHandler` for :attr:`flogin.search_handler.SearchHandler.plugin`
-- Add ``Generic`` to :class:`flogin.jsonrpc.results.Result` for :attr:`flogin.jsonrpc.results.Result.plugin`
+- Add :class:`~typing.Generic` to :class:`flogin.search_handler.SearchHandler` for :attr:`flogin.search_handler.SearchHandler.plugin`
+- Add :class:`~typing.Generic` to :class:`flogin.jsonrpc.results.Result` for :attr:`flogin.jsonrpc.results.Result.plugin`
 - Update ``Query.__init__`` to allow for an easier time manually creating query objects.
-- Add the ability to supply a default into ``flogin.errors.SettingNotFound.__getitem__``
+- Add the ability to supply a default into ``flogin.settings.Settings.__getitem__``
 - Add a generic to :class:`flogin.plugin.Plugin` for a custom :class:`flogin.settings.Settings` class.
 - Document the generic in :class:`flogin.jsonrpc.results.Result` for a custom plugin class.
 - Document the generic in :class:`flogin.search_handler.SearchHandler.plugin` for a custom plugin class.
 - Document the generic in :class:`flogin.query.Query` for :attr:`flogin.query.Query.condition_data`
 - Make :attr:`flogin.jsonrpc.results.Result.title` optional
+- Add :class:`flogin.conditions.AnyCondition`
+- Add :class:`flogin.conditions.AllCondition`
 
 Bug Fixes
 ~~~~~~~~~
 
-- Fix bug where :func:`FlowLauncherAPI.update_results` does not register the results, so callbacks do not get triggered.
+- Fix bug where :func:`flogin.flow_api.client.FlowLauncherAPI.update_results` does not register the results, so callbacks do not get triggered.
 - Fix typing bug with :func:`flogin.plugin.Plugin.register_search_handlers` and :func:`flogin.plugin.Plugin.register_search_handler` due to :class:`flogin.search_handler.SearchHandler` being a generic.
 - Fix bug where ``Glyph`` was not included in ``ResultConstructorArgs``
 - Fix bug with the ``PluginT`` TypeVar not being marked as covariant
@@ -52,7 +54,7 @@ New Features
 - Add :func:`flogin.plugin.Plugin.register_search_handlers`
 - Add the :doc:`whats_new` section in the docs
 - Add :func:`flogin.plugin.Plugin.register_event`
-- Add :ref:`flogin gh gitignore <create_gitignore_cli>` CLI command
+- Add ``flogin gh gitignore`` CLI command
 - Add :class:`flogin.jsonrpc.results.ResultPreview`
     - Add :attr:`~flogin.jsonrpc.results.Result.preview`
 - Add :class:`flogin.jsonrpc.results.ProgressBar`
@@ -61,7 +63,7 @@ New Features
 - Add :class:`flogin.jsonrpc.results.Glyph`
     - Allow :class:`~flogin.jsonrpc.results.Glyph` objects in :attr:`flogin.jsonrpc.results.Result.icon`
 - Add :attr:`flogin.jsonrpc.results.Result.rounded_icon`
-- Add :ref:`flogin create settings <cli-create-settings-template>` CLI command
+- Add ``flogin create settings`` CLI command
 - Add :func:`flogin.utils.cached_gen`
 
 Bug Fixes

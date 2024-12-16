@@ -77,9 +77,11 @@ Builtin Search Conditions
 .. autoclass:: flogin.conditions.KeywordCondition
     :members:
 
-.. autoclass:: flogin.conditions.MultiCondition
+.. autoclass:: flogin.conditions.AllCondition
     :members:
 
+.. autoclass:: flogin.conditions.AnyCondition
+    :members:
 
 Flow API
 ----------
