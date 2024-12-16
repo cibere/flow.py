@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from .plugin import Plugin
     from .query import Query
 
-    PluginT = TypeVar("PluginT", bound=Plugin[Any], default=Plugin[Any])
+    PluginT = TypeVar("PluginT", bound=Plugin[Any], default=Plugin[Any], covariant=True)
 else:
     Query = Any
     PluginT = TypeVar("PluginT")
