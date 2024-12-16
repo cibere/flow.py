@@ -361,7 +361,8 @@ def create_git_files(parser: argparse.ArgumentParser, args: argparse.Namespace):
 def init_command(parser: argparse.ArgumentParser, args: argparse.Namespace) -> None:
     plugin_name = args.plugin_name
 
-    create_plugin_dot_json_file(parser, plugin_name)
+    if not args.no_manifest:
+        create_plugin_dot_json_file(parser, plugin_name)
 
     if not args.no_settings:
         settings_file = Path("SettingsTemplate.yaml")
@@ -370,7 +371,8 @@ def init_command(parser: argparse.ArgumentParser, args: argparse.Namespace) -> N
     if not args.no_git:
         create_git_files(parser, args)
 
-    create_plugin_directory(parser, args)
+    if not args.no_plugin:
+        create_plugin_directory(parser, args)
 
 
 def add_init_args(subparser: argparse._SubParsersAction) -> None:
@@ -386,6 +388,12 @@ def add_init_args(subparser: argparse._SubParsersAction) -> None:
     )
     parser.add_argument(
         "--no-settings", help="whether or not to add setting files", action="store_true"
+    )
+    parser.add_argument(
+        "--no-plugin", help="Do not create an example plugin", action="store_true"
+    )
+    parser.add_argument(
+        "--no-manifest", help="Do not create a plugin.json manifest file", action="store_true"
     )
 
 
