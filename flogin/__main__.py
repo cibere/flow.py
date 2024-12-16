@@ -231,6 +231,18 @@ class {plugin}(Plugin[{plugin}Settings]):
 
         self.register_search_handler(RootHandler())
 """
+_plugin_dot_py_template_no_settings = """
+from flogin import Plugin
+
+from .handlers.root import RootHandler
+
+
+class {plugin}(Plugin):
+    def __init__(self) -> None:
+        super().__init__()
+
+        self.register_search_handler(RootHandler())
+"""
 _settings_dot_py_template = """
 from flogin import Settings
 
@@ -310,16 +322,18 @@ def create_plugin_directory(parser: argparse.ArgumentParser, args: argparse.Name
     main_file = Path("main.py")
 
     write_to_file(main_file, _main_py_template.format(plugin=plugin_name), parser)
-
+    
     plugin_file = plugin_dir / "plugin.py"
-    settings_file = plugin_dir / "settings.py"
+    template = _plugin_dot_py_template_no_settings if args.no_settings else _plugin_dot_py_template
+    write_to_file(
+        plugin_file, template.format(plugin=plugin_name), parser
+    )
 
-    write_to_file(
-        plugin_file, _plugin_dot_py_template.format(plugin=plugin_name), parser
-    )
-    write_to_file(
-        settings_file, _settings_dot_py_template.format(plugin=plugin_name), parser
-    )
+    if not args.no_settings:
+        settings_file = plugin_dir / "settings.py"
+        write_to_file(
+            settings_file, _settings_dot_py_template.format(plugin=plugin_name), parser
+        )
 
     handlers_dir = plugin_dir / "handlers"
     root_handler_file = handlers_dir / "root.py"
@@ -351,8 +365,9 @@ def init_command(parser: argparse.ArgumentParser, args: argparse.Namespace) -> N
 
     create_plugin_dot_json_file(parser, plugin_name)
 
-    settings_file = Path("SettingsTemplate.yaml")
-    write_to_file(settings_file, _settings_template, parser)
+    if not args.no_settings:
+        settings_file = Path("SettingsTemplate.yaml")
+        write_to_file(settings_file, _settings_template, parser)
 
     if not args.no_git:
         create_git_files(parser, args)
@@ -370,6 +385,9 @@ def add_init_args(subparser: argparse._SubParsersAction) -> None:
     parser.add_argument("plugin_name", help="the name of the plugin")
     parser.add_argument(
         "--no-git", help="whether or not to add git files", action="store_true"
+    )
+    parser.add_argument(
+        "--no-settings", help="whether or not to add setting files", action="store_true"
     )
 
 
