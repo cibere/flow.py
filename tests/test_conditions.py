@@ -4,7 +4,7 @@ import pytest
 
 from flogin import (
     KeywordCondition,
-    MultiCondition,
+    AnyCondition, AllCondition,
     PlainTextCondition,
     Query,
     RegexCondition,
@@ -50,50 +50,107 @@ def test_conditions_2(condition, no_query: Query):
     assert res == False
 
 
-multi_condition_both_tests = [
-    MultiCondition(
+allcondition_yes_tests = [
+    AllCondition(
         conditions["PlainTextCondition"],
         conditions["RegexCondition"],
     ),
-    MultiCondition(
+    AllCondition(
         conditions["KeywordCondition-Allowed"],
         conditions["CustomCondition"],
     ),
-    MultiCondition(
+    AllCondition(
         conditions["KeywordCondition-Allowed"],
         conditions["KeywordCondition-Disallowed"],
     ),
-    MultiCondition(
+    AllCondition(
         conditions["KeywordCondition-Disallowed"],
         conditions["RegexCondition"],
     ),
 ]
-multi_condition_mismatch_tests = [
-    MultiCondition(
+allcondition_no_tests = [
+    AllCondition(
         cond,
         lambda q: q.text == "bar",
     )
     for cond in conditions.values()
 ]
 
-
-class TestMultiCondition:
-    @pytest.fixture(scope="class", params=multi_condition_both_tests)
-    def both_mul_cond(self, request: pytest.FixtureRequest):
+class TestAllCondition:
+    @pytest.fixture(scope="class", params=allcondition_yes_tests)
+    def allcondition_yes(self, request: pytest.FixtureRequest):
         return request.param
 
-    @pytest.fixture(scope="class", params=multi_condition_mismatch_tests)
-    def mismatch_mul_cond(self, request: pytest.FixtureRequest):
+    @pytest.fixture(scope="class", params=allcondition_no_tests)
+    def allcondition_no(self, request: pytest.FixtureRequest):
         return request.param
 
-    def test_multicondition_1(self, both_mul_cond: MultiCondition, yes_query: Query):
-        res = both_mul_cond(yes_query)
+    def test_allcondition_1(self, allcondition_yes: AllCondition, yes_query: Query):
+        res = allcondition_yes(yes_query)
         assert res == True
 
-    def test_multicondition_2(self, both_mul_cond: MultiCondition, no_query: Query):
-        res = both_mul_cond(no_query)
+    def test_allcondition_2(self, allcondition_yes: AllCondition, no_query: Query):
+        res = allcondition_yes(no_query)
         assert res == False
 
-    def test_multicondition_3(self, mismatch_mul_cond: MultiCondition, query: Query):
-        res = mismatch_mul_cond(query)
+    def test_allcondition_3(self, allcondition_no: AllCondition, query: Query):
+        res = allcondition_no(query)
         assert res == False
+    
+    def test_condition_data(self, yes_query: Query):
+        def condition1(query: Query):
+            query.condition_data = 25
+            return True
+        def condition2(query: Query):
+            query.condition_data = 20
+            return True
+
+        cond = AllCondition(
+            condition1, condition2
+        )
+        assert cond(yes_query) == True
+        assert yes_query.condition_data == {
+            condition2: 20,
+            condition1: 25,
+        }
+
+anycondition_yes_tests = [
+    AnyCondition(
+        PlainTextCondition("foo"),
+        PlainTextCondition("apple"),
+    )
+]
+anycondition_no_tests = [
+    AnyCondition(
+        PlainTextCondition("bar"),
+        PlainTextCondition("car"),
+    )
+]
+
+class TestAnyCondition:
+    @pytest.fixture(scope="class", params=anycondition_yes_tests)
+    def anycondition_yes(self, request: pytest.FixtureRequest):
+        return request.param
+    
+    @pytest.fixture(scope="class", params=anycondition_no_tests)
+    def anycondition_no(self, request: pytest.FixtureRequest):
+        return request.param
+
+    def test_multicondition_any_1(self, anycondition_yes: AnyCondition, query: Query):
+        res = anycondition_yes(query)
+        assert res == True
+    
+    def test_multicondition_any_2(self, anycondition_no: AnyCondition, query: Query):
+        res = anycondition_no(query)
+        assert res == False
+    
+    def test_condition_data(self, yes_query: Query):
+        def condition(query: Query):
+            query.condition_data = 25
+            return True
+
+        cond = AnyCondition(
+            condition,
+        )
+        assert cond(yes_query) == True
+        assert yes_query.condition_data == (condition, 25)
