@@ -34,6 +34,7 @@ Documentation = "https://flogin.readthedocs.io/en/latest/"
 dependencies = { file = "requirements.txt" }
 optional-dependencies.docs = { file = "requirements-docs.txt" }
 optional-dependencies.dev = { file = "requirements-dev.txt" }
+optional-dependencies.tests = { file = "requirements-tests.txt" }
 
 [tool.setuptools]
 packages = [
