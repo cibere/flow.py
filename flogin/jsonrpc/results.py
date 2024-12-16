@@ -119,7 +119,7 @@ class ResultPreview(Base):
 
 
 class ResultConstructorArgs(TypedDict):
-    title: str
+    title: NotRequired[str | None]
     sub: NotRequired[str | None]
     icon: NotRequired[str | None]
     title_highlight_data: NotRequired[Iterable[int] | None]
@@ -188,7 +188,7 @@ class Result(Base, Generic[PluginT]):
 
     def __init__(
         self,
-        title: str,
+        title: str | None = None,
         sub: str | None = None,
         icon: str | None = None,
         title_highlight_data: Iterable[int] | None = None,
@@ -314,9 +314,10 @@ class Result(Base, Generic[PluginT]):
         dict[:class:`str`, Any]
         """
 
-        x: dict[str, Any] = {
-            "title": self.title,
-        }
+        x: dict[str, Any] = {}
+
+        if self.title is not None:
+            x['title'] = self.title
         if self.sub is not None:
             x["subTitle"] = self.sub
         if self.icon is not None:

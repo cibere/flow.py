@@ -28,6 +28,7 @@ New Features
 - Document the generic in :class:`flogin.jsonrpc.results.Result` for a custom plugin class.
 - Document the generic in :class:`flogin.search_handler.SearchHandler.plugin` for a custom plugin class.
 - Document the generic in :class:`flogin.query.Query` for :attr:`flogin.query.Query.condition_data`
+- Make :attr:`flogin.jsonrpc.results.Result.title` optional
 
 Bug Fixes
 ~~~~~~~~~
