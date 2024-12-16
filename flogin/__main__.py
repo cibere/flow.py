@@ -221,14 +221,15 @@ jobs:
 _plugin_dot_py_template = """
 from flogin import Plugin
 
-from .handlers.root import RootHandler
 from .settings import {plugin}Settings
 
 
-class {plugin}(Plugin[{plugin}Settings]):
+class {plugin}Plugin(Plugin[{plugin}Settings]):
     def __init__(self) -> None:
         super().__init__()
 
+        from .handlers.root import RootHandler
+        
         self.register_search_handler(RootHandler())
 """
 _plugin_dot_py_template_no_settings = """
@@ -237,7 +238,7 @@ from flogin import Plugin
 from .handlers.root import RootHandler
 
 
-class {plugin}(Plugin):
+class {plugin}Plugin(Plugin):
     def __init__(self) -> None:
         super().__init__()
 
@@ -253,15 +254,12 @@ class {plugin}Settings(Settings):
 _handler_template = """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from flogin import Query, Result, SearchHandler
 
-if TYPE_CHECKING:
-    from ..plugin import {plugin}
+from ..plugin import {plugin}Plugin
 
 
-class {name}Handler(SearchHandler[{plugin}]):
+class {name}Handler(SearchHandler[{plugin}Plugin]):
     def condition(self, query: Query): ...
 
     async def callback(self, query: Query):
@@ -276,10 +274,10 @@ sys.path.append(parent_folder_path)
 sys.path.append(os.path.join(parent_folder_path, "lib"))
 sys.path.append(os.path.join(parent_folder_path, "venv", "lib", "site-packages"))
 
-from plugin.plugin import {plugin}
+from plugin.plugin import {plugin}Plugin
 
 if __name__ == "__main__":
-    {plugin}().run()
+    {plugin}Plugin().run()
 """
 
 
