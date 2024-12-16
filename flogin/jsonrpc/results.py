@@ -317,7 +317,7 @@ class Result(Base, Generic[PluginT]):
         x: dict[str, Any] = {}
 
         if self.title is not None:
-            x['title'] = self.title
+            x["title"] = self.title
         if self.sub is not None:
             x["subTitle"] = self.sub
         if self.icon is not None:

@@ -320,12 +320,14 @@ def create_plugin_directory(parser: argparse.ArgumentParser, args: argparse.Name
     main_file = Path("main.py")
 
     write_to_file(main_file, _main_py_template.format(plugin=plugin_name), parser)
-    
+
     plugin_file = plugin_dir / "plugin.py"
-    template = _plugin_dot_py_template_no_settings if args.no_settings else _plugin_dot_py_template
-    write_to_file(
-        plugin_file, template.format(plugin=plugin_name), parser
+    template = (
+        _plugin_dot_py_template_no_settings
+        if args.no_settings
+        else _plugin_dot_py_template
     )
+    write_to_file(plugin_file, template.format(plugin=plugin_name), parser)
 
     if not args.no_settings:
         settings_file = plugin_dir / "settings.py"
@@ -393,7 +395,9 @@ def add_init_args(subparser: argparse._SubParsersAction) -> None:
         "--no-plugin", help="Do not create an example plugin", action="store_true"
     )
     parser.add_argument(
-        "--no-manifest", help="Do not create a plugin.json manifest file", action="store_true"
+        "--no-manifest",
+        help="Do not create a plugin.json manifest file",
+        action="store_true",
     )
 
 

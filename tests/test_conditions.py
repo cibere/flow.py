@@ -3,8 +3,9 @@ import re
 import pytest
 
 from flogin import (
+    AllCondition,
+    AnyCondition,
     KeywordCondition,
-    AnyCondition, AllCondition,
     PlainTextCondition,
     Query,
     RegexCondition,
@@ -76,6 +77,7 @@ allcondition_no_tests = [
     for cond in conditions.values()
 ]
 
+
 class TestAllCondition:
     @pytest.fixture(scope="class", params=allcondition_yes_tests)
     def allcondition_yes(self, request: pytest.FixtureRequest):
@@ -96,23 +98,23 @@ class TestAllCondition:
     def test_allcondition_3(self, allcondition_no: AllCondition, query: Query):
         res = allcondition_no(query)
         assert res == False
-    
+
     def test_condition_data(self, yes_query: Query):
         def condition1(query: Query):
             query.condition_data = 25
             return True
+
         def condition2(query: Query):
             query.condition_data = 20
             return True
 
-        cond = AllCondition(
-            condition1, condition2
-        )
+        cond = AllCondition(condition1, condition2)
         assert cond(yes_query) == True
         assert yes_query.condition_data == {
             condition2: 20,
             condition1: 25,
         }
+
 
 anycondition_yes_tests = [
     AnyCondition(
@@ -127,11 +129,12 @@ anycondition_no_tests = [
     )
 ]
 
+
 class TestAnyCondition:
     @pytest.fixture(scope="class", params=anycondition_yes_tests)
     def anycondition_yes(self, request: pytest.FixtureRequest):
         return request.param
-    
+
     @pytest.fixture(scope="class", params=anycondition_no_tests)
     def anycondition_no(self, request: pytest.FixtureRequest):
         return request.param
@@ -139,11 +142,11 @@ class TestAnyCondition:
     def test_multicondition_any_1(self, anycondition_yes: AnyCondition, query: Query):
         res = anycondition_yes(query)
         assert res == True
-    
+
     def test_multicondition_any_2(self, anycondition_no: AnyCondition, query: Query):
         res = anycondition_no(query)
         assert res == False
-    
+
     def test_condition_data(self, yes_query: Query):
         def condition(query: Query):
             query.condition_data = 25

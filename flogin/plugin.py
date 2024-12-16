@@ -12,11 +12,11 @@ from typing import (
     Awaitable,
     Callable,
     Coroutine,
+    Generic,
     Iterable,
     TypeVar,
     TypeVarTuple,
     overload,
-    Generic
 )
 
 from .conditions import PlainTextCondition, RegexCondition
@@ -37,8 +37,9 @@ from .settings import Settings
 from .utils import MISSING, cached_property, coro_or_gen, setup_logging
 
 if TYPE_CHECKING:
-    from ._types import SearchHandlerCallback, SearchHandlerCondition
     from typing_extensions import TypeVar
+
+    from ._types import SearchHandlerCallback, SearchHandlerCondition
 
     SettingsT = TypeVar("SettingsT", default=Settings, bound=Settings)
 else:
@@ -86,7 +87,7 @@ class Plugin(Generic[SettingsT]):
             data = json.load(f)
         self._settings_are_populated = True
         LOG.debug(f"Settings filled from file: {data!r}")
-        return Settings(data) # type: ignore
+        return Settings(data)  # type: ignore
 
     async def _run_event(
         self,

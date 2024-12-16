@@ -7,7 +7,13 @@ if TYPE_CHECKING:
     from ._types import SearchHandlerCondition
     from .query import Query
 
-__all__ = "PlainTextCondition", "RegexCondition", "KeywordCondition", "AllCondition", "AnyCondition"
+__all__ = (
+    "PlainTextCondition",
+    "RegexCondition",
+    "KeywordCondition",
+    "AllCondition",
+    "AnyCondition",
+)
 
 
 class PlainTextCondition:
@@ -58,8 +64,9 @@ class RegexCondition:
             return True
         return False
 
+
 class _MultiCondition:
-    __slots__ = "conditions",
+    __slots__ = ("conditions",)
 
     def __init__(self, *conditions: SearchHandlerCondition) -> None:
         self.conditions = conditions
@@ -67,13 +74,14 @@ class _MultiCondition:
     def __repr__(self):
         return f"{self.__class__.__name__} {self.conditions=}"
 
+
 class AllCondition(_MultiCondition):
     r"""This builtin search condition acts similiarly to the builtin ``all`` function. It only returns ``True`` if all of the given conditions also return ``True``.
 
     ConditionData
     -------------
     This condition will set :attr:`flogin.query.Query.condition_data` to a dictionary containing the conditions, where the keys are the conditions, and the values are the condition data that they gave.
-    
+
     Parameters
     ----------
     *conditions: :ref:`condition <condition_example>`
@@ -91,6 +99,7 @@ class AllCondition(_MultiCondition):
         query.condition_data = condition_data
         return True
 
+
 class AnyCondition(_MultiCondition):
     r"""This builtin search condition acts similiarly to the builtin ``any`` function. It only returns ``True`` if any one of the given conditions return ``True``.
 
@@ -99,7 +108,7 @@ class AnyCondition(_MultiCondition):
     This condition will set :attr:`flogin.query.Query.condition_data` to a tuple containing two values. The first value will be the condition that returned true, and the second will be the condition data that the condition gave. ::
 
         (condition, query.condition_data)
-    
+
     Parameters
     ----------
     *conditions: :ref:`condition <condition_example>`
@@ -112,6 +121,7 @@ class AnyCondition(_MultiCondition):
                 query.condition_data = (condition, query.condition_data)
                 return True
         return False
+
 
 class KeywordCondition:
     r"""A builtin search condition to check what keyword was used with the query.
