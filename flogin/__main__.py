@@ -222,9 +222,10 @@ _plugin_dot_py_template = """
 from flogin import Plugin
 
 from .handlers.root import RootHandler
+from .settings import {plugin}Settings
 
 
-class {plugin}(Plugin):
+class {plugin}(Plugin[{plugin}Settings]):
     def __init__(self) -> None:
         super().__init__()
 

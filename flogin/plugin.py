@@ -16,6 +16,7 @@ from typing import (
     TypeVar,
     TypeVarTuple,
     overload,
+    Generic
 )
 
 from .conditions import PlainTextCondition, RegexCondition
@@ -37,6 +38,12 @@ from .utils import MISSING, cached_property, coro_or_gen, setup_logging
 
 if TYPE_CHECKING:
     from ._types import SearchHandlerCallback, SearchHandlerCondition
+    from typing_extensions import TypeVar
+
+    SettingsT = TypeVar("SettingsT", default=Settings, bound=Settings)
+else:
+    SettingsT = TypeVar("SettingsT")
+
 TS = TypeVarTuple("TS")
 EventCallbackT = TypeVar(
     "EventCallbackT", bound=Callable[..., Coroutine[Any, Any, Any]]
@@ -46,9 +53,10 @@ LOG = logging.getLogger(__name__)
 __all__ = ("Plugin",)
 
 
-class Plugin:
-    r"""This class represents your plugin
+class Plugin(Generic[SettingsT]):
+    r"""This class represents your plugin.
 
+    This class impliments a generic for a custom :class:`~flogin.settings.Settings` class for typechecking purposes.
 
     Attributes
     --------
@@ -70,7 +78,7 @@ class Plugin:
         self._settings_are_populated: bool = False
 
     @cached_property
-    def settings(self) -> Settings:
+    def settings(self) -> SettingsT:
         fp = os.path.join(
             "..", "..", "Settings", "Plugin", self.metadata.name, "Settings.json"
         )
@@ -78,7 +86,7 @@ class Plugin:
             data = json.load(f)
         self._settings_are_populated = True
         LOG.debug(f"Settings filled from file: {data!r}")
-        return Settings(data)
+        return Settings(data) # type: ignore
 
     async def _run_event(
         self,

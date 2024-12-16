@@ -24,7 +24,7 @@ async def on_error(
     return ErrorResponse.internal_error(error)
 
 
-def get_default_events(plugin: Plugin) -> dict[str, Callable[..., Awaitable[Any]]]:
+def get_default_events(plugin: Plugin[Any]) -> dict[str, Callable[..., Awaitable[Any]]]:
     def on_query(data: dict[str, Any], raw_settings: dict[str, Any]):
         query = Query.from_json(data)
         if plugin._settings_are_populated is False:
