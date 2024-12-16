@@ -10,7 +10,7 @@ Breaking Changes
 ~~~~~~~~~~~~~~~~
 
 - Move :class:`flogin.jsonrpc.results.Glyph` support from :attr:`flogin.jsonrpc.results.Result.icon` to :class:`flogin.jsonrpc.results.Result.gylph`
-- Make the :class:`flogin.conditions.MultiCondition` constructor go from ``conditions: list[SearchCondition]`` to ``*conditions: SearchCondition``
+- The :class:`flogin.conditions.MultiCondition` constructor has gone from taking a list of conditions to being a varargs argument.
 - Return ``None`` if a setting is not found in :class:`flogin.settings.Setting`
     - Remove ``flogin.errors.SettingNotFound``
 - Rewrite the CLI commands
@@ -24,6 +24,10 @@ New Features
 - Add ``Generic`` to :class:`flogin.jsonrpc.results.Result` for :attr:`flogin.jsonrpc.results.Result.plugin`
 - Update ``Query.__init__`` to allow for an easier time manually creating query objects.
 - Add the ability to supply a default into ``flogin.errors.SettingNotFound.__getitem__``
+- Add a generic to :class:`flogin.plugin.Plugin` for a custom :class:`flogin.settings.Settings` class.
+- Document the generic in :class:`flogin.jsonrpc.results.Result` for a custom plugin class.
+- Document the generic in :class:`flogin.search_handler.SearchHandler.plugin` for a custom plugin class.
+- Document the generic in :class:`flogin.query.Query` for :attr:`flogin.query.Query.condition_data`
 
 Bug Fixes
 ~~~~~~~~~
