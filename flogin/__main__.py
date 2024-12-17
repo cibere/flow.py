@@ -190,10 +190,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python ${{ env.python_ver }}
         uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ env.python_ver }}
 
       - name: get version
         id: version
@@ -208,7 +208,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r ./requirements.txt -t ./lib
-          zip -r ${{ github.event.repository.name }} . -x '*.git*'
+          zip -r ${{ github.event.repository.name }}.zip . -x '*.git*'
 
       - name: Publish
         if: success()
@@ -216,7 +216,6 @@ jobs:
         with:
           files: '${{ github.event.repository.name }}.zip'
           tag_name: "v${{steps.version.outputs.prop}}"
-          body_path: 'CHANGELOG.txt'
 """
 _plugin_dot_py_template = """
 from flogin import Plugin
