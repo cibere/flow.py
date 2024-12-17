@@ -22,7 +22,7 @@ class JsonRPCClient:
     reader: StreamReader
     writer: StreamWriter
 
-    def __init__(self, plugin: Plugin) -> None:
+    def __init__(self, plugin: Plugin[Any]) -> None:
         self.tasks: dict[int, asyncio.Task] = {}
         self.requests: dict[int, asyncio.Future[Any | ErrorResponse]] = {}
         self._current_request_id = 1
