@@ -216,7 +216,7 @@ jobs:
         with:
           files: '${{ github.event.repository.name }}.zip'
           tag_name: "v${{steps.version.outputs.prop}}"
-          body_path: 'CHANGELOG.txt
+          body_path: 'CHANGELOG.txt'
 """
 _plugin_dot_py_template = """
 from flogin import Plugin
