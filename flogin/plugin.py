@@ -81,7 +81,7 @@ class Plugin(Generic[SettingsT]):
     @cached_property
     def settings(self) -> SettingsT:
         fp = os.path.join(
-            "..", "..", "Settings", "Plugin", self.metadata.name, "Settings.json"
+            "..", "..", "Settings", "Plugins", self.metadata.name, "Settings.json"
         )
         with open(fp, "r") as f:
             data = json.load(f)

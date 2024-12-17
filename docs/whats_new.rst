@@ -39,6 +39,7 @@ Bug Fixes
 - Fix typing bug with :func:`flogin.plugin.Plugin.register_search_handlers` and :func:`flogin.plugin.Plugin.register_search_handler` due to :class:`flogin.search_handler.SearchHandler` being a generic.
 - Fix bug where ``Glyph`` was not included in ``ResultConstructorArgs``
 - Fix bug with the ``PluginT`` TypeVar not being marked as covariant
+- Fix bug with the default settings reader looking for the wrong path.
 
 Removals
 ~~~~~~~~~
