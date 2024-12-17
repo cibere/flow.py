@@ -39,7 +39,7 @@ from .utils import MISSING, cached_property, coro_or_gen, setup_logging
 if TYPE_CHECKING:
     from typing_extensions import TypeVar
 
-    from ._types import SearchHandlerCallback, SearchHandlerCondition
+    from ._types import SearchHandlerCallback, SearchHandlerCondition, RawSettings
 
     SettingsT = TypeVar("SettingsT", default=Settings, bound=Settings)
 else:
@@ -67,7 +67,7 @@ class Plugin(Generic[SettingsT]):
         An easy way to acess Flow Launcher's API
     """
 
-    def __init__(self) -> None:
+    def __init__(self, **options: Any) -> None:
         self.jsonrpc: JsonRPCClient = JsonRPCClient(self)
         self.api = FlowLauncherAPI(self.jsonrpc)
         self._metadata: PluginMetadata | None = None
@@ -77,6 +77,7 @@ class Plugin(Generic[SettingsT]):
         self._search_handlers: list[SearchHandler] = []
         self._results: dict[str, Result] = {}
         self._settings_are_populated: bool = False
+        self.options = options
 
     @cached_property
     def settings(self) -> SettingsT:
@@ -87,7 +88,8 @@ class Plugin(Generic[SettingsT]):
             data = json.load(f)
         self._settings_are_populated = True
         LOG.debug(f"Settings filled from file: {data!r}")
-        return Settings(data)  # type: ignore
+        sets = Settings(data, no_update=self.options.get("settings_no_update", False))
+        return sets # type: ignore
 
     async def _run_event(
         self,

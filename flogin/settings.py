@@ -42,9 +42,10 @@ class Settings:
     _data: RawSettings
     _changes: RawSettings
 
-    def __init__(self, data: RawSettings) -> None:
+    def __init__(self, data: RawSettings, *, no_update: bool = False) -> None:
         self._data = data
         self._changes = {}
+        self._no_update = no_update
 
     @overload
     def __getitem__(self, key: str, /) -> Any: ...
@@ -79,8 +80,11 @@ class Settings:
         self.__setitem__(name, value)
 
     def _update(self, data: RawSettings) -> None:
-        LOG.debug(f"Updating settings. Before: {self._data}, after: {data}")
-        self._data = data
+        if self._no_update:
+            LOG.debug(f"Received a settings update, ignoring. {data=}")
+        else:
+            LOG.debug(f"Updating settings. Before: {self._data}, after: {data}")
+            self._data = data
 
     def _get_updates(self) -> RawSettings:
         try:
