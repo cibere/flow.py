@@ -1,31 +1,46 @@
 from __future__ import annotations
 
-from enum import Enum
 from inspect import getmembers
-from typing import Any
+from typing import Any, Callable
 
 from ..utils import MISSING
+
+ValidCls = Callable[[Any], Any]
+
+
+def _convert_cls(orig: ValidCls, is_list: bool) -> ValidCls:
+    if orig is MISSING:
+        return lambda x: x
+    if orig is not MISSING and is_list is True:
+        return lambda item: [orig(x) for x in item]
+    return orig
+
+
+def _get_prop_func(cls: ValidCls, name: str, *, default: Any = MISSING):
+    if default is MISSING:
+
+        def func(self):
+            return cls(self._data[name])
+
+    else:
+
+        def func(self):
+            return cls(self._data.get(name, default))
+
+    return func
 
 
 def add_prop(
     name: str,
     *,
     default: Any = MISSING,
-    cls: type[Base | Enum] = MISSING,
+    cls: ValidCls = MISSING,
     is_list: bool = False,
 ) -> Any:
-    if cls is MISSING:
-        cls = lambda x: x  # type: ignore
+    cls = _convert_cls(cls, is_list)
+    func = _get_prop_func(cls, name, default=default)
 
-    if cls is not MISSING and is_list is True:
-        cls = lambda item: [cls(x) for x in item]  # type: ignore
-
-    if default is MISSING:
-        prop = property(lambda self: cls(self._data[name]))
-    else:
-        prop = property(lambda self: cls(self._data.get(name, default)))
-
-    return prop
+    return property(func)
 
 
 class Base:
