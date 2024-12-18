@@ -172,7 +172,9 @@ class PluginsSettings(Base):
 
     python_executable: str = add_prop("PythonExecutablePath")
     node_executable: str = add_prop("NodeExecutablePath")
-    plugins: list[PartialPlugin] = add_prop("Plugins", cls=PartialPlugin, is_list=True)
+    plugins: dict[str, PartialPlugin] = add_prop(
+        "Plugins", cls=lambda x: [PartialPlugin(value) for value in x.values()]
+    )
 
 
 class FlowSettings(Base):
@@ -206,18 +208,18 @@ class FlowSettings(Base):
     query_box_font_size: :class:`int` | :class:`float`
     result_item_font_size: :class:`int` | :class:`float`
     result_sub_item_font_size: :class:`int` | :class:`float`
-    query_box_font: :class:`str`
-    query_box_font_style: :class:`str`
-    query_box_font_weight: :class:`str`
-    query_box_font_stretch: :class:`str`
-    result_font: :class:`str`
-    result_font_style: :class:`str`
-    result_font_weight: :class:`str`
-    result_font_stretch: :class:`str`
-    result_sub_font: :class:`str`
-    result_sub_font_style: :class:`str`
-    result_sub_font_weight: :class:`str`
-    result_sub_font_stretch: :class:`str`
+    query_box_font: :class:`str` | ``None``
+    query_box_font_style: :class:`str` | ``None``
+    query_box_font_weight: :class:`str` | ``None``
+    query_box_font_stretch: :class:`str` | ``None``
+    result_font: :class:`str` | ``None``
+    result_font_style: :class:`str` | ``None``
+    result_font_weight: :class:`str` | ``None``
+    result_font_stretch: :class:`str` | ``None``
+    result_sub_font: :class:`str` | ``None``
+    result_sub_font_style: :class:`str` | ``None``
+    result_sub_font_weight: :class:`str` | ``None``
+    result_sub_font_stretch: :class:`str` | ``None``
     use_glyph_icons: :class:`bool`
     use_animation: :class:`bool`
     use_sound: :class:`bool`
@@ -294,18 +296,18 @@ class FlowSettings(Base):
     query_box_font_size: Double = add_prop("QueryBoxFontSize")
     result_item_font_size: Double = add_prop("ResultItemFontSize")
     result_sub_item_font_size: Double = add_prop("ResultSubItemFontSize")
-    query_box_font: str = add_prop("QueryBoxFont")
-    query_box_font_style: str = add_prop("QueryBoxFontStyle")
-    query_box_font_weight: str = add_prop("QueryBoxFontWeight")
-    query_box_font_stretch: str = add_prop("QueryBoxFontStretch")
-    result_font: str = add_prop("ResultFont")
-    result_font_style: str = add_prop("ResultFontStyle")
-    result_font_weight: str = add_prop("ResultFontWeight")
-    result_font_stretch: str = add_prop("ResultFontStretch")
-    result_sub_font: str = add_prop("ResultSubFont")
-    result_sub_font_style: str = add_prop("ResultSubFontStyle")
-    result_sub_font_weight: str = add_prop("ResultSubFontWeight")
-    result_sub_font_stretch: str = add_prop("ResultSubFontStretch")
+    query_box_font: str | None = add_prop("QueryBoxFont")
+    query_box_font_style: str | None = add_prop("QueryBoxFontStyle")
+    query_box_font_weight: str | None = add_prop("QueryBoxFontWeight")
+    query_box_font_stretch: str | None = add_prop("QueryBoxFontStretch")
+    result_font: str | None = add_prop("ResultFont")
+    result_font_style: str | None = add_prop("ResultFontStyle")
+    result_font_weight: str | None = add_prop("ResultFontWeight")
+    result_font_stretch: str | None = add_prop("ResultFontStretch")
+    result_sub_font: str | None = add_prop("ResultSubFont")
+    result_sub_font_style: str | None = add_prop("ResultSubFontStyle")
+    result_sub_font_weight: str | None = add_prop("ResultSubFontWeight")
+    result_sub_font_stretch: str | None = add_prop("ResultSubFontStretch")
     use_glyph_icons: bool = add_prop("UseGlyphIcons")
     use_animation: bool = add_prop("UseAnimation")
     use_sound: bool = add_prop("UseSound")
@@ -332,7 +334,7 @@ class FlowSettings(Base):
     always_preview: bool = add_prop("AlwaysPreview")
     always_start_en: bool = add_prop("AlwaysStartEn")
     query_search_precision: SearchPrecisionScore = add_prop(
-        "QuerySearchPrecision", cls=SearchPrecisionScore
+        "QuerySearchPrecision", cls=lambda x: SearchPrecisionScore[x.lower()]
     )
     auto_updates: bool = add_prop("AutoUpdates")
     window_left: Double = add_prop("WindowLeft")
