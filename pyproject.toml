@@ -39,7 +39,7 @@ optional-dependencies.tests = { file = "requirements-tests.txt" }
 [tool.setuptools]
 packages = [
     "flogin",
-    "flogin.flow_api",
+    "flogin.flow",
     "flogin.jsonrpc",
     "flogin.testing"
 ]

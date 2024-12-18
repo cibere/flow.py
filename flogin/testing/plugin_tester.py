@@ -8,7 +8,7 @@ import uuid
 from typing import TYPE_CHECKING, Any, Generic
 
 from .._types import PluginT, RawSettings
-from ..flow_api.plugin_metadata import PluginMetadata
+from ..flow.plugin_metadata import PluginMetadata
 from ..settings import Settings
 from ..utils import MISSING
 from .filler import FillerObject
@@ -35,10 +35,10 @@ class PluginTester(Generic[PluginT]):
     ----------
     plugin: :class:`~flogin.plugin.Plugin`
         Your plugin
-    metadata: :class:`~flogin.flow_api.plugin_metadata.PluginMetadata` | dict[str, Any] | None
-        Your plugin's metadata. If ``None`` is passed, flogin will attempt to get the metadata from your ``plugin.json`` file. The :func:`PluginTester.create_plugin_metadata` and :func:`PluginTester.create_bogus_plugin_metadata` classmethods have been provided for creating :class:`~flogin.flow_api.plugin_metadata.PluginMetadata` objects.
+    metadata: :class:`~flogin.flow.plugin_metadata.PluginMetadata` | dict[str, Any] | None
+        Your plugin's metadata. If ``None`` is passed, flogin will attempt to get the metadata from your ``plugin.json`` file. The :func:`PluginTester.create_plugin_metadata` and :func:`PluginTester.create_bogus_plugin_metadata` classmethods have been provided for creating :class:`~flogin.flow.plugin_metadata.PluginMetadata` objects.
     flow_api_client: Optional[Any]
-        If not passed, flogin will use a filler class which will raise a runtime error whenever an attribute is accessed. If passed, you should be passing an instance of a class which will replace :class:`~flogin.flow_api.client.FlowLauncherAPI`, so make sure to impliment the methods you need and handle them accordingly.
+        If not passed, flogin will use a filler class which will raise a runtime error whenever an attribute is accessed. If passed, you should be passing an instance of a class which will replace :class:`~flogin.flow.api.FlowLauncherAPI`, so make sure to impliment the methods you need and handle them accordingly.
 
     Attributes
     ----------
@@ -79,7 +79,7 @@ class PluginTester(Generic[PluginT]):
         Parameters
         ----------
         flow_api_client: Optional[Any]
-            If not passed, flogin will use a filler class which will raise a runtime error whenever an attribute is accessed. If passed, you should be passing an instance of a class which will replace :class:`~flogin.flow_api.client.FlowLauncherAPI`, so make sure to impliment the methods you need and handle them accordingly.
+            If not passed, flogin will use a filler class which will raise a runtime error whenever an attribute is accessed. If passed, you should be passing an instance of a class which will replace :class:`~flogin.flow.api.FlowLauncherAPI`, so make sure to impliment the methods you need and handle them accordingly.
         """
         if flow_api_client is MISSING:
             flow_api_client = FillerObject(API_FILLER_TEXT)
@@ -164,15 +164,15 @@ class PluginTester(Generic[PluginT]):
 
     @classmethod
     def create_bogus_plugin_metadata(cls: type[PluginTester]) -> PluginMetadata:
-        r"""This classmethod can be used to easily and quickly create a :class:`~flogin.flow_api.plugin_metadata.PluginMetadata` object that can be used for testing.
+        r"""This classmethod can be used to easily and quickly create a :class:`~flogin.flow.plugin_metadata.PluginMetadata` object that can be used for testing.
 
         .. NOTE::
             Since the information that this classmethod generates is bogus, it is not recommended to use this when your plugin relies on the plugin metadata. Consider using :func:`PluginTester.create_plugin_metadata` instead.
 
         Returns
         --------
-        :class:`~flogin.flow_api.plugin_metadata.PluginMetadata`
-            The :class:`~flogin.flow_api.plugin_metadata.PluginMetadata` instance with your bogus information.
+        :class:`~flogin.flow.plugin_metadata.PluginMetadata`
+            The :class:`~flogin.flow.plugin_metadata.PluginMetadata` instance with your bogus information.
         """
 
         return cls.create_plugin_metadata(
@@ -199,7 +199,7 @@ class PluginTester(Generic[PluginT]):
         main_keyword: str | None = None,
         icon_path: str | None = None,
     ) -> PluginMetadata:
-        r"""This classmethod can be used to easily create a valid :class:`~flogin.flow_api.plugin_metadata.PluginMetadata` object that has correct data.
+        r"""This classmethod can be used to easily create a valid :class:`~flogin.flow.plugin_metadata.PluginMetadata` object that has correct data.
 
         Parameters
         -----------
@@ -228,7 +228,7 @@ class PluginTester(Generic[PluginT]):
 
         Returns
         --------
-        :class:`~flogin.flow_api.plugin_metadata.PluginMetadata`
+        :class:`~flogin.flow.plugin_metadata.PluginMetadata`
             Your new metadata class.
         """
 

@@ -22,7 +22,7 @@ from typing import (
 from .conditions import PlainTextCondition, RegexCondition
 from .default_events import get_default_events
 from .errors import InvalidContextDataReceived, PluginNotInitialized
-from .flow_api.client import FlowLauncherAPI, PluginMetadata
+from .flow.api import FlowLauncherAPI, PluginMetadata
 from .jsonrpc import (
     ErrorResponse,
     ExecuteResponse,
@@ -63,7 +63,7 @@ class Plugin(Generic[SettingsT]):
     --------
     settings: :class:`~flogin.settings.Settings`
         The plugin's settings set by the user
-    api: :class:`~flogin.flow_api.client.FlowLauncherAPI`
+    api: :class:`~flogin.flow.api.FlowLauncherAPI`
         An easy way to acess Flow Launcher's API
     """
 
