@@ -136,10 +136,6 @@ Settings
     :members:
     :private-members:
 
-.. autoclass:: flogin.flow.settings.ColorSchemes
-    :members:
-    :private-members:
-
 .. autoclass:: flogin.flow.settings.SearchWindowScreens
     :members:
     :private-members:

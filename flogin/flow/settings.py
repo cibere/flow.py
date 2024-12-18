@@ -1,7 +1,6 @@
 from .base import Base, add_prop
 from .enums import (
     AnimationSpeeds,
-    ColorSchemes,
     LastQueryMode,
     SearchPrecisionScore,
     SearchWindowAligns,

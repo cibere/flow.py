@@ -2,7 +2,6 @@ from enum import Enum
 
 __all__ = (
     "LastQueryMode",
-    "ColorSchemes",
     "SearchWindowScreens",
     "SearchWindowAligns",
     "AnimationSpeeds",
@@ -14,13 +13,6 @@ class LastQueryMode(Enum):
     selected = "Selected"
     empty = "Empty"
     preserved = "Preserved"
-
-
-class ColorSchemes(Enum):
-    system = "System"
-    light = "Light"
-    dark = "Dark"
-
 
 class SearchWindowScreens(Enum):
     remember_last_launch_location = "RememberLastLaunchLocation"
