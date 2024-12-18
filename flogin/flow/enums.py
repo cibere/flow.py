@@ -14,6 +14,7 @@ class LastQueryMode(Enum):
     empty = "Empty"
     preserved = "Preserved"
 
+
 class SearchWindowScreens(Enum):
     remember_last_launch_location = "RememberLastLaunchLocation"
     cursor = "Cursor"

@@ -22,7 +22,7 @@ from typing import (
 from .conditions import PlainTextCondition, RegexCondition
 from .default_events import get_default_events
 from .errors import InvalidContextDataReceived, PluginNotInitialized
-from .flow import FlowLauncherAPI, PluginMetadata, FlowSettings
+from .flow import FlowLauncherAPI, FlowSettings, PluginMetadata
 from .jsonrpc import (
     ErrorResponse,
     ExecuteResponse,
@@ -402,16 +402,14 @@ class Plugin(Generic[SettingsT]):
 
     def fetch_flow_settings(self) -> FlowSettings:
         """Fetches flow's settings from flow's config file
-        
+
         Returns
         --------
         :class:`~flogin.flow.settings.FlowSettings`
             A dataclass containing all of flow's settings
         """
-        
-        path = os.path.join(
-            "..", "..", "Settings", "Settings.json"
-        )
+
+        path = os.path.join("..", "..", "Settings", "Settings.json")
         with open(path, "r") as f:
             data = json.load(f)
         return FlowSettings(data)
