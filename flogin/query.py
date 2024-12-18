@@ -1,6 +1,11 @@
 from __future__ import annotations
 
-from typing import Any, Generic, TypeVar
+from typing import TYPE_CHECKING, Any, Generic, TypeVar
+
+from ._types import PluginT
+
+if TYPE_CHECKING:
+    from .jsonrpc.results import Result
 
 T = TypeVar("T")
 
@@ -34,24 +39,10 @@ class Query(Generic[T]):
         The keyword used to initiate the query
     """
 
-    def __init__(
-        self, *, raw_text: str, is_requery: bool = False, text: str, keyword: str
-    ) -> None:
+    def __init__(self, data: dict[str, Any], plugin: PluginT) -> None:
         self.__search_condition_data: T | None = None
-
-        self.raw_text = raw_text
-        self.is_requery = is_requery
-        self.text = text
-        self.keyword = keyword
-
-    @classmethod
-    def from_json(cls: type[Query], data: dict[str, Any]) -> Query:
-        return cls(
-            raw_text=data["rawQuery"],
-            is_requery=data["isReQuery"],
-            text=data["search"],
-            keyword=data["actionKeyword"],
-        )
+        self._data = data
+        self.plugin = plugin
 
     @property
     def condition_data(self) -> T | None:
@@ -61,6 +52,34 @@ class Query(Generic[T]):
     @condition_data.setter
     def condition_data(self, value: T) -> None:
         self.__search_condition_data = value
+
+    @property
+    def is_requery(self) -> bool:
+        return self._data["isReQuery"]
+
+    @property
+    def keyword(self) -> str:
+        return self._data["actionKeyword"]
+
+    @keyword.setter
+    def keyword(self, value: str) -> None:
+        self._data["actionKeyword"] = value
+
+    @property
+    def raw_text(self) -> str:
+        return self._data["rawQuery"]
+
+    @raw_text.setter
+    def raw_text(self, value: str) -> None:
+        self._data["rawQuery"] = value
+
+    @property
+    def text(self) -> str:
+        return self._data["search"]
+
+    @text.setter
+    def text(self, value: str) -> None:
+        self._data["search"] = value
 
     def __eq__(self, other: Any) -> bool:
         return (
@@ -74,3 +93,41 @@ class Query(Generic[T]):
 
     def __repr__(self) -> str:
         return f"<Query {self.raw_text=} {self.text=} {self.keyword=} {self.is_requery=} {self.condition_data=}>"
+
+    async def update_results(self, results: list[Result]) -> None:
+        r"""|coro|
+
+        Tells flow to change the results shown to the user, using the query from this query object.
+
+        This method provides quick acess to :func:`flogin.flow_api.client.FlowLauncherAPI.update_results`. Because of that, this method will only take affect if the user has not changed the query.
+
+        Parameters
+        ----------
+        results: list[:class:`~flogin.jsonrpc.results.Result`]
+            The new results
+
+        Returns
+        -------
+        None
+        """
+
+        return await self.plugin.api.update_results(self.raw_text, results)
+
+    async def push_update(self, *, requery: bool = True) -> None:
+        r"""|coro|
+
+        Pushes any updates made to this query launcher to flow.
+
+        This method provides quick acess to :func:`flogin.flow_api.client.FlowLauncherAPI.change_query`
+
+        Parameters
+        ----------
+        requery: :class:`bool`
+            Whether or not to re-send a query request in the event that the `new_query` is the same as the current query
+
+        Returns
+        --------
+        None
+        """
+
+        return await self.plugin.api.change_query(self.raw_text, requery=requery)
