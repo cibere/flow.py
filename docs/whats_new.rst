@@ -49,6 +49,7 @@ New Features
     - Add :class:`flogin.flow.enums.SearchWindowAligns`
     - Add :class:`flogin.flow.enums.AnimationSpeeds`
     - Add :class:`flogin.flow.enums.SearchPrecisionScore`
+- Add :func:`flogin.plugin.Plugin.fetch_flow_settings`
 
 Bug Fixes
 ~~~~~~~~~
