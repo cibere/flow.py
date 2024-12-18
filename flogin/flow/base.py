@@ -1,15 +1,24 @@
 from __future__ import annotations
+
+from enum import Enum
 from inspect import getmembers
 from typing import Any
-from ..utils import MISSING
-from enum import Enum
 
-def add_prop(name: str, *, default: Any = MISSING, cls: type[Base | Enum] = MISSING, is_list: bool = False) -> Any:
+from ..utils import MISSING
+
+
+def add_prop(
+    name: str,
+    *,
+    default: Any = MISSING,
+    cls: type[Base | Enum] = MISSING,
+    is_list: bool = False,
+) -> Any:
     if cls is MISSING:
-        cls = lambda x: x # type: ignore
-    
+        cls = lambda x: x  # type: ignore
+
     if cls is not MISSING and is_list is True:
-        cls = lambda item: [cls(x) for x in item] # type: ignore
+        cls = lambda item: [cls(x) for x in item]  # type: ignore
 
     if default is MISSING:
         prop = property(lambda self: cls(self._data[name]))
@@ -17,7 +26,8 @@ def add_prop(name: str, *, default: Any = MISSING, cls: type[Base | Enum] = MISS
         prop = property(lambda self: cls(self._data.get(name, default)))
 
     return prop
-    
+
+
 class Base:
     __slots__ = ("_data", "__repr_attributes__")
 

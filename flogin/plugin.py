@@ -39,7 +39,7 @@ from .utils import MISSING, cached_property, coro_or_gen, setup_logging
 if TYPE_CHECKING:
     from typing_extensions import TypeVar
 
-    from ._types import SearchHandlerCallback, SearchHandlerCondition, RawSettings
+    from ._types import RawSettings, SearchHandlerCallback, SearchHandlerCondition
 
     SettingsT = TypeVar("SettingsT", default=Settings, bound=Settings)
 else:
@@ -89,7 +89,7 @@ class Plugin(Generic[SettingsT]):
         self._settings_are_populated = True
         LOG.debug(f"Settings filled from file: {data!r}")
         sets = Settings(data, no_update=self.options.get("settings_no_update", False))
-        return sets # type: ignore
+        return sets  # type: ignore
 
     async def _run_event(
         self,

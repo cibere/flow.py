@@ -1,22 +1,34 @@
 from .base import Base, add_prop
-from .enums import LastQueryMode, ColorSchemes, SearchWindowAligns, SearchWindowScreens, AnimationSpeeds, SearchPrecisionScore
+from .enums import (
+    AnimationSpeeds,
+    ColorSchemes,
+    LastQueryMode,
+    SearchPrecisionScore,
+    SearchWindowAligns,
+    SearchWindowScreens,
+)
 
-Double = int | float # C# doubles are just floats in python, however there is some typemismatch, so some "doubles" are integers.
+Double = (
+    int | float
+)  # C# doubles are just floats in python, however there is some typemismatch, so some "doubles" are integers.
 
-__all__ = ("CustomExplorerViewModel",
-"CustomBrowserViewModel",
-"CustomPluginHotkey",
-"CustomShortcutModel",
-"HttpProxy",
-"PartialPlugin",
-"PluginsSettings",
-"FlowSettings",)
+__all__ = (
+    "CustomExplorerViewModel",
+    "CustomBrowserViewModel",
+    "CustomPluginHotkey",
+    "CustomShortcutModel",
+    "HttpProxy",
+    "PartialPlugin",
+    "PluginsSettings",
+    "FlowSettings",
+)
+
 
 class CustomExplorerViewModel(Base):
     """This is a replica of the ``CustomExplorerViewModel`` dataclass in flow.
 
     This is an entry for a custom file manager, which is under the ``Default File Manager`` option in flow's ui settings.
-    
+
     Attributes
     -----------
     name: :class:`str`
@@ -30,18 +42,19 @@ class CustomExplorerViewModel(Base):
     editable: :class:`bool`
         Whether or not the user can edit this entry in the ui
     """
-    
+
     name: str = add_prop("Name")
     path: str = add_prop("Path")
     file_argument: str = add_prop("FileArgument")
     directory_argument: str = add_prop("DirectoryArgument")
     editable: bool = add_prop("Editable")
 
+
 class CustomBrowserViewModel(Base):
     """This is a replica of the ``CustomBrowserViewModel`` dataclass in flow.
 
     This represents an entry for a custom browser, which is under the ``Default Web Browser`` option in flow's ui settings.
-    
+
     Attributes
     -----------
     name: :class:`str`
@@ -65,9 +78,10 @@ class CustomBrowserViewModel(Base):
     open_in_tab: bool = add_prop("OpenInTab")
     editable: bool = add_prop("Editable")
 
+
 class CustomPluginHotkey(Base):
     """This is a replica of the ``CustomPluginHotkey`` dataclass in flow.
-    
+
     Attributes
     -----------
     hotkey: :class:`str`
@@ -77,9 +91,10 @@ class CustomPluginHotkey(Base):
     hotkey: str = add_prop("Hotkey")
     keyword: str = add_prop("ActionKeyword")
 
+
 class CustomShortcutModel(Base):
     """This represents a custom shortcut in flow's config file.
-    
+
     Attributes
     -----------
     value: :class:`str`
@@ -91,9 +106,10 @@ class CustomShortcutModel(Base):
     value: str = add_prop("Value")
     key: str = add_prop("Key")
 
+
 class HttpProxy(Base):
     """This represents the user's proxy info
-    
+
     Attributes
     -----------
     enabled: :class:`bool`
@@ -114,9 +130,10 @@ class HttpProxy(Base):
     username: str | None = add_prop("UserName")
     password: str | None = add_prop("Password")
 
+
 class PartialPlugin(Base):
     """This is a partial plugin from flow.
-    
+
     Attributes
     -----------
     id: :class:`str`
@@ -132,7 +149,7 @@ class PartialPlugin(Base):
     keywords: list[:class:`str`]
         The plugin's keywords
     """
-    
+
     id: str = add_prop("ID")
     name: str = add_prop("Name")
     version: str = add_prop("Version")
@@ -140,9 +157,10 @@ class PartialPlugin(Base):
     disabled: bool = add_prop("Disabled")
     keywords: list[str] = add_prop("ActionKeywords")
 
+
 class PluginsSettings(Base):
     """This represents the user's plugin settings from the general flow config file.
-    
+
     Attributes
     -----------
     python_executable: :class:`str`
@@ -156,6 +174,7 @@ class PluginsSettings(Base):
     python_executable: str = add_prop("PythonExecutablePath")
     node_executable: str = add_prop("NodeExecutablePath")
     plugins: list[PartialPlugin] = add_prop("Plugins", cls=PartialPlugin, is_list=True)
+
 
 class FlowSettings(Base):
     """This is a class which represents the settings that flow launcher saves in config files.
@@ -249,24 +268,25 @@ class FlowSettings(Base):
     custom_animation_length: :class:`int`
     plugin_settings: :class:`PluginsSettings`
     """
+
     hotkey: str = add_prop("Hotkey")
     open_result_modifiers: str = add_prop("OpenResultModifiers")
     color_scheme: str = add_prop("ColorScheme")
     show_open_result_gotkey: bool = add_prop("ShowOpenResultHotkey")
     window_size: Double = add_prop("WindowSize")
-    preview_hotkey:str = add_prop("PreviewHotkey")
-    autocomplete_hotkey:str = add_prop("AutoCompleteHotkey")
-    autocomplete_hotkey_2:str = add_prop("AutoCompleteHotkey2")
-    select_next_item_hotkey:str = add_prop("SelectNextItemHotkey")
-    select_next_item_hotkey_2:str = add_prop("SelectNextItemHotkey2")
-    select_previous_item_hotkey:str = add_prop("SelectPrevItemHotkey")
-    select_previous_item_hotkey_2:str = add_prop("SelectPrevItemHotkey2")
-    select_next_page_hotkey:str = add_prop("SelectNextPageHotkey")
-    select_previous_page_hotkey:str = add_prop("SelectPrevPageHotkey")
-    open_context_menu_hotkey:str = add_prop("OpenContextMenuHotkey")
-    setting_window_hotkey:str = add_prop("SettingWindowHotkey")
-    cycle_history_up_hotkey:str = add_prop("CycleHistoryUpHotkey")
-    cycle_history_down_hotkey:str = add_prop("CycleHistoryDownHotkey")
+    preview_hotkey: str = add_prop("PreviewHotkey")
+    autocomplete_hotkey: str = add_prop("AutoCompleteHotkey")
+    autocomplete_hotkey_2: str = add_prop("AutoCompleteHotkey2")
+    select_next_item_hotkey: str = add_prop("SelectNextItemHotkey")
+    select_next_item_hotkey_2: str = add_prop("SelectNextItemHotkey2")
+    select_previous_item_hotkey: str = add_prop("SelectPrevItemHotkey")
+    select_previous_item_hotkey_2: str = add_prop("SelectPrevItemHotkey2")
+    select_next_page_hotkey: str = add_prop("SelectNextPageHotkey")
+    select_previous_page_hotkey: str = add_prop("SelectPrevPageHotkey")
+    open_context_menu_hotkey: str = add_prop("OpenContextMenuHotkey")
+    setting_window_hotkey: str = add_prop("SettingWindowHotkey")
+    cycle_history_up_hotkey: str = add_prop("CycleHistoryUpHotkey")
+    cycle_history_down_hotkey: str = add_prop("CycleHistoryDownHotkey")
     language: str = add_prop("Language")
     theme: str = add_prop("Theme")
     use_drop_shadow_effect: bool = add_prop("UseDropShadowEffect")
@@ -295,20 +315,26 @@ class FlowSettings(Base):
     use_date: bool = add_prop("UseDate")
     time_format: str = add_prop("TimeFormat")
     date_format: str = add_prop("DateFormat")
-    first_launch: bool =add_prop("FirstLaunch")
+    first_launch: bool = add_prop("FirstLaunch")
     setting_window_width: Double = add_prop("SettingWindowWidth")
     setting_window_height: Double = add_prop("SettingWindowHeight")
     setting_window_top: Double | None = add_prop("SettingWindowTop", default=None)
     setting_window_left: Double | None = add_prop("SettingWindowLeft", default=None)
     setting_window_state: int = add_prop("SettingWindowState")
     custom_explorer_index: int = add_prop("CustomExplorerIndex")
-    custom_explorer_list: list[CustomExplorerViewModel] = add_prop("CustomExplorerList",  cls=CustomExplorerViewModel, is_list=True)
+    custom_explorer_list: list[CustomExplorerViewModel] = add_prop(
+        "CustomExplorerList", cls=CustomExplorerViewModel, is_list=True
+    )
     custom_browser_index: int = add_prop("CustomBrowserIndex")
-    custom_browser_list: list[CustomBrowserViewModel] = add_prop("CustomBrowserList", cls=CustomBrowserViewModel, is_list=True)
+    custom_browser_list: list[CustomBrowserViewModel] = add_prop(
+        "CustomBrowserList", cls=CustomBrowserViewModel, is_list=True
+    )
     should_use_pinyin: bool = add_prop("ShouldUsePinyin")
     always_preview: bool = add_prop("AlwaysPreview")
     always_start_en: bool = add_prop("AlwaysStartEn")
-    query_search_precision: SearchPrecisionScore = add_prop("QuerySearchPrecision", cls=SearchPrecisionScore)
+    query_search_precision: SearchPrecisionScore = add_prop(
+        "QuerySearchPrecision", cls=SearchPrecisionScore
+    )
     auto_updates: bool = add_prop("AutoUpdates")
     window_left: Double = add_prop("WindowLeft")
     window_top: Double = add_prop("WindowTop")
@@ -317,17 +343,27 @@ class FlowSettings(Base):
     keep_max_results: bool = add_prop("KeepMaxResults")
     max_results_to_show: int = add_prop("MaxResultsToShow")
     activate_times: int = add_prop("ActivateTimes")
-    custom_plugin_hotkeys: list[CustomPluginHotkey] = add_prop("CustomPluginHotkeys", cls=CustomPluginHotkey, is_list=True)
-    custom_shortcuts: list[CustomShortcutModel] = add_prop("CustomShortcuts", cls=CustomShortcutModel, is_list=True)
+    custom_plugin_hotkeys: list[CustomPluginHotkey] = add_prop(
+        "CustomPluginHotkeys", cls=CustomPluginHotkey, is_list=True
+    )
+    custom_shortcuts: list[CustomShortcutModel] = add_prop(
+        "CustomShortcuts", cls=CustomShortcutModel, is_list=True
+    )
     dont_prompt_update_msg: bool = add_prop("DontPromptUpdateMsg")
     enable_update_log: bool = add_prop("EnableUpdateLog")
-    start_flow_launcher_on_system_startup: bool = add_prop("StartFlowLauncherOnSystemStartup")
+    start_flow_launcher_on_system_startup: bool = add_prop(
+        "StartFlowLauncherOnSystemStartup"
+    )
     hide_on_startup: bool = add_prop("HideOnStartup")
     hide_notify_icon: bool = add_prop("HideNotifyIcon")
     leave_cmd_open: bool = add_prop("LeaveCmdOpen")
     hide_when_deactivated: bool = add_prop("HideWhenDeactivated")
-    search_window_screen: SearchWindowScreens = add_prop("SearchWindowScreen", cls=SearchWindowScreens)
-    search_window_align: SearchWindowAligns = add_prop("SearchWindowAlign", cls=SearchWindowAligns)
+    search_window_screen: SearchWindowScreens = add_prop(
+        "SearchWindowScreen", cls=SearchWindowScreens
+    )
+    search_window_align: SearchWindowAligns = add_prop(
+        "SearchWindowAlign", cls=SearchWindowAligns
+    )
     custom_screen_number: int = add_prop("CustomScreenNumber")
     ignore_hotkeys_on_fullscreen: bool = add_prop("IgnoreHotkeysOnFullscreen")
     proxy: HttpProxy = add_prop("Proxy", cls=HttpProxy)
