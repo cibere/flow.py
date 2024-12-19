@@ -93,7 +93,7 @@ class CustomPluginHotkey(Base):
 
 class CustomQueryShortcut(Base):
     """This is a replica of the ``CustomShortcutModel`` dataclass in flow.
-    
+
     This represents a custom shortcut in flow's config file.
 
     Attributes
