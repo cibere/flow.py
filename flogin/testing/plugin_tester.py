@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING, Any, Generic
 
 from .._types import PluginT, RawSettings
 from ..flow.plugin_metadata import PluginMetadata
+from ..query import Query
 from ..settings import Settings
 from ..utils import MISSING
 from .filler import FillerObject
@@ -16,7 +17,6 @@ from .filler import FillerObject
 if TYPE_CHECKING:
     from ..jsonrpc.responses import QueryResponse
     from ..jsonrpc.results import Result
-    from ..query import Query
 
 API_FILLER_TEXT = "FlowLauncherAPI is unavailable during testing. Consider passing the 'flow_api_client' arg into PluginTester to impliment your own flow api client."
 CHARACTERS = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLLZXCVBNM1234567890"
@@ -88,7 +88,12 @@ class PluginTester(Generic[PluginT]):
         self.plugin.metadata._flow_api = flow_api_client
 
     async def test_query(
-        self, query: Query, *, settings: Settings | RawSettings | None = MISSING
+        self,
+        text: str,
+        *,
+        keyword: str = "*",
+        is_requery: bool = False,
+        settings: Settings | RawSettings | None = MISSING,
     ) -> QueryResponse:
         r"""|coro|
 
@@ -115,6 +120,16 @@ class PluginTester(Generic[PluginT]):
         if isinstance(settings, Settings):
             self.plugin.settings = settings
             self.plugin._settings_are_populated = True
+
+        query = Query(
+            {
+                "rawQuery": f"{keyword} {text}",
+                "search": text,
+                "actionKeyword": keyword,
+                "isReQuery": is_requery,
+            },
+            self.plugin,
+        )
 
         coro = self.plugin.process_search_handlers(query)
 
