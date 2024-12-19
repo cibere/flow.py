@@ -12,10 +12,10 @@ Double = (
 )  # C# doubles are just floats in python, however there is some typemismatch, so some "doubles" are integers.
 
 __all__ = (
-    "CustomExplorerViewModel",
-    "CustomBrowserViewModel",
+    "CustomFileManager",
+    "CustomBrowser",
     "CustomPluginHotkey",
-    "CustomShortcutModel",
+    "CustomQueryShortcut",
     "HttpProxy",
     "PartialPlugin",
     "PluginsSettings",
@@ -23,7 +23,7 @@ __all__ = (
 )
 
 
-class CustomExplorerViewModel(Base):
+class CustomFileManager(Base):
     """This is a replica of the ``CustomExplorerViewModel`` dataclass in flow.
 
     This is an entry for a custom file manager, which is under the ``Default File Manager`` option in flow's ui settings.
@@ -49,7 +49,7 @@ class CustomExplorerViewModel(Base):
     editable: bool = add_prop("Editable")
 
 
-class CustomBrowserViewModel(Base):
+class CustomBrowser(Base):
     """This is a replica of the ``CustomBrowserViewModel`` dataclass in flow.
 
     This represents an entry for a custom browser, which is under the ``Default Web Browser`` option in flow's ui settings.
@@ -91,8 +91,10 @@ class CustomPluginHotkey(Base):
     keyword: str = add_prop("ActionKeyword")
 
 
-class CustomShortcutModel(Base):
-    """This represents a custom shortcut in flow's config file.
+class CustomQueryShortcut(Base):
+    """This is a replica of the ``CustomShortcutModel`` dataclass in flow.
+    
+    This represents a custom shortcut in flow's config file.
 
     Attributes
     -----------
@@ -235,9 +237,9 @@ class FlowSettings(Base):
     setting_window_left: :class:`int` | :class:`float` | None
     setting_window_state: :class:`int`
     custom_explorer_index: :class:`int`
-    custom_explorer_list: list[:class:`CustomExplorerViewModel`]
+    custom_explorer_list: list[:class:`CustomFileManager`]
     custom_browser_index: :class:`int`
-    custom_browser_list: list[:class:`CustomBrowserViewModel`]
+    custom_browser_list: list[:class:`CustomBrowser`]
     should_use_pinyin: :class:`bool`
     always_preview: :class:`bool`
     always_start_en: :class:`bool`
@@ -251,7 +253,7 @@ class FlowSettings(Base):
     max_results_to_show: :class:`int`
     activate_times: :class:`int`
     custom_plugin_hotkeys: list[:class:`CustomPluginHotkey`]
-    custom_shortcuts: list[:class:`CustomShortcutModel`]
+    custom_shortcuts: list[:class:`CustomQueryShortcut`]
     dont_prompt_update_msg: :class:`bool`
     enable_update_log: :class:`bool`
     start_flow_launcher_on_system_startup: :class:`bool`
@@ -323,12 +325,12 @@ class FlowSettings(Base):
     setting_window_left: Double | None = add_prop("SettingWindowLeft", default=None)
     setting_window_state: int = add_prop("SettingWindowState")
     custom_explorer_index: int = add_prop("CustomExplorerIndex")
-    custom_explorer_list: list[CustomExplorerViewModel] = add_prop(
-        "CustomExplorerList", cls=CustomExplorerViewModel, is_list=True
+    custom_explorer_list: list[CustomFileManager] = add_prop(
+        "CustomExplorerList", cls=CustomFileManager, is_list=True
     )
     custom_browser_index: int = add_prop("CustomBrowserIndex")
-    custom_browser_list: list[CustomBrowserViewModel] = add_prop(
-        "CustomBrowserList", cls=CustomBrowserViewModel, is_list=True
+    custom_browser_list: list[CustomBrowser] = add_prop(
+        "CustomBrowserList", cls=CustomBrowser, is_list=True
     )
     should_use_pinyin: bool = add_prop("ShouldUsePinyin")
     always_preview: bool = add_prop("AlwaysPreview")
@@ -347,8 +349,8 @@ class FlowSettings(Base):
     custom_plugin_hotkeys: list[CustomPluginHotkey] = add_prop(
         "CustomPluginHotkeys", cls=CustomPluginHotkey, is_list=True
     )
-    custom_shortcuts: list[CustomShortcutModel] = add_prop(
-        "CustomShortcuts", cls=CustomShortcutModel, is_list=True
+    custom_shortcuts: list[CustomQueryShortcut] = add_prop(
+        "CustomShortcuts", cls=CustomQueryShortcut, is_list=True
     )
     dont_prompt_update_msg: bool = add_prop("DontPromptUpdateMsg")
     enable_update_log: bool = add_prop("EnableUpdateLog")

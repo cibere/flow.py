@@ -34,10 +34,10 @@ New Features
 - Add :class:`flogin.conditions.AnyCondition`
 - Add :class:`flogin.conditions.AllCondition`
 - Add ``flogin.flow.settings.py``
-    - Add :class:`flogin.flow.settings.CustomExplorerViewModel`
-    - Add :class:`flogin.flow.settings.CustomBrowserViewModel`
+    - Add :class:`flogin.flow.settings.CustomFileManager`
+    - Add :class:`flogin.flow.settings.CustomBrowser`
     - Add :class:`flogin.flow.settings.CustomPluginHotkey`
-    - Add :class:`flogin.flow.settings.CustomShortcutModel`
+    - Add :class:`flogin.flow.settings.CustomQueryShortcut`
     - Add :class:`flogin.flow.settings.HttpProxy`
     - Add :class:`flogin.flow.settings.PartialPlugin`
     - Add :class:`flogin.flow.settings.PluginsSettings`

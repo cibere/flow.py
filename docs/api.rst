@@ -105,14 +105,14 @@ Settings
     :members:
     :private-members:
 
-.. autoclass:: flogin.flow.settings.CustomShortcutModel
+.. autoclass:: flogin.flow.settings.CustomQueryShortcut
     :members:
 
-.. autoclass:: flogin.flow.settings.CustomExplorerViewModel
+.. autoclass:: flogin.flow.settings.CustomFileManager
     :members:
     :private-members:
 
-.. autoclass:: flogin.flow.settings.CustomBrowserViewModel
+.. autoclass:: flogin.flow.settings.CustomBrowser
     :members:
     :private-members:
 
