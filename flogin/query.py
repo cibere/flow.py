@@ -95,7 +95,7 @@ class Query(Generic[T]):
 
         Tells flow to change the results shown to the user, using the query from this query object.
 
-        This method provides quick acess to :func:`flogin.flow_api.client.FlowLauncherAPI.update_results`. Because of that, this method will only take affect if the user has not changed the query.
+        This method provides quick acess to :func:`flogin.flow.api.FlowLauncherAPI.update_results`. Because of that, this method will only take affect if the user has not changed the query.
 
         Parameters
         ----------
@@ -116,7 +116,7 @@ class Query(Generic[T]):
 
         Applies updates to the query with flow, and to this object.
 
-        This method provides quick acess to :func:`flogin.flow_api.client.FlowLauncherAPI.change_query`
+        This method provides quick acess to :func:`flogin.flow.api.FlowLauncherAPI.change_query`
 
         Parameters
         ----------
