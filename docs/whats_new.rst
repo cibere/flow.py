@@ -14,6 +14,8 @@ Breaking Changes
     - Remove ``flogin.errors.SettingNotFound``
 - Rewrite the CLI commands
 - Remove ``flogin.conditions.MultiCondition`` in favor of :class:`flogin.conditions.AnyCondition` and :class:`flogin.conditions.AllCondition`
+- Remove `Query.from_json`
+- For :func:`flogin.testing.plugin_tester.PluginTester.test_query`, switch from receiving a query object to taking kwargs that will be used to make a query object
 
 New Features
 ~~~~~~~~~~~~
@@ -31,6 +33,8 @@ New Features
 - Make :attr:`flogin.jsonrpc.results.Result.title` optional
 - Add :class:`flogin.conditions.AnyCondition`
 - Add :class:`flogin.conditions.AllCondition`
+- Add :func:`flogin.query.Query.update_results`
+- Add :func:`flogin.query.Query.update`
 
 Bug Fixes
 ~~~~~~~~~
