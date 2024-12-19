@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Generic, TypeVar, TypedDict
+from typing import TYPE_CHECKING, Any, Generic, TypedDict, TypeVar
 
 from ._types import PluginT
 from .utils import MISSING
@@ -12,11 +12,13 @@ T = TypeVar("T")
 
 __all__ = ("Query",)
 
+
 class RawQuery(TypedDict):
     search: str
     rawQuery: str
     isReQuery: bool
     actionKeyword: str
+
 
 class Query(Generic[T]):
     r"""This class represents the query data sent from flow launcher
@@ -107,7 +109,9 @@ class Query(Generic[T]):
 
         return await self.plugin.api.update_results(self.raw_text, results)
 
-    async def update(self, *, text: str, keyword: str | None = MISSING, requery: bool = False) -> None:
+    async def update(
+        self, *, text: str, keyword: str | None = MISSING, requery: bool = False
+    ) -> None:
         r"""|coro|
 
         Applies updates to the query with flow, and to this object.
@@ -130,16 +134,16 @@ class Query(Generic[T]):
 
         if keyword is MISSING:
             keyword = self.keyword
-        
+
         if keyword is None or keyword == "*":
             raw_text = text
-            self._data['actionKeyword'] = "*"
+            self._data["actionKeyword"] = "*"
         else:
             raw_text = f"{keyword} {text}"
-            self._data['actionKeyword'] = keyword
+            self._data["actionKeyword"] = keyword
 
-        self._data['rawQuery'] = raw_text
-        self._data['search'] = text
-        self._data['isReQuery'] = requery
+        self._data["rawQuery"] = raw_text
+        self._data["search"] = text
+        self._data["isReQuery"] = requery
 
         return await self.plugin.api.change_query(raw_text, requery=requery)
