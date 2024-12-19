@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Generic, TypeVar
+from typing import TYPE_CHECKING, Any, Generic, TypeVar, TypedDict
 
 from ._types import PluginT
+from .utils import MISSING
 
 if TYPE_CHECKING:
     from .jsonrpc.results import Result
@@ -11,6 +12,11 @@ T = TypeVar("T")
 
 __all__ = ("Query",)
 
+class RawQuery(TypedDict):
+    search: str
+    rawQuery: str
+    isReQuery: bool
+    actionKeyword: str
 
 class Query(Generic[T]):
     r"""This class represents the query data sent from flow launcher
@@ -39,7 +45,7 @@ class Query(Generic[T]):
         The keyword used to initiate the query
     """
 
-    def __init__(self, data: dict[str, Any], plugin: PluginT) -> None:
+    def __init__(self, data: RawQuery, plugin: PluginT) -> None:
         self.__search_condition_data: T | None = None
         self._data = data
         self.plugin = plugin
@@ -61,25 +67,13 @@ class Query(Generic[T]):
     def keyword(self) -> str:
         return self._data["actionKeyword"]
 
-    @keyword.setter
-    def keyword(self, value: str) -> None:
-        self._data["actionKeyword"] = value
-
     @property
     def raw_text(self) -> str:
         return self._data["rawQuery"]
 
-    @raw_text.setter
-    def raw_text(self, value: str) -> None:
-        self._data["rawQuery"] = value
-
     @property
     def text(self) -> str:
         return self._data["search"]
-
-    @text.setter
-    def text(self, value: str) -> None:
-        self._data["search"] = value
 
     def __eq__(self, other: Any) -> bool:
         return (
@@ -113,21 +107,39 @@ class Query(Generic[T]):
 
         return await self.plugin.api.update_results(self.raw_text, results)
 
-    async def push_update(self, *, requery: bool = True) -> None:
+    async def update(self, *, text: str, keyword: str | None = MISSING, requery: bool = False) -> None:
         r"""|coro|
 
-        Pushes any updates made to this query launcher to flow.
+        Applies updates to the query with flow, and to this object.
 
         This method provides quick acess to :func:`flogin.flow_api.client.FlowLauncherAPI.change_query`
 
         Parameters
         ----------
+        text: :class:`str`
+            The text that will be used with the query.
+        keyword: :class:`str`
+            The keyword that will be used with the query. Defaults to the pre-existing value of :attr:`Query.keyword`. Set this to ``None`` or `"*"` for no keyword to be used.
         requery: :class:`bool`
-            Whether or not to re-send a query request in the event that the `new_query` is the same as the current query
+            Whether or not to re-send a query request in the event that the new query is the same as the current query
 
         Returns
         --------
         None
         """
 
-        return await self.plugin.api.change_query(self.raw_text, requery=requery)
+        if keyword is MISSING:
+            keyword = self.keyword
+        
+        if keyword is None or keyword == "*":
+            raw_text = text
+            self._data['actionKeyword'] = "*"
+        else:
+            raw_text = f"{keyword} {text}"
+            self._data['actionKeyword'] = keyword
+
+        self._data['rawQuery'] = raw_text
+        self._data['search'] = text
+        self._data['isReQuery'] = requery
+
+        return await self.plugin.api.change_query(raw_text, requery=requery)
