@@ -39,7 +39,7 @@ Basic Example
 
     plugin = Plugin()
 
-    @plugin.event
+    @plugin.search()
     async def on_query(data: Query):
         return f"You wrote {data.text}"
     
