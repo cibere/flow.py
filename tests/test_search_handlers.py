@@ -19,14 +19,6 @@ def tester(plugin, metadata):
     return PluginTester(plugin, metadata=metadata)
 
 
-@pytest.fixture
-def query():
-    txt = "bar"
-    keyword = "foo"
-
-    return Query(raw_text=f"{txt} {keyword}", text=txt, keyword=keyword)
-
-
 class ReturnSingleResultHandler(SearchHandler):
     async def callback(self, query: Query):
         return Result("Title")
@@ -75,7 +67,7 @@ def handler(plugin: Plugin, request: pytest.FixtureRequest):
 
 
 @pytest.mark.asyncio
-async def test_handler_result(tester: PluginTester, query: Query):
-    response = await tester.test_query(query)
+async def test_handler_result(tester: PluginTester):
+    response = await tester.test_query("bar", keyword="foo")
     result = response.results[0]
     assert result.title == "Title"
