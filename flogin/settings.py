@@ -3,6 +3,8 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any, overload
 
+from .enums import SettingTemplateInputType
+
 if TYPE_CHECKING:
     from ._types import RawSettings
 
